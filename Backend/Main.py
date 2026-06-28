@@ -4,11 +4,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def home():
-    return {
-        "status": "live saas system",
-        "repo": "AK",
-        "deployed": True
-    }
+    return {"status": "ok", "repo": "AK"}
 
 @app.route("/health")
 def health():
