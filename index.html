@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>A11-K — Multiverse Enterprise Directory</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;700&display=swap');
+
+    :root {
+      --bg: #030408;
+      --text: #f3f4f6;
+      --muted: #808b9e;
+      --border: rgba(255, 255, 255, 0.08);
+      --neon-cyan: #00f2fe;
+      --neon-pink: #fd267e;
+      --neon-green: #5cffb1;
+      --neon-purple: #9d4edd;
+      --neon-gold: #d8b76a;
+      --font-logo: 'Cinzel', serif;
+      --font-sans: 'Plus Jakarta Sans', sans-serif;
+      --font-mono: 'Space Grotesk', sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      font-family: var(--font-sans);
+      background: 
+        radial-gradient(circle at 10% 15%, rgba(0, 242, 254, 0.15), transparent 45rem),
+        radial-gradient(circle at 90% 85%, rgba(253, 38, 126, 0.12), transparent 50rem),
+        var(--bg);
+      color: var(--text);
+      margin: 0;
+      line-height: 1.6;
+      overflow-x: hidden;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      border-bottom: 1px solid var(--border);
+      padding: 24px 0;
+      backdrop-filter: blur(20px);
+      background: rgba(3, 4, 8, 0.7);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-container {
+      width: min(1300px, 94vw);
+      margin: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .brand {
+      font-family: var(--font-logo);
+      font-size: 1.8rem;
+      letter-spacing: 0.15em;
+      text-decoration: none;
+      color: #fff;
+      font-weight: 900;
+    }
+    .brand span {
+      color: var(--neon-cyan);
+      text-shadow: 0 0 10px var(--neon-cyan);
+    }
+    .badge {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      padding: 6px 14px;
+      border-radius: 999px;
+      color: var(--muted);
+    }
+
+    main {
+      width: min(1300px, 94vw);
+      margin: 40px auto 80px;
+      flex-grow: 1;
+    }
+
+    .hero-sec {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+    .hero-sec h1 {
+      font-family: var(--font-logo);
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      line-height: 1;
+      letter-spacing: -0.04em;
+      margin: 0 0 15px;
+    }
+    .hero-sec h1 span {
+      background: linear-gradient(135deg, var(--neon-cyan), var(--neon-pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero-sec p {
+      font-size: 1.15rem;
+      color: var(--muted);
+      max-width: 700px;
+      margin: auto;
+      font-weight: 300;
+    }
+
+    .niche-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+      gap: 24px;
+    }
+    .niche-card {
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      background: rgba(10, 12, 22, 0.65);
+      padding: 35px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .niche-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--theme-color), transparent);
+    }
+    .niche-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--theme-color);
+      box-shadow: 0 30px 60px rgba(0,0,0,0.6), 0 0 25px rgba(var(--theme-rgb), 0.04);
+    }
+    
+    .card-top {
+      margin-bottom: 24px;
+    }
+    .niche-tag {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--theme-color);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 10px;
+      display: block;
+    }
+    .niche-card h2 {
+      font-family: var(--font-logo);
+      font-size: 1.7rem;
+      margin: 0 0 12px;
+      letter-spacing: -0.02em;
+    }
+    .niche-card p {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin: 0;
+      font-weight: 300;
+      line-height: 1.5;
+    }
+    
+    .system-badge {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 16px;
+      margin-top: 20px;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+    }
+    .system-badge strong {
+      color: var(--theme-color);
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 25px;
+    }
+    .card-btn {
+      flex-grow: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 12px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 700;
+      transition: all 0.2s;
+    }
+    .card-btn.primary {
+      background: var(--theme-color);
+      color: #030408;
+    }
+    .card-btn.primary:hover {
+      box-shadow: 0 0 15px var(--theme-color);
+    }
+    .card-btn.secondary {
+      border: 1px solid var(--border);
+      color: #fff;
+      background: rgba(255,255,255,0.02);
+    }
+    .card-btn.secondary:hover {
+      background: rgba(255,255,255,0.05);
+      border-color: rgba(255,255,255,0.15);
+    }
+
+    @media(max-width: 900px) {
+      .niche-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-container">
+      <a href="#" class="brand">A11-K<span>✦</span> DIRECTORY</a>
+      <div class="badge">Decoupled Multiverse</div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero-sec">
+      <h1>Sovereign <span>Multiverse</span> Assets</h1>
+      <p>Five highly niche development pipelines constructed with hyper-advanced client-side mathematical systems. Zero external dependencies, pure standalone sovereign tech.</p>
+    </section>
+
+    <div class="niche-grid">
+      <!-- Site 1: Bio-Sovereign -->
+      <div class="niche-card" style="--theme-color: var(--neon-green); --theme-rgb: 92, 255, 177;">
+        <div class="card-top">
+          <span class="niche-tag">Synthetic Bio / Genetics</span>
+          <h2>Bio-Sovereign</h2>
+          <p>Decentralized synthetic biological synthesis blueprints. Local peer-to-peer CAD pipelines bypassing state or corporate sequencing gatekeepers.</p>
+          <div class="system-badge">
+            <strong>System:</strong> Synthetic CRISPR Codon & Hamming Off-Target Simulator
+          </div>
+        </div>
+        <div class="card-actions">
+          <a href="./bio-sovereign/index.html" class="card-btn primary">Initialize System</a>
+          <a href="./bio-sovereign/simulation.html" class="card-btn secondary">Console Only</a>
+        </div>
+      </div>
+
+      <!-- Site 2: Deep-Aquaculture -->
+      <div class="niche-card" style="--theme-color: var(--neon-cyan); --theme-rgb: 0, 242, 254;">
+        <div class="card-top">
+          <span class="niche-tag">Carbon Sinks / Algaculture</span>
+          <h2>Deep-Aquaculture</h2>
+          <p>Autonomous marine thermal upwelling networks farming pelagic sargassum crops to construct deep-sea carbon-sequestration sinks.</p>
+          <div class="system-badge">
+            <strong>System:</strong> Hydrostatic Deep-Water Lift & Carbon-Sequestration Engine
+          </div>
+        </div>
+        <div class="card-actions">
+          <a href="./deep-aquaculture/index.html" class="card-btn primary">Initialize System</a>
+          <a href="./deep-aquaculture/simulation.html" class="card-btn secondary">Console Only</a>
+        </div>
+      </div>
+
+      <!-- Site 3: Quantum-Logistics -->
+      <div class="niche-card" style="--theme-color: var(--neon-purple); --theme-rgb: 157, 78, 221;">
+        <div class="card-top">
+          <span class="niche-tag">Pharmaceutical Isotope Cold-Chain</span>
+          <h2>Quantum-Logistics</h2>
+          <p>Routing critical oncology isotopes and ultra-cold superconductors via dynamic paths optimized to solar radiation & half-life decay.</p>
+          <div class="system-badge">
+            <strong>System:</strong> Decay Path Half-Life Calculator & Isotope Optimizer
+          </div>
+        </div>
+        <div class="card-actions">
+          <a href="./quantum-logistics/index.html" class="card-btn primary">Initialize System</a>
+          <a href="./quantum-logistics/simulation.html" class="card-btn secondary">Console Only</a>
+        </div>
+      </div>
+
+      <!-- Site 4: Orbital-Reclaim -->
+      <div class="niche-card" style="--theme-color: var(--neon-pink); --theme-rgb: 253, 38, 126;">
+        <div class="card-top">
+          <span class="niche-tag">Defense / Space Debris Mitigation</span>
+          <h2>Orbital-Reclaim</h2>
+          <p>Ground-station laser arrays utilizing short pulse thermal ablation vectors to safely de-orbit hazardous LEO space debris.</p>
+          <div class="system-badge">
+            <strong>System:</strong> Delta-V Thermal Laser Ablation Deflection Calculator
+          </div>
+        </div>
+        <div class="card-actions">
+          <a href="./orbital-reclaim/index.html" class="card-btn primary">Initialize System</a>
+          <a href="./orbital-reclaim/simulation.html" class="card-btn secondary">Console Only</a>
+        </div>
+      </div>
+
+      <!-- Site 5: Mesh-Geothermal -->
+      <div class="niche-card" style="--theme-color: var(--neon-gold); --theme-rgb: 216, 183, 106;">
+        <div class="card-top">
+          <span class="niche-tag">Energy / Thermosiphons</span>
+          <h2>Mesh-Geothermal</h2>
+          <p>Closed-loop, sub-surface heat harvesters using supercritical carbon dioxide (sCO2) thermosiphons in deep abandoned wells.</p>
+          <div class="system-badge">
+            <strong>System:</strong> sCO2 Thermodynamic Heat Flux & Density Velocity Simulator
+          </div>
+        </div>
+        <div class="card-actions">
+          <a href="./mesh-geothermal/index.html" class="card-btn primary">Initialize System</a>
+          <a href="./mesh-geothermal/simulation.html" class="card-btn secondary">Console Only</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+</body>
+</html>
