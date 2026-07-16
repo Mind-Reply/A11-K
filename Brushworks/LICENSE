@@ -1,0 +1,36 @@
+MRPRODUCTION / BRUSHWORKS LICENSE
+================================
+
+Copyright (c) 2026 A.K. / Mind-Reply / MRPRODUCTION
+All rights reserved unless expressly granted below.
+
+BRAND: Brushworks
+PARENT: MRPRODUCTION Estate
+ROLE: System layer — creative builder, studio wrap, publish pipeline
+POLICY: WRAP-AND-SHIP DIRECTIVE v1.0 (Directive 001)
+FINGERPRINT: LIBRA-BW-AK-2026
+
+1. OWNERSHIP
+   This software, branding, shell UI, configuration, and documentation
+   are owned by A.K. under the Mind-Reply / MRPRODUCTION umbrella.
+   Third-party engines (including Photopea) remain property of their
+   respective owners and are wrapped, not redistributed as source.
+
+2. DIRECTIVE 001 — NEVER BUILD FROM SCRATCH
+   Agents and contributors MUST wrap existing tools, brand them, and
+   ship. Greenfield rebuilds of editors, carts, or infrastructure that
+   already exist are a license / policy breach.
+
+3. USE
+   Internal estate use and public demonstration of Brushworks-branded
+   surfaces is permitted. Commercial resale of the shell as a competing
+   product requires written permission from the owner.
+
+4. NO WARRANTY
+   Provided as-is. No warranty of merchantability or fitness.
+
+5. NOTICE
+   Retain this LICENSE and OWNERSHIP notice in distributions and footers.
+
+Contact / org: Mind-Reply (GitHub org)
+Site: https://mind-reply.github.io/Brushworks/

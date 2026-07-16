@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brushworks Builder — MRstation Console</title>
+  <meta name="description" content="Brushworks Builder console: prompt to draft, approve, publish. Wraps MRstation CLI flow for the estate." />
+  <link rel="canonical" href="https://mind-reply.github.io/A11-K/Brushworks/builder.html" />
+  <meta name="theme-color" content="#0a0a0a" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&family=DM+Sans:opsz,wght@9..40,400;9..40,500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+  <header class="nav">
+    <a class="logo" href="./">Brushworks</a>
+    <nav>
+      <a href="./">Home</a>
+      <a href="studio.html">Studio</a>
+      <a href="builder.html" class="btn-nav">Builder</a>
+    </nav>
+  </header>
+
+  <div class="builder-layout">
+    <p class="eyebrow">MRSTATION · BUILDER CONSOLE</p>
+    <h1>Type what you need.<br />Approve. Publish.</h1>
+    <p class="lede" style="margin:0;max-width:520px;text-align:left;color:var(--muted);">
+      Local-first flow mirrored from the Brushworks CLI. Templates wrap existing shells.
+      Production URLs must be HTTPS. Human approval before ship.
+    </p>
+
+    <div class="template-row" id="templates">
+      <button type="button" class="chip active" data-template="premium-saas">premium-saas</button>
+      <button type="button" class="chip" data-template="aurel-luxury">aurel-luxury</button>
+      <button type="button" class="chip" data-template="control-plane">control-plane</button>
+      <button type="button" class="chip" data-template="unapologetic-sets">unapologetic-sets</button>
+    </div>
+
+    <div class="console">
+      <div class="console-head">brushworks · draft builder</div>
+      <textarea id="prompt" placeholder="e.g. Luxury cosmetics landing for Unapologetic #sets — dark gold, video hero, product grid, dropship CTA"></textarea>
+      <div class="console-actions">
+        <button type="button" class="btn primary" id="buildBtn">Build draft</button>
+        <button type="button" class="btn ghost" id="approveBtn">Request publish approval</button>
+        <button type="button" class="btn ghost" id="copyCliBtn">Copy CLI command</button>
+      </div>
+    </div>
+
+    <div class="status" id="status">Ready. Describe the site, pick a template, build draft.</div>
+
+    <section class="panel" style="padding-left:0;padding-right:0;">
+      <div class="panel-head">
+        <h2>CLI (local)</h2>
+        <p>Run from brands/brushworks on your machine — same system, real registry.</p>
+      </div>
+      <pre style="background:#0e0e0e;border:1px solid var(--line);border-radius:12px;padding:1.1rem;overflow:auto;color:var(--muted);font-size:0.85rem;"><code>node builder.js create "Unapologetic" unapologetic-sets
+node builder.js list
+node builder.js deploy-prep &lt;projectId&gt;
+node builder.js register &lt;projectId&gt; https://your-site.pages.dev</code></pre>
+    </section>
+  </div>
+
+  <footer class="footer">
+    <div>
+      <strong>Brushworks Builder</strong> · WRAP-AND-SHIP
+      <br /><span class="muted">FINGERPRINT · LIBRA-BW-AK-2026</span>
+    </div>
+    <div class="footer-links">
+      <a href="OWNERSHIP.md">Ownership</a>
+      <a href="LICENSE">License</a>
+    </div>
+  </footer>
+  <script src="app.js"></script>
+</body>
+</html>
