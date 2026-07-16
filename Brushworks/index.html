@@ -3,151 +3,203 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Brushworks — Create. Design. Publish.</title>
-  <meta name="description" content="Brushworks is the MRPRODUCTION creative system: wrap existing tools, brand them, and ship. Design canvas, Photopea studio, publish pipeline." />
+  <title>Brushworks — Build your site like a puzzle</title>
+  <meta name="description" content="Brushworks helps anyone build a beautiful site. Pick pieces, drop them in, publish. No coding. No jargon." />
   <meta name="robots" content="index,follow" />
   <link rel="canonical" href="https://mind-reply.github.io/A11-K/Brushworks/" />
-  <meta property="og:title" content="Brushworks — Create. Design. Publish." />
-  <meta property="og:description" content="Creative-first website system. Canvas, studio, publish. Never from scratch." />
-  <meta property="og:type" content="website" />
-  <meta name="theme-color" content="#0a0a0a" />
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "name": "Brushworks",
-    "applicationCategory": "DesignApplication",
-    "operatingSystem": "Web",
-    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-    "publisher": { "@type": "Organization", "name": "MRPRODUCTION / Mind-Reply" },
-    "datePublished": "2026-07-16",
-    "dateModified": "2026-07-16"
-  }
-  </script>
+  <meta name="theme-color" content="#0c0b0a" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="grain" aria-hidden="true"></div>
-  <header class="nav">
-    <a class="logo" href="./">Brushworks</a>
-    <nav>
-      <a href="#system">System</a>
-      <a href="#studio">Studio</a>
-      <a href="#publish">Publish</a>
-      <a href="builder.html">Builder</a>
-      <a href="studio.html" class="btn-nav">Open Studio</a>
-    </nav>
-  </header>
-
-  <main>
-    <section class="hero">
-      <p class="eyebrow">MRPRODUCTION · SYSTEM LAYER</p>
-      <h1>Create. Design.<br /><em>Publish.</em></h1>
-      <p class="lede">
-        The estate builder. Wrap what exists — Photopea, templates, Cloudflare Pages —
-        brand it, license it, ship it. No greenfield. No toys.
-      </p>
-      <div class="hero-actions">
-        <a class="btn primary" href="studio.html">Enter Studio</a>
-        <a class="btn ghost" href="builder.html">Launch Builder</a>
-      </div>
-      <p class="fingerprint">FINGERPRINT · LIBRA-BW-AK-2026 · DIRECTIVE 001</p>
-    </section>
-
-    <section id="system" class="panel">
-      <div class="panel-head">
-        <h2>System stack</h2>
-        <p>One pipeline. Three surfaces. Zero rebuilds.</p>
-      </div>
-      <div class="cards">
-        <article class="card">
-          <span class="num">01</span>
-          <h3>Canvas shell</h3>
-          <p>Luxury landing + project registry. Your brand, your license, your domain.</p>
-        </article>
-        <article class="card">
-          <span class="num">02</span>
-          <h3>Studio wrap</h3>
-          <p>Photopea embedded full-screen. PSD layers, masks, brushes — already built.</p>
-        </article>
-        <article class="card">
-          <span class="num">03</span>
-          <h3>Publish engine</h3>
-          <p>MRstation CLI → Cloudflare Pages / GitHub Pages. Approve, then ship.</p>
-        </article>
-      </div>
-    </section>
-
-    <section id="studio" class="split">
-      <div>
-        <p class="eyebrow">STUDIO</p>
-        <h2>Photoshop-class editor.<br />Your shell around it.</h2>
-        <p>Photopea runs in-browser. Brushworks owns the chrome, license badge, and publish path. Directive 001: never build the editor from scratch.</p>
-        <a class="btn primary" href="studio.html">Open Photopea Studio</a>
-      </div>
-      <div class="preview-frame">
-        <div class="preview-bar">
-          <span></span><span></span><span></span>
-          <em>studio.brushworks · photopea wrap</em>
-        </div>
-        <div class="preview-body">
-          <p>Layers · Masks · PSD · Export</p>
-          <a href="studio.html">Launch →</a>
+  <div class="app">
+    <!-- Friendly top -->
+    <header class="top">
+      <div class="brand">
+        <span class="logo-dot">B</span>
+        <div>
+          <strong>Brushworks</strong>
+          <small>Build a site like a puzzle</small>
         </div>
       </div>
+      <div class="top-right">
+        <span class="step-pill" id="stepPill">Step 1 of 4 · Pick a vibe</span>
+        <button type="button" class="btn soft" id="btnHelp">Need help?</button>
+      </div>
+    </header>
+
+    <!-- Progress puzzle bar -->
+    <div class="progress" aria-label="Your progress">
+      <button type="button" class="prog active" data-go="1"><span>1</span> Vibe</button>
+      <button type="button" class="prog" data-go="2"><span>2</span> Pieces</button>
+      <button type="button" class="prog" data-go="3"><span>3</span> Design</button>
+      <button type="button" class="prog" data-go="4"><span>4</span> Publish</button>
+    </div>
+
+    <!-- STEP 1: Vibe — instant creativity -->
+    <section class="screen active" id="s1">
+      <div class="welcome">
+        <p class="hello">Hey — you don’t need to know tech.</p>
+        <h1>What kind of site<br />do you want to make?</h1>
+        <p class="sub">Tap a card. That’s it. We’ll build the rest with you.</p>
+      </div>
+      <div class="vibe-grid" id="vibeGrid">
+        <button type="button" class="vibe" data-vibe="shop" data-template="unapologetic-sets">
+          <span class="emoji">✨</span>
+          <strong>Shop / beauty</strong>
+          <span>Sell products · look expensive</span>
+        </button>
+        <button type="button" class="vibe" data-vibe="business" data-template="premium-saas">
+          <span class="emoji">🚀</span>
+          <strong>Business / app</strong>
+          <span>Clean · modern · trust</span>
+        </button>
+        <button type="button" class="vibe" data-vibe="luxury" data-template="aurel-luxury">
+          <span class="emoji">🥂</span>
+          <strong>Luxury brand</strong>
+          <span>Gold · calm · premium</span>
+        </button>
+        <button type="button" class="vibe" data-vibe="ops" data-template="control-plane">
+          <span class="emoji">🎛️</span>
+          <strong>Dashboard / tools</strong>
+          <span>Control panel energy</span>
+        </button>
+        <button type="button" class="vibe" data-vibe="me" data-template="premium-saas">
+          <span class="emoji">👋</span>
+          <strong>About me</strong>
+          <span>Portfolio · story · contact</span>
+        </button>
+        <button type="button" class="vibe" data-vibe="blank" data-template="premium-saas">
+          <span class="emoji">🧩</span>
+          <strong>Surprise me</strong>
+          <span>Empty canvas · free play</span>
+        </button>
+      </div>
     </section>
 
-    <section id="publish" class="panel dark">
-      <div class="panel-head">
-        <h2>Publish flow</h2>
-        <p>Type intent → draft → approve → live. Short notifications only.</p>
+    <!-- STEP 2: Puzzle pieces -->
+    <section class="screen" id="s2">
+      <div class="welcome compact">
+        <h1>Pick the pieces you want</h1>
+        <p class="sub">Like a puzzle — click to add. Click again to remove. No wrong answers.</p>
       </div>
-      <ol class="steps">
-        <li><strong>Prompt</strong> — describe the site or pick a template (premium-saas, aurel-luxury, control-plane).</li>
-        <li><strong>Build</strong> — MRstation creates project ID, copies template, writes registry.</li>
-        <li><strong>Approve</strong> — human gate before production URL.</li>
-        <li><strong>Deploy</strong> — deploy-prep + Cloudflare Pages / GitHub Pages. HTTPS only.</li>
+      <div class="two-col">
+        <div>
+          <p class="label">Your site name</p>
+          <input type="text" id="siteName" placeholder="e.g. Unapologetic" maxlength="48" />
+          <p class="label" style="margin-top:1.25rem">One sentence about it</p>
+          <textarea id="siteBlurb" rows="3" placeholder="e.g. Classy cosmetics sets that look expensive on camera"></textarea>
+        </div>
+        <div>
+          <p class="label">Puzzle pieces</p>
+          <div class="pieces" id="pieces">
+            <button type="button" class="piece on" data-piece="hero">🏠 Big welcome</button>
+            <button type="button" class="piece on" data-piece="about">💬 About us</button>
+            <button type="button" class="piece on" data-piece="products">🛍️ Products / services</button>
+            <button type="button" class="piece" data-piece="video">🎬 Video spotlight</button>
+            <button type="button" class="piece" data-piece="gallery">🖼️ Photo gallery</button>
+            <button type="button" class="piece on" data-piece="contact">✉️ Contact / buy</button>
+            <button type="button" class="piece" data-piece="faq">❓ FAQ</button>
+            <button type="button" class="piece" data-piece="social">📱 Social links</button>
+          </div>
+          <p class="tiny" id="pieceCount">4 pieces selected</p>
+        </div>
+      </div>
+      <div class="footer-bar">
+        <button type="button" class="btn soft" data-back="1">← Back</button>
+        <button type="button" class="btn primary" id="btnToDesign">Next: Design →</button>
+      </div>
+    </section>
+
+    <!-- STEP 3: Design studio — friendly shell + Photopea -->
+    <section class="screen" id="s3">
+      <div class="studio-head">
+        <div>
+          <h1>Design playground</h1>
+          <p class="sub">Draw, edit photos, make it yours. The pro editor is underneath — we keep it simple on top.</p>
+        </div>
+        <div class="studio-actions">
+          <button type="button" class="btn soft" id="btnSkipDesign">Skip for now</button>
+          <button type="button" class="btn primary" id="btnToPublish">Looks good → Publish</button>
+        </div>
+      </div>
+      <div class="studio-box">
+        <div class="studio-tip" id="studioTip">
+          <div>
+            <strong>🎨 Your creative room</strong>
+            <p>Tap <b>Open editor</b>. Change colors, crop photos, try ideas. Nothing breaks. You can always come back.</p>
+            <button type="button" class="btn primary" id="btnOpenEditor">Open editor</button>
+          </div>
+        </div>
+        <iframe id="editor" title="Design editor" src="about:blank" allow="clipboard-read; clipboard-write; fullscreen"></iframe>
+      </div>
+      <div class="footer-bar">
+        <button type="button" class="btn soft" data-back="2">← Back</button>
+        <button type="button" class="btn primary" data-go-pub>Continue →</button>
+      </div>
+    </section>
+
+    <!-- STEP 4: Publish — full path, plain English -->
+    <section class="screen" id="s4">
+      <div class="welcome compact">
+        <h1>Ready to show the world?</h1>
+        <p class="sub">We’ll package everything. You say yes. Then it can go live.</p>
+      </div>
+
+      <div class="summary" id="summary">
+        <!-- filled by JS -->
+      </div>
+
+      <div class="checklist">
+        <label class="check"><input type="checkbox" id="chkLook" /> I checked how it looks</label>
+        <label class="check"><input type="checkbox" id="chkMine" /> This is my project / brand</label>
+        <label class="check"><input type="checkbox" id="chkGo" /> I’m ready to publish</label>
+      </div>
+
+      <div class="publish-box">
+        <p class="label">Optional live link (if you already have one)</p>
+        <input type="url" id="liveUrl" placeholder="https://my-site.pages.dev" />
+        <div class="footer-bar" style="padding:0;margin-top:1rem;border:0;">
+          <button type="button" class="btn soft" data-back="3">← Back</button>
+          <button type="button" class="btn primary" id="btnFinish" disabled>Finish &amp; get my package 🎁</button>
+        </div>
+        <p class="tiny" id="finishHint">Tick all three boxes to unlock Finish.</p>
+      </div>
+
+      <div class="done-card hidden" id="doneCard">
+        <h2>You did it 🎉</h2>
+        <p>Your site package is ready. Copy the steps below — or save the file. This is the full handoff to go live.</p>
+        <pre id="packageOut"></pre>
+        <div class="footer-bar" style="padding:0;border:0;margin-top:1rem;">
+          <button type="button" class="btn soft" id="btnCopy">Copy package</button>
+          <button type="button" class="btn primary" id="btnAgain">Make another site</button>
+        </div>
+        <p class="tiny honest">
+          <b>Honest note:</b> Finish builds your full package (name, pieces, template, commands).
+          Putting it on the real internet needs one free GitHub + Cloudflare Pages connect (or we run the CLI on your PC).
+          The creativity part is done — the last mile is just “put the box on the shelf.”
+        </p>
+      </div>
+    </section>
+  </div>
+
+  <!-- Help modal -->
+  <div class="modal hidden" id="helpModal">
+    <div class="modal-card">
+      <h2>How Brushworks works</h2>
+      <ol>
+        <li><b>Vibe</b> — pick the feeling of your site</li>
+        <li><b>Pieces</b> — choose blocks like a puzzle</li>
+        <li><b>Design</b> — play in the editor (optional)</li>
+        <li><b>Publish</b> — approve and get your package</li>
       </ol>
-      <a class="btn primary" href="builder.html">Open Builder Console</a>
-    </section>
-
-    <section class="panel">
-      <div class="panel-head">
-        <h2>Templates</h2>
-        <p>Wrap-ready shells for the estate.</p>
-      </div>
-      <div class="cards three">
-        <article class="card">
-          <h3>premium-saas</h3>
-          <p>Black ground, gold accents, editorial headlines.</p>
-        </article>
-        <article class="card">
-          <h3>aurel-luxury</h3>
-          <p>Serif, amber, curated — luxury goods energy.</p>
-        </article>
-        <article class="card">
-          <h3>control-plane</h3>
-          <p>Terminal UI, emerald accents, ops-first.</p>
-        </article>
-      </div>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <div>
-      <strong>Brushworks</strong> · MRPRODUCTION v1.0 · Mind-Reply
-      <br />
-      <span class="muted">OWNER: A.K. · POLICY: WRAP-AND-SHIP · Never build from scratch.</span>
+      <p>No code. No wrong clicks. You can always go back.</p>
+      <button type="button" class="btn primary" id="btnCloseHelp">Got it</button>
     </div>
-    <div class="footer-links">
-      <a href="OWNERSHIP.md">Ownership</a>
-      <a href="LICENSE">License</a>
-      <a href="https://mind-reply.github.io/A11-K/">A11-K Multiverse</a>
-    </div>
-  </footer>
+  </div>
+
   <script src="app.js"></script>
 </body>
 </html>
