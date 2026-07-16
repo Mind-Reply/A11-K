@@ -189,7 +189,10 @@
       showPage("look");
       return "Design room is open. Tap Start designing for the full editor.";
     }
-    return "Try: “beauty shop”, “luxury brand”, “about me”, “open design”, or “publish”.";
+    if (/research|firecrawl|scrape|search|competitor|seo/.test(m)) {
+      return "Research uses Firecrawl (wrap only). Open Research in the top bar, or run D:\\MRPRODUCTION\\ESTATE\\agents\\firecrawl\\search.ps1 with FIRECRAWL_API_KEY. Playground: firecrawl.dev search.";
+    }
+    return "Try: “beauty shop”, “luxury brand”, “about me”, “open design”, “research”, or “publish”.";
   }
 
   const chatForm = $("#chatForm");
