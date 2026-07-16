@@ -1,0 +1,1 @@
+﻿MRPRODUCTION v1.0 LICENSE - NAUTIC-OS - Owner: Angel Krastev (DOB: 10/04/1997) - Fingerprint: fp_nautic_os_signal_k_influxdb_9cd050 - Copyright (c) 2026 Angel Krastev. All rights reserved.

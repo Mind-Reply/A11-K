@@ -1,0 +1,7 @@
+﻿--------------------------------------------------
+BRAND: SUB-STRATA
+PARENT: A11-K MULTIVERSE
+OWNER: A.K.
+POLICY: WRAP-AND-SHIP DIRECTIVE v1.0
+FINGERPRINT: LIBRA-594301-SIG-AK
+--------------------------------------------------

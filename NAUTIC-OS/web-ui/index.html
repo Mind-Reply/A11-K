@@ -1,0 +1,105 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NAUTIC-OS — Maritime Digital Twin & Fleet Operations</title>
+<meta name="description" content="Specialized Digital Twin management for private yacht charters and boutique fleets. Real-time NMEA 2000 maritime protocol integration via Signal K + InfluxDB.">
+<link rel="canonical" href="https://nautic-os.systems/">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"NAUTIC-OS","applicationCategory":"MaritimeInfrastructure","operatingSystem":"Web","description":"Maritime Digital Twin management for private yacht charters. Wraps Signal K Server + InfluxDB for real-time vessel telemetry.","author":{"@type":"Person","name":"Angel Krastev"},"publisher":{"@type":"Organization","name":"MRPRODUCTION v1.0","url":"https://mind-reply.com"},"datePublished":"2026-07-16","dateModified":"2026-07-16"}
+</script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Space+Grotesk:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap');
+:root{--bg:#020617;--text:#e2e8f0;--muted:#64748b;--border:rgba(56,189,248,0.12);--cyan:#22d3ee;--blue:#3b82f6;--teal:#14b8a6;--font-logo:'Cinzel',serif;--font-sans:'Inter',sans-serif;--font-mono:'Space Grotesk',sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);background:radial-gradient(ellipse at 20% 0%,rgba(34,211,238,0.08),transparent 50%),radial-gradient(ellipse at 80% 100%,rgba(59,130,246,0.06),transparent 50%),var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+header{border-bottom:1px solid var(--border);padding:20px 0;backdrop-filter:blur(20px);background:rgba(2,6,23,0.8);position:sticky;top:0;z-index:100}
+.hc{width:min(1200px,92vw);margin:auto;display:flex;justify-content:space-between;align-items:center}
+.brand{font-family:var(--font-logo);font-size:1.6rem;letter-spacing:0.12em;color:#fff;font-weight:900;text-decoration:none}
+.brand span{color:var(--cyan);text-shadow:0 0 12px rgba(34,211,238,0.5)}
+.badge{font-family:var(--font-mono);font-size:0.7rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;background:rgba(34,211,238,0.06);border:1px solid var(--border);padding:6px 14px;border-radius:999px;color:var(--cyan)}
+main{width:min(1200px,92vw);margin:40px auto 80px}
+.hero{text-align:center;margin-bottom:60px}
+.hero h1{font-family:var(--font-logo);font-size:clamp(2.2rem,4.5vw,4rem);line-height:1.1;letter-spacing:-0.03em;margin-bottom:16px}
+.hero h1 span{background:linear-gradient(135deg,var(--cyan),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{font-size:1.1rem;color:var(--muted);max-width:650px;margin:auto;font-weight:300}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(350px,1fr));gap:20px}
+.card{border:1px solid var(--border);border-radius:20px;background:rgba(8,15,30,0.6);padding:30px;position:relative;overflow:hidden;transition:all 0.3s cubic-bezier(0.16,1,0.3,1)}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--cyan),transparent)}
+.card:hover{transform:translateY(-4px);border-color:rgba(34,211,238,0.3);box-shadow:0 20px 50px rgba(0,0,0,0.5),0 0 20px rgba(34,211,238,0.05)}
+.tag{font-family:var(--font-mono);font-size:0.7rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px;display:block}
+.card h2{font-family:var(--font-logo);font-size:1.5rem;margin-bottom:10px}
+.card p{color:var(--muted);font-size:0.9rem;line-height:1.5;font-weight:300}
+.sys{background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-top:16px;font-family:var(--font-mono);font-size:0.78rem}
+.sys strong{color:var(--cyan)}
+.actions{display:flex;gap:10px;margin-top:20px}
+.btn{flex:1;text-align:center;padding:11px;border-radius:10px;text-decoration:none;font-size:0.85rem;font-weight:700;transition:all 0.2s}
+.btn.p{background:var(--cyan);color:#020617}
+.btn.p:hover{box-shadow:0 0 15px rgba(34,211,238,0.4)}
+.btn.s{border:1px solid var(--border);color:#fff;background:rgba(255,255,255,0.02)}
+.btn.s:hover{background:rgba(255,255,255,0.05)}
+.status-bar{display:flex;gap:20px;justify-content:center;margin-top:40px;flex-wrap:wrap}
+.status-item{font-family:var(--font-mono);font-size:0.8rem;color:var(--muted);display:flex;align-items:center;gap:8px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+footer{border-top:1px solid var(--border);padding:30px 0;text-align:center}
+.license{font-family:var(--font-mono);font-size:0.7rem;color:var(--muted);line-height:1.8}
+.license strong{color:var(--cyan)}
+@media(max-width:768px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><div class="hc"><a href="#" class="brand">NAUTIC<span>~</span>OS</a><div class="badge">Signal K · InfluxDB</div></div></header>
+<main>
+<section class="hero">
+<h1>Maritime <span>Digital Twin</span> & Fleet Ops</h1>
+<p>Specialized Digital Twin management for private yacht charters and boutique fleets. Real-time NMEA 2000 protocol integration via Signal K Server with InfluxDB time-series storage.</p>
+</section>
+<div class="status-bar">
+<div class="status-item"><div class="dot"></div> Signal K Server: Online</div>
+<div class="status-item"><div class="dot"></div> InfluxDB: Connected</div>
+<div class="status-item"><div class="dot"></div> NMEA 2000 Bus: Active</div>
+<div class="status-item"><div class="dot"></div> Vessels: 3 Tracked</div>
+</div>
+<div class="grid" style="margin-top:40px">
+<div class="card">
+<span class="tag">Real-Time Dashboard</span>
+<h2>Bridge View</h2>
+<p>Real-time SVG gauges powered by Signal K WebSockets. Depth, wind speed, engine RPM, and heading displayed in a maritime-grade instrument cluster.</p>
+<div class="sys"><strong>Engine:</strong> Signal K WebSocket API -> SVG Gauge Renderer</div>
+<div class="actions"><a href="./bridge-view.html" class="btn p">Open Bridge</a><a href="#" class="btn s">Docs</a></div>
+</div>
+<div class="card">
+<span class="tag">Time-Series Analytics</span>
+<h2>Historical Logs</h2>
+<p>InfluxDB query engine for voyage performance and fuel efficiency. Query any time range, export CSV, compare trips side-by-side.</p>
+<div class="sys"><strong>Engine:</strong> InfluxDB Flux Query -> Chart.js Visualization</div>
+<div class="actions"><a href="./historical-logs.html" class="btn p">View Logs</a><a href="#" class="btn s">Export</a></div>
+</div>
+<div class="card">
+<span class="tag">Fleet Management</span>
+<h2>Asset Manager</h2>
+<p>NMEA device registry with health-check heartbeats. Track every sensor, actuator, and gateway on every vessel in your fleet.</p>
+<div class="sys"><strong>Engine:</strong> Signal K Device Tree -> Health Monitor</div>
+<div class="actions"><a href="./asset-manager.html" class="btn p">Manage Assets</a><a href="#" class="btn s">API</a></div>
+</div>
+<div class="card">
+<span class="tag">Automation Layer</span>
+<h2>Policy Engine</h2>
+<p>Automated alerts for geofencing and bilge sensor triggers. Define rules in YAML, get notified via webhook when thresholds are breached.</p>
+<div class="sys"><strong>Engine:</strong> Rule Engine -> Webhook + Email Alerts</div>
+<div class="actions"><a href="./policy-engine.html" class="btn p">Configure Rules</a><a href="#" class="btn s">Test</a></div>
+</div>
+</div>
+</main>
+<footer>
+<div class="license">
+<strong>MRPRODUCTION v1.0</strong> - Owner: Angel Krastev (DOB: 10/04/1997) - A.K. Estate<br>
+License: MRP-NAUTIC-001 - Fingerprint: fp_nautic_os_signal_k_influxdb_9cd050<br>
+Policy: WRAP-AND-SHIP v1.0 - Never build from scratch. Wrap Signal K, brand it, ship it.<br>
+(c) 2026 Angel Krastev / MRPRODUCTION v1.0 - All rights reserved.
+</div>
+</footer>
+</body>
+</html>

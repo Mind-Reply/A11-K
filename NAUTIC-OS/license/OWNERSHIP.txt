@@ -1,0 +1,7 @@
+﻿--------------------------------------------------
+BRAND: NAUTIC-OS
+PARENT: A11-K MULTIVERSE
+OWNER: A.K.
+POLICY: WRAP-AND-SHIP DIRECTIVE v1.0
+FINGERPRINT: LIBRA-987591-SIG-AK
+--------------------------------------------------
