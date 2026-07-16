@@ -1,0 +1,10 @@
+--------------------------------------------------
+BRAND: Unapologetic
+LINE: #sets
+PARENT: MRPRODUCTION / Mind-Reply
+SYSTEM: BRUSHworks
+OWNER: A.K.
+POLICY: WRAP-AND-SHIP DIRECTIVE v1.0
+FINGERPRINT: LIBRA-UNA-AK-2026
+DATE: 2026-07-16
+--------------------------------------------------

@@ -1,0 +1,23 @@
+{
+  "brand": "BRUSHworks",
+  "agent": "firecrawl",
+  "fingerprint": "LIBRA-BW-AK-2026",
+  "playground": "https://www.firecrawl.dev/app/playground?endpoint=search",
+  "apiBase": "https://api.firecrawl.dev",
+  "endpoints": {
+    "search": "/v1/search",
+    "scrape": "/v1/scrape"
+  },
+  "auth": "Bearer FIRECRAWL_API_KEY",
+  "localScripts": {
+    "search": "D:\\\\MRPRODUCTION\\\\ESTATE\\\\agents\\\\firecrawl\\\\search.ps1",
+    "scrape": "D:\\\\MRPRODUCTION\\\\ESTATE\\\\agents\\\\firecrawl\\\\scrape.ps1"
+  },
+  "defaultQueries": [
+    "luxury cosmetics dropshipping suppliers",
+    "beauty #sets product photography trends",
+    "Cloudflare Pages custom domain SEO checklist",
+    "Signal K marine digital twin open source"
+  ],
+  "policy": "WRAP-AND-SHIP — never build a crawler from scratch"
+}

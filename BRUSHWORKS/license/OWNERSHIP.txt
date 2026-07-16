@@ -1,0 +1,13 @@
+--------------------------------------------------
+BRAND: Brushworks
+PARENT: MRPRODUCTION / Mind-Reply
+OWNER: A.K.
+ROLE: System layer — builder, studio, publish
+POLICY: WRAP-AND-SHIP DIRECTIVE v1.0
+FINGERPRINT: LIBRA-BW-AK-2026
+DATE: 2026-07-16
+--------------------------------------------------
+Never build from scratch. Wrap existing tools, brand them, ship.
+Photopea = studio engine (wrapped). MRstation = CLI publish path.
+Unapologetic / #sets = separate cosmetics brand, not this system.
+--------------------------------------------------
