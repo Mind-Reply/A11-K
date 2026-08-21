@@ -1,0 +1,51 @@
+{
+  "brand": {
+    "en": "The Sofia Tech Ledger",
+    "bg": "Софийски Технологичен Регистър"
+  },
+  "gcp": {
+    "projectName": "MIND REPLY",
+    "projectId": "mind-reply-496111",
+    "projectNumber": "768983523738",
+    "region": "europe-west3",
+    "consoleUrl": "https://console.cloud.google.com/welcome?project=mind-reply-496111"
+  },
+  "timezone": "Europe/Sofia",
+  "city": "София",
+  "claims": {
+    "smeVeryHighDigitalIntensityPct": {
+      "stated": 2,
+      "status": "unverified",
+      "note": "Treat as a hypothesis until Eurostat isoc_e_dii confirms the latest Bulgaria SME very-high digital intensity print."
+    },
+    "sofiaTechValueSharePct": {
+      "stated": 87,
+      "status": "unverified",
+      "note": "Do not publish as fact until an NSI/InvestBulgaria/Eurostat regional ICT-value source is attached."
+    }
+  },
+  "watchlist": [
+    { "name": "Payhawk", "bg": "Payhawk", "sector": "FinTech", "note": "Public Bulgaria-rooted spend platform. Track only verified public disclosures." },
+    { "name": "Iris Solutions", "bg": "Ирис Солюшънс", "sector": "FinTech", "note": "Open-banking rails. Track only verified public disclosures." }
+  ],
+  "sectors": [
+    { "id": "trade", "bg": "Търговия", "en": "Trade", "color": "#38BDF8" },
+    { "id": "manufacturing", "bg": "Производство", "en": "Manufacturing", "color": "#A78BFA" },
+    { "id": "transport", "bg": "Транспорт", "en": "Transport", "color": "#F472B6" },
+    { "id": "tourism", "bg": "Туризъм", "en": "Tourism", "color": "#FBBF24" },
+    { "id": "health", "bg": "Здравеопазване", "en": "Healthcare", "color": "#34D399" },
+    { "id": "construction", "bg": "Строителство", "en": "Construction", "color": "#FB7185" },
+    { "id": "it", "bg": "ИТ услуги", "en": "IT services", "color": "#60A5FA" }
+  ],
+  "endpoints": {
+    "eurostatDigitalIntensity": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/isoc_e_dii?format=JSON&lang=EN&geo=BG&unit=PC_ENT",
+    "egovPackageSearch": "https://data.egov.bg/api/3/action/package_search?q=%D1%82%D1%8A%D1%80%D0%B3%D0%BE%D0%B2%D1%81%D0%BA%D0%B8%20%D1%80%D0%B5%D0%B3%D0%B8%D1%81%D1%82%D1%8A%D1%80",
+    "economicTransformation": "https://www.mig.government.bg/",
+    "commercialRegister": "https://portal.registryagency.bg/"
+  },
+  "legal": {
+    "regix": "RegiX is a government-to-government interoperability bus. Do not scrape it. Use published open-data datasets or licensed registry access.",
+    "contacts": "No personal-contact scraping. No purchased lists. B2B distribution only through owned or contracted channels.",
+    "publish": "Ghost/LinkedIn stay draft unless credentials and PUBLISH_MODE=live are set."
+  }
+}

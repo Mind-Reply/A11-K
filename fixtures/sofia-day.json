@@ -1,0 +1,38 @@
+{
+  "asOf": "2026-08-21",
+  "smeDigitalIntensity": [
+    { "date": "2026-08-18", "value": 2.00, "source": "fixture-hypothesis" },
+    { "date": "2026-08-19", "value": 2.05, "source": "fixture-hypothesis" },
+    { "date": "2026-08-20", "value": 2.10, "source": "fixture-hypothesis" },
+    { "date": "2026-08-21", "value": 2.25, "source": "fixture-hypothesis" }
+  ],
+  "registrations": [
+    { "name": "Облак Търговия ООД", "latin": "Oblak Targovia OOD", "sector": "Търговия", "city": "София", "registeredAt": "2026-08-21", "techPark": true },
+    { "name": "София ERP Лаб ЕООД", "latin": "Sofia ERP Lab EOOD", "sector": "ИТ услуги", "city": "София", "registeredAt": "2026-08-21", "techPark": true },
+    { "name": "Балкан Логистик АД", "latin": "Balkan Logistic AD", "sector": "Транспорт", "city": "София", "registeredAt": "2026-08-21", "techPark": false },
+    { "name": "Пловдив Склад ООД", "latin": "Plovdiv Sklad OOD", "sector": "Търговия", "city": "Пловдив", "registeredAt": "2026-08-21", "techPark": false }
+  ],
+  "euFundingAwards": [
+    { "company": "София Ритейл Груп ООД", "sector": "trade", "instrument": "ERP / cloud upgrade", "programme": "Economic Transformation Programme", "amountEur": 48500, "awardedAt": "2026-08-21", "city": "София", "source": "fixture" },
+    { "company": "Стоков Център Изток ЕООД", "sector": "trade", "instrument": "e-invoicing + CRM", "programme": "RRF digitalisation", "amountEur": 39200, "awardedAt": "2026-08-21", "city": "София", "source": "fixture" },
+    { "company": "Национална Търговска Мрежа АД", "sector": "trade", "instrument": "ERP systems", "programme": "Economic Transformation Programme", "amountEur": 33800, "awardedAt": "2026-08-21", "city": "София", "source": "fixture" },
+    { "company": "Стара Загора Метал ООД", "sector": "manufacturing", "instrument": "MES", "programme": "RRF digitalisation", "amountEur": 61000, "awardedAt": "2026-08-20", "city": "Стара Загора", "source": "fixture" }
+  ],
+  "sectorLags": [
+    { "id": "construction", "bg": "Строителство", "en": "Construction", "sector": "Строителство", "digitalScoreBg": 28.4, "euAverage": 47.6, "color": "#FB7185" },
+    { "id": "tourism", "bg": "Туризъм", "en": "Tourism", "sector": "Туризъм", "digitalScoreBg": 33.1, "euAverage": 49.0, "color": "#FBBF24" },
+    { "id": "trade", "bg": "Търговия", "en": "Trade", "sector": "Търговия", "digitalScoreBg": 36.8, "euAverage": 51.2, "color": "#38BDF8" },
+    { "id": "manufacturing", "bg": "Производство", "en": "Manufacturing", "sector": "Производство", "digitalScoreBg": 41.0, "euAverage": 54.3, "color": "#A78BFA" },
+    { "id": "transport", "bg": "Транспорт", "en": "Transport", "sector": "Транспорт", "digitalScoreBg": 34.7, "euAverage": 48.9, "color": "#F472B6" },
+    { "id": "health", "bg": "Здравеопазване", "en": "Healthcare", "sector": "Здравеопазване", "digitalScoreBg": 39.2, "euAverage": 52.1, "color": "#34D399" },
+    { "id": "it", "bg": "ИТ услуги", "en": "IT services", "sector": "ИТ услуги", "digitalScoreBg": 68.4, "euAverage": 71.0, "color": "#60A5FA" }
+  ],
+  "nis2Findings": [
+    { "org": "София Ритейл Груп ООД", "severity": "high", "detectedAt": "2026-08-21", "note": "Missing incident-reporting owner" },
+    { "org": "Балкан Логистик АД", "severity": "medium", "detectedAt": "2026-08-20", "note": "Supplier register incomplete" }
+  ],
+  "fundingRounds": [
+    { "company": "Payhawk", "announcedAt": "2026-08-19", "amountUsd": 20000000, "note": "Public-watchlist placeholder. Replace with a verified disclosure before live publish." },
+    { "company": "Iris Solutions", "announcedAt": "2026-07-01", "amountUsd": 4000000, "note": "Outside 7-day window." }
+  ]
+}
