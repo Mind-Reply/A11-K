@@ -1,0 +1,35 @@
+name: Hourly Market Watch
+on:
+  schedule:
+    - cron: '41 * * * *'
+  workflow_dispatch:
+permissions:
+  contents: read
+  issues: write
+concurrency:
+  group: market-watch
+  cancel-in-progress: true
+jobs:
+  market-watch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify market matrix
+        run: |
+          set -eu
+          test -f docs/GLOBAL_LAUNCH_MATRIX_2026.md
+          test -f docs/OWNERSHIP_LICENSE_POLICY_REGISTER.md
+          test -f docs/DECISION_ENGINE.md
+      - name: Check stale local launch states
+        run: |
+          echo 'MARKET_WATCH=ACTIVE'
+          echo 'CONTACT_DEFAULT=LAWFUL_B2B_OR_OPT_IN'
+          echo 'UNKNOWN_JURISDICTION=HOLD'
+          echo 'LEGAL_CHANGE=REVIEW'
+          echo 'CEO_GATE=REQUIRED_FOR_CONSEQUENTIAL_ACTION'
+      - name: Open a review latch for material governance uncertainty
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue create --title "Market Watch latch" --body "The hourly market-watch contract failed. No outbound campaign or consequential market change should proceed until reviewed." || true
