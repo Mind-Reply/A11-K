@@ -15,11 +15,24 @@ import { renderAll } from "./render.js";
 import { appendEntry, verifyLedger } from "./ledger.js";
 import { loadConfig } from "./config.js";
 import { maybePublishGhost } from "./publishers/ghost.js";
+import { fetchEurostatDigitalIntensity, toIntensitySeries } from "./providers/eurostatLive.js";
 
 export async function run({ asOf = defaultAsOf(), provider = "fixture" } = {}) {
   const config = loadConfig();
   const outDir = process.env.STL_OUT_DIR || config.artifactDir;
   const data = provider === "fixture" ? getFixtureDataset(asOf) : getFixtureDataset(asOf);
+  let liveEurostat = null;
+  if (provider !== "fixture" || process.env.STL_LIVE_EUROSTAT === "1") {
+    liveEurostat = await fetchEurostatDigitalIntensity();
+    if (liveEurostat.ok) {
+      const liveSeries = toIntensitySeries(liveEurostat.BG);
+      if (liveSeries.length) {
+        data.smeDigitalIntensity = liveSeries;
+        data.eurostatSource = liveEurostat.source;
+        data.eu27Intensity = liveEurostat.EU27;
+      }
+    }
+  }
   const intensitySeries = data.smeDigitalIntensity;
   const delta = digitalIntensityDelta(intensitySeries);
   const trend = digitalIntensityTrend(intensitySeries);
@@ -51,6 +64,7 @@ export async function run({ asOf = defaultAsOf(), provider = "fixture" } = {}) {
     velocity,
     bulletin,
     gcp: config.gcp,
+    liveEurostat: liveEurostat ? { ok: liveEurostat.ok, reason: liveEurostat.reason ?? null, source: liveEurostat.source ?? null, points: liveEurostat.BG?.length ?? 0, eu27Points: liveEurostat.EU27?.length ?? 0 } : null,
     generatedAt: new Date().toISOString(),
     ledger: { height: 0 },
   };

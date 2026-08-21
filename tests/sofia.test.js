@@ -8,6 +8,7 @@ import {
 } from '../src/metrics.js';
 import { appendEntry, verifyLedger, readEntries } from '../src/ledger.js';
 import { run } from '../src/index.js';
+import { parseJsonStat, parseJsonStatMulti, toIntensitySeries } from '../src/providers/eurostatLive.js';
 
 const AS_OF = '2026-08-21';
 const TMP = 'out-test';
@@ -104,6 +105,58 @@ test('ledger detects tampering', () => {
   rmSync(TMP, { recursive: true, force: true });
 });
 
+test('eurostat json-stat parser orders years and values', () => {
+  const fake = {
+    dimension: { time: { category: { index: { '2021': 0, '2023': 2, '2022': 1 } } } },
+    value: { 0: 15.2, 1: 16.8, 2: 18.1 }
+  };
+  const s = parseJsonStat(fake);
+  assert.deepEqual(s.map((p) => p.date), ['2021-01-01', '2022-01-01', '2023-01-01']);
+  assert.deepEqual(s.map((p) => p.value), [15.2, 16.8, 18.1]);
+  assert.equal(toIntensitySeries(s).length, 3);
+});
+
+test('eurostat multi-dim parser decodes BG and EU27 with stride math', () => {
+  const fake = {
+    id: ['freq', 'unit', 'indic_is', 'size_emp', 'geo', 'time'],
+    size: [1, 1, 1, 1, 2, 2],
+    dimension: {
+      geo: { category: { index: { EU27_2020: 0, BG: 1 } } },
+      time: { category: { index: { 2022: 0, 2024: 1 } } }
+    },
+    value: { 0: 3.42, 1: 6.15, 2: 1.39, 3: 2.45 }
+  };
+  const r = parseJsonStatMulti(fake);
+  assert.deepEqual(r.BG, [{ date: '2022-01-01', value: 1.39 }, { date: '2024-01-01', value: 2.45 }]);
+  assert.deepEqual(r.EU27, [{ date: '2022-01-01', value: 3.42 }, { date: '2024-01-01', value: 6.15 }]);
+});
+
+test('live eurostat merge path swaps intensity series when fetch succeeds', async () => {
+  rmSync(TMP, { recursive: true, force: true });
+  process.env.STL_OUT_DIR = TMP;
+  process.env.STL_LIVE_EUROSTAT = '1';
+  const realFetch = globalThis.fetch;
+  globalThis.fetch = async () => new Response(JSON.stringify({
+    id: ['geo', 'time'],
+    size: [1, 2],
+    dimension: {
+      geo: { category: { index: { BG: 0 } } },
+      time: { category: { index: { 2022: 0, 2024: 1 } } }
+    },
+    value: { 0: 21.5, 1: 23.9 }
+  }), { status: 200, headers: { 'content-type': 'application/json' } });
+  try {
+    const { report } = await run({ asOf: AS_OF });
+    assert.equal(report.liveEurostat.ok, true);
+    assert.equal(report.liveEurostat.points, 2);
+    assert.equal(report.intensitySeries.at(-1).value, 23.9);
+  } finally {
+    globalThis.fetch = realFetch;
+    delete process.env.STL_LIVE_EUROSTAT;
+    delete process.env.STL_OUT_DIR;
+    rmSync(TMP, { recursive: true, force: true });
+  }
+});
 test('full pipeline run produces files + verified ledger', async () => {
   rmSync(TMP, { recursive: true, force: true });
   process.env.STL_OUT_DIR = TMP;
