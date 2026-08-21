@@ -18,6 +18,7 @@ import { maybePublishGhost } from "./publishers/ghost.js";
 import { fetchEurostatDigitalIntensity, toIntensitySeries } from "./providers/eurostatLive.js";
 import { fetchEgovRegistryDiscovery } from "./providers/egovLive.js";
 import { fetchTedDigitalProcurement } from "./providers/tedLive.js";
+import { scanRegistry, NIS2_LAW } from "./nis2Scout.js";
 
 export async function run({ asOf = defaultAsOf(), provider = "fixture" } = {}) {
   const config = loadConfig();
@@ -61,6 +62,7 @@ export async function run({ asOf = defaultAsOf(), provider = "fixture" } = {}) {
     parkShare,
   });
   const bulletin = buildBulletin({ asOf, delta, todaysRegistrations, funding, gaps, nis2, velocity, readiness });
+  const nis2Targets = scanRegistry();
   const report = {
     asOf,
     provider,
@@ -81,6 +83,14 @@ export async function run({ asOf = defaultAsOf(), provider = "fixture" } = {}) {
     liveEgov: liveEgov ? { ok: liveEgov.ok, reason: liveEgov.reason ?? null, datasets: liveEgov.totalDatasets ?? 0 } : null,
     liveTed: liveTed ? { ok: liveTed.ok, reason: liveTed.reason ?? null, totalNotices: liveTed.total ?? 0, returned: liveTed.notices?.length ?? 0 } : null,
     tedProcurement: data.tedProcurement ?? null,
+    nis2Targets: {
+      law: { inForce: NIS2_LAW.inForce, graceEnded: NIS2_LAW.gracePeriodEnded, sectors: NIS2_LAW.sectors },
+      inScope: nis2Targets.length,
+      essential: nis2Targets.filter((t) => t.classification.bracket === 'essential').length,
+      important: nis2Targets.filter((t) => t.classification.bracket === 'important').length,
+      avgVulnerability: Math.round(nis2Targets.reduce((s, t) => s + t.vulnerabilityScore, 0) / Math.max(1, nis2Targets.length)),
+      topTargets: nis2Targets.slice(0, 5).map((t) => ({ name: t.name, eik: t.eik, bracket: t.classification.bracket, score: t.vulnerabilityScore }))
+    },
     generatedAt: new Date().toISOString(),
     ledger: { height: 0 },
   };
@@ -136,6 +146,7 @@ if (process.argv[1]?.replaceAll("\\", "/").endsWith("/src/index.js") || process.
           egov: report.liveEgov,
           ted: report.liveTed
         },
+        nis2: report.nis2Targets,
         files: Object.fromEntries(Object.entries(files).map(([key, value]) => [key, value.replaceAll("\\", "/")])),
       },
       null,

@@ -11,6 +11,7 @@ import { run } from '../src/index.js';
 import { parseJsonStat, parseJsonStatMulti, toIntensitySeries } from '../src/providers/eurostatLive.js';
 import { searchEgovDatasets } from '../src/providers/egovLive.js';
 import { fetchTedDigitalProcurement } from '../src/providers/tedLive.js';
+import { scanRegistry, classifyEntity, vulnerabilityScore, buildOutreachBg, NIS2_LAW } from '../src/nis2Scout.js';
 
 const AS_OF = '2026-08-21';
 const TMP = 'out-test';
@@ -215,4 +216,36 @@ test('ted procurement search normalizes notices', async () => {
     assert.equal(r.notices[0].buyer, 'Община София');
     assert.equal(r.notices[0].totalValue, 50000);
   } finally { globalThis.fetch = realFetch; }
+});
+test('nis2 scout classifies essential vs important entities', () => {
+  const essential = classifyEntity({ sector: 'Питейна вода', employees: 350 });
+  const important = classifyEntity({ sector: 'Хранителна промишленост', employees: 55 });
+  const smallOut = classifyEntity({ sector: 'Търговия', employees: 10 });
+  assert.equal(essential.bracket, 'essential');
+  assert.equal(important.bracket, 'important');
+  assert.equal(smallOut.bracket, 'out-of-scope');
+});
+
+test('nis2 vulnerability score weights hygiene gaps', () => {
+  const low = vulnerabilityScore({ hasIso27001: true, hasIncidentPlan: true, hasRiskPolicy: true }, { bracket: 'important' });
+  const high = vulnerabilityScore({ hasIso27001: false, hasIncidentPlan: false, hasRiskPolicy: false }, { bracket: 'essential' });
+  assert.ok(high > low);
+  assert.equal(low, 0);
+  assert.ok(high <= 100);
+});
+
+test('nis2 outreach embeds company eik and fine ceiling', () => {
+  const c = { eik: '201234567', name: 'Балкан Храни ООД', sector: 'Хранителна промишленост', manager: 'Иван Петров' };
+  const o = buildOutreachBg(c, { bracket: 'important', bg: 'важен субект', fine: NIS2_LAW.importantFine });
+  assert.ok(o.subject.includes('NIS2'));
+  assert.ok(o.body.includes(c.eik));
+  assert.ok(o.body.includes('7 млн.'));
+  assert.ok(o.body.includes(NIS2_LAW.gracePeriodEnded));
+});
+
+test('nis2 scanRegistry returns scored targets sorted desc', () => {
+  const targets = scanRegistry();
+  assert.ok(targets.length >= 5);
+  assert.ok(targets[0].vulnerabilityScore >= targets.at(-1).vulnerabilityScore);
+  assert.ok(targets.every((t) => t.classification.bracket !== 'out-of-scope'));
 });
