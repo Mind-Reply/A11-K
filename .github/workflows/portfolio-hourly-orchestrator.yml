@@ -1,0 +1,65 @@
+name: Portfolio Hourly Orchestrator
+
+on:
+  schedule:
+    - cron: '31 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: portfolio-hourly
+  cancel-in-progress: true
+
+env:
+  MODE: observe-decide-verify
+  OWNER_GATE: required
+  BACKUP_REQUIRED: 'true'
+  UNKNOWN_ACTION: latch
+
+jobs:
+  portfolio-posture:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout control layer
+        uses: actions/checkout@v4
+
+      - name: Validate control documents
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f docs/PORTFOLIO_OPERATING_MAP_2026-08-21.md
+          test -f docs/OWNERSHIP_LICENSE_POLICY_REGISTER.md
+          test -f docs/DECISION_ENGINE.md
+          echo 'CONTROL_DOCUMENTS=OK'
+
+      - name: Scan obvious credential patterns
+        shell: bash
+        run: |
+          set -euo pipefail
+          if grep -RInE 'BEGIN (RSA|OPENSSH|EC|DSA) PRIVATE KEY|sk-[A-Za-z0-9]{20,}|whsec_[A-Za-z0-9]{20,}' . --exclude-dir=.git; then
+            echo 'CREDENTIAL_RISK=BLOCK'
+            exit 1
+          fi
+          echo 'CREDENTIAL_RISK=CLEAR'
+
+      - name: Emit product trial queue
+        shell: bash
+        run: |
+          cat <<'EOF'
+          TRIAL_QUEUE=MindReply,A11-K,ResellerPro,Radar,WhatsAppRouter,AUREL,Brushworks,OpenMontage,Pointer,ControlPlane
+          TEAM=Architect,Builder,Breaker
+          REQUIRED_ORDER=backup,evidence,architect,builder,breaker,decision,preview,verify,recovery
+          UNKNOWN=Latch
+          CONSEQUENT_OWNER_GATE=Required
+          EOF
+
+      - name: Emit recovery posture
+        shell: bash
+        run: |
+          echo 'RECOVERY=REVERSIBLE_FIRST'
+          echo 'RETRY=BOUNDED'
+          echo 'ROLLBACK=AVAILABLE_BEFORE_PRODUCTION'
+          echo 'SENSITIVE_RECORDS=NO_AUTOMATED_MUTATION'
+          echo 'LEGAL_OR_OWNERSHIP_UNKNOWN=BLOCK'
