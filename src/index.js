@@ -16,13 +16,18 @@ import { appendEntry, verifyLedger } from "./ledger.js";
 import { loadConfig } from "./config.js";
 import { maybePublishGhost } from "./publishers/ghost.js";
 import { fetchEurostatDigitalIntensity, toIntensitySeries } from "./providers/eurostatLive.js";
+import { fetchEgovRegistryDiscovery } from "./providers/egovLive.js";
+import { fetchTedDigitalProcurement } from "./providers/tedLive.js";
 
 export async function run({ asOf = defaultAsOf(), provider = "fixture" } = {}) {
   const config = loadConfig();
   const outDir = process.env.STL_OUT_DIR || config.artifactDir;
   const data = provider === "fixture" ? getFixtureDataset(asOf) : getFixtureDataset(asOf);
   let liveEurostat = null;
-  if (provider !== "fixture" || process.env.STL_LIVE_EUROSTAT === "1") {
+  let liveEgov = null;
+  let liveTed = null;
+  const liveAll = process.env.STL_LIVE === "1";
+  if (provider !== "fixture" || liveAll || process.env.STL_LIVE_EUROSTAT === "1") {
     liveEurostat = await fetchEurostatDigitalIntensity();
     if (liveEurostat.ok) {
       const liveSeries = toIntensitySeries(liveEurostat.BG);
@@ -32,6 +37,13 @@ export async function run({ asOf = defaultAsOf(), provider = "fixture" } = {}) {
         data.eu27Intensity = liveEurostat.EU27;
       }
     }
+  }
+  if (provider !== "fixture" || liveAll || process.env.STL_LIVE_EGOV === "1") {
+    liveEgov = await fetchEgovRegistryDiscovery();
+  }
+  if (provider !== "fixture" || liveAll || process.env.STL_LIVE_TED === "1") {
+    liveTed = await fetchTedDigitalProcurement();
+    if (liveTed.ok) data.tedProcurement = liveTed.notices;
   }
   const intensitySeries = data.smeDigitalIntensity;
   const delta = digitalIntensityDelta(intensitySeries);
@@ -66,6 +78,9 @@ export async function run({ asOf = defaultAsOf(), provider = "fixture" } = {}) {
     eu27Intensity: data.eu27Intensity ?? null,
     gcp: config.gcp,
     liveEurostat: liveEurostat ? { ok: liveEurostat.ok, reason: liveEurostat.reason ?? null, source: liveEurostat.source ?? null, points: liveEurostat.BG?.length ?? 0, eu27Points: liveEurostat.EU27?.length ?? 0 } : null,
+    liveEgov: liveEgov ? { ok: liveEgov.ok, reason: liveEgov.reason ?? null, datasets: liveEgov.totalDatasets ?? 0 } : null,
+    liveTed: liveTed ? { ok: liveTed.ok, reason: liveTed.reason ?? null, totalNotices: liveTed.total ?? 0, returned: liveTed.notices?.length ?? 0 } : null,
+    tedProcurement: data.tedProcurement ?? null,
     generatedAt: new Date().toISOString(),
     ledger: { height: 0 },
   };
@@ -116,6 +131,11 @@ if (process.argv[1]?.replaceAll("\\", "/").endsWith("/src/index.js") || process.
         ledger,
         publish,
         gcpProject: report.gcp?.projectId || null,
+        live: {
+          eurostat: report.liveEurostat,
+          egov: report.liveEgov,
+          ted: report.liveTed
+        },
         files: Object.fromEntries(Object.entries(files).map(([key, value]) => [key, value.replaceAll("\\", "/")])),
       },
       null,

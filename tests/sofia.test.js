@@ -9,6 +9,8 @@ import {
 import { appendEntry, verifyLedger, readEntries } from '../src/ledger.js';
 import { run } from '../src/index.js';
 import { parseJsonStat, parseJsonStatMulti, toIntensitySeries } from '../src/providers/eurostatLive.js';
+import { searchEgovDatasets } from '../src/providers/egovLive.js';
+import { fetchTedDigitalProcurement } from '../src/providers/tedLive.js';
 
 const AS_OF = '2026-08-21';
 const TMP = 'out-test';
@@ -167,4 +169,50 @@ test('full pipeline run produces files + verified ledger', async () => {
   assert.equal(readEntries(TMP).length, 1);
   delete process.env.STL_OUT_DIR;
   rmSync(TMP, { recursive: true, force: true });
+});
+test('egov dataset search normalizes payload', async () => {
+  const realFetch = globalThis.fetch;
+  globalThis.fetch = async () => new Response(JSON.stringify({
+    success: true,
+    total_records: 2,
+    datasets: [
+      { id: 1, uri: 'u1', name: 'Търговски регистър', org_id: 41, resources: [{}, {}] },
+      { id: 2, uri: 'u2', name: 'Регистър на дружествата', org_id: 42, resources: [] }
+    ]
+  }), { status: 200 });
+  try {
+    const r = await searchEgovDatasets('търговски регистър');
+    assert.equal(r.ok, true);
+    assert.equal(r.total, 2);
+    assert.equal(r.datasets[0].name, 'Търговски регистър');
+    assert.equal(r.datasets[0].resources, 2);
+  } finally { globalThis.fetch = realFetch; }
+});
+
+test('egov dataset search handles http failure', async () => {
+  const realFetch = globalThis.fetch;
+  globalThis.fetch = async () => new Response('x', { status: 503 });
+  try {
+    const r = await searchEgovDatasets('x');
+    assert.equal(r.ok, false);
+    assert.equal(r.reason, 'http-503');
+  } finally { globalThis.fetch = realFetch; }
+});
+
+test('ted procurement search normalizes notices', async () => {
+  const realFetch = globalThis.fetch;
+  globalThis.fetch = async () => new Response(JSON.stringify({
+    totalNoticeCount: 12516,
+    notices: [
+      { 'publication-number': '1-2026', 'notice-title': { eng: 'ERP delivery' }, 'buyer-name': { bul: 'Община София' }, 'publication-date': '2026-08-20+03:00', 'winner-name': { eng: 'DataLink EOOD' }, 'total-value': 50000 }
+    ]
+  }), { status: 200 });
+  try {
+    const r = await fetchTedDigitalProcurement();
+    assert.equal(r.ok, true);
+    assert.equal(r.total, 12516);
+    assert.equal(r.notices[0].id, '1-2026');
+    assert.equal(r.notices[0].buyer, 'Община София');
+    assert.equal(r.notices[0].totalValue, 50000);
+  } finally { globalThis.fetch = realFetch; }
 });
