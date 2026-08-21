@@ -63,6 +63,7 @@ export async function run({ asOf = defaultAsOf(), provider = "fixture" } = {}) {
     nis2,
     velocity,
     bulletin,
+    eu27Intensity: data.eu27Intensity ?? null,
     gcp: config.gcp,
     liveEurostat: liveEurostat ? { ok: liveEurostat.ok, reason: liveEurostat.reason ?? null, source: liveEurostat.source ?? null, points: liveEurostat.BG?.length ?? 0, eu27Points: liveEurostat.EU27?.length ?? 0 } : null,
     generatedAt: new Date().toISOString(),
