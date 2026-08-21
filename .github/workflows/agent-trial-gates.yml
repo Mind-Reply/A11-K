@@ -1,0 +1,32 @@
+name: Agent Trial Gates
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+concurrency:
+  group: agent-trial-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  evidence-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify trial doctrine
+        run: |
+          set -eu
+          test -f docs/AGENT_TRIALS.md
+          test -f docs/DECISION_ENGINE.md
+          test -f .github/agents/command-atelier.md
+          test -f .github/agents/architect.md
+          test -f .github/agents/builder.md
+          test -f .github/agents/auditor.md
+      - name: Verify no obvious credential payloads
+        run: |
+          if grep -RInE 'BEGIN (RSA|OPENSSH|EC|DSA) PRIVATE KEY|sk-[A-Za-z0-9]{20,}|whsec_[A-Za-z0-9]{20,}' . --exclude-dir=.git; then
+            echo 'Credential-like material detected'; exit 1
+          fi
+      - name: Record release rule
+        run: |
+          echo 'TRIAL=Architect+Builder+Auditor'
+          echo 'PRODUCTION=protected-environment-only'
+          echo 'UNKNOWN=stop-and-latch'
