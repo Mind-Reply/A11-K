@@ -11,7 +11,7 @@ import { run } from '../src/index.js';
 import { parseJsonStat, parseJsonStatMulti, toIntensitySeries } from '../src/providers/eurostatLive.js';
 import { searchEgovDatasets } from '../src/providers/egovLive.js';
 import { fetchTedDigitalProcurement } from '../src/providers/tedLive.js';
-import { scanRegistry, classifyEntity, vulnerabilityScore, buildOutreachBg, NIS2_LAW } from '../src/nis2Scout.js';
+import { scanRegistry, classifyEntity, vulnerabilityScore, buildSelfAssessment, buildOutreachBg, NIS2_LAW } from '../src/nis2Scout.js';
 
 const AS_OF = '2026-08-21';
 const TMP = 'out-test';
@@ -234,13 +234,13 @@ test('nis2 vulnerability score weights hygiene gaps', () => {
   assert.ok(high <= 100);
 });
 
-test('nis2 outreach embeds company eik and fine ceiling', () => {
-  const c = { eik: '201234567', name: 'Балкан Храни ООД', sector: 'Хранителна промишленост', manager: 'Иван Петров' };
-  const o = buildOutreachBg(c, { bracket: 'important', bg: 'важен субект', fine: NIS2_LAW.importantFine });
-  assert.ok(o.subject.includes('NIS2'));
-  assert.ok(o.body.includes(c.eik));
-  assert.ok(o.body.includes('7 млн.'));
-  assert.ok(o.body.includes(NIS2_LAW.gracePeriodEnded));
+test('nis2 self-assessment embeds company eik and fine ceiling', () => {
+  const c = { eik: 'FIXTURE-201234567', name: 'Балкан Храни ООД', sector: 'Хранителна промишленост', employees: 55 };
+  const o = buildSelfAssessment(c, { bracket: 'important', bg: 'важен субект (предварително)', fine: NIS2_LAW.importantFine });
+  assert.ok(o.eik.includes('FIXTURE'));
+  assert.ok(o.entityFineCeiling.includes('7 млн.'));
+  assert.ok(o.disclaimer.includes('Не е правен съвет'));
+  assert.throws(() => buildOutreachBg(), /Blocked/);
 });
 
 test('nis2 scanRegistry returns scored targets sorted desc', () => {

@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="bg">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>NIS2 / ЗКС входяща самооценка — Angel Krastev</title>
+  <meta name="description" content="Предварителен класификатор по Закона за киберсигурност. Дружеството попълва само. Не е правен съвет и не изпраща писма.">
+  <style>
+    :root { --bg:#07080d; --panel:#12141e; --line:rgba(255,255,255,.1); --text:#f5f7fb; --muted:#9da6b8; --accent:#9b8cff }
+    * { box-sizing:border-box }
+    body { margin:0; background:radial-gradient(circle at 10% 0,#1d1633 0,transparent 32%),var(--bg); color:var(--text); font:16px/1.55 Inter,ui-sans-serif,system-ui,sans-serif }
+    .wrap { width:min(860px,92vw); margin:auto; padding:28px 0 80px }
+    a { color:#c4bbff }
+    h1 { font-size:clamp(32px,6vw,52px); letter-spacing:-.05em; line-height:1.05 }
+    .muted { color:var(--muted) }
+    form, .report { background:var(--panel); border:1px solid var(--line); border-radius:20px; padding:22px; margin:18px 0 }
+    label { display:block; font-size:13px; color:var(--muted); margin:12px 0 6px }
+    input, select { width:100%; padding:11px 12px; border-radius:12px; border:1px solid var(--line); background:#0c0e16; color:var(--text) }
+    .row { display:grid; grid-template-columns:1fr 1fr; gap:12px }
+    .checks label { display:flex; gap:8px; align-items:center; color:var(--text); font-size:14px }
+    .checks input { width:auto }
+    button { margin-top:18px; padding:12px 16px; border:0; border-radius:12px; background:#f4f2ff; color:#111; font-weight:800; cursor:pointer }
+    .kpi { display:grid; grid-template-columns:repeat(3,1fr); gap:10px }
+    .kpi div { background:#0c0e16; border:1px solid var(--line); border-radius:14px; padding:12px }
+    .kpi b { display:block; font-size:20px }
+    .warn { color:#fbbf24 }
+    .footer { color:#737c8d; font-size:12px; margin-top:28px }
+    @media (max-width:720px) { .row, .kpi { grid-template-columns:1fr } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <p><a href="./index.html">← Angel Krastev</a></p>
+    <h1>Входяща самооценка ЗКС / NIS2</h1>
+    <p class="muted">Попълва се от дружеството. Предварителен класификатор, не правен съвет, не одит, не изходяща кампания. Личните административни глоби за ръководен орган не са равни на корпоративния таван от €10 млн. / 2%.</p>
+    <form id="f">
+      <div class="row">
+        <div>
+          <label for="name">Юридическо име</label>
+          <input id="name" name="name" required placeholder="Пример ООД">
+        </div>
+        <div>
+          <label for="eik">ЕИК (по избор, само ако вие го въвеждате)</label>
+          <input id="eik" name="eik" inputmode="numeric" placeholder="не се извлича автоматично">
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label for="sector">Сектор</label>
+          <select id="sector" name="sector" required></select>
+        </div>
+        <div>
+          <label for="employees">Брой служители</label>
+          <input id="employees" name="employees" type="number" min="1" value="50" required>
+        </div>
+      </div>
+      <div class="checks">
+        <label><input type="checkbox" id="iso"> Имаме ISO/IEC 27001 или еквивалент</label>
+        <label><input type="checkbox" id="incident"> Имаме план за 24/72-часово известяване</label>
+        <label><input type="checkbox" id="risk"> Имаме документирана политика за киберриск</label>
+        <label><input type="checkbox" id="supply"> Имаме контроли за веригата на доставки</label>
+      </div>
+      <button type="submit">Генерирай предварителен отчет</button>
+    </form>
+    <section class="report" id="out" hidden></section>
+    <p class="footer">Източници за проверка: Държавен вестник бр. 17 / 13.02.2026; публични анализи на транспонирането на NIS2. Потвърдете с юрист преди търговска употреба.</p>
+  </div>
+  <script type="module">
+    import { SECTORS, classifyEntity, buildSelfAssessment, NIS2_LAW } from '../../src/nis2Scout.js';
+
+    const sector = document.getElementById('sector');
+    for (const s of SECTORS) {
+      const opt = document.createElement('option');
+      opt.value = s; opt.textContent = s; sector.append(opt);
+    }
+
+    document.getElementById('f').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const company = {
+        name: document.getElementById('name').value.trim(),
+        eik: document.getElementById('eik').value.trim() || null,
+        sector: document.getElementById('sector').value,
+        employees: Number(document.getElementById('employees').value),
+        city: 'София',
+        hasIso27001: document.getElementById('iso').checked,
+        hasIncidentPlan: document.getElementById('incident').checked,
+        hasRiskPolicy: document.getElementById('risk').checked,
+        hasSupplyChainControls: document.getElementById('supply').checked,
+      };
+      const classification = classifyEntity(company);
+      const report = buildSelfAssessment(company, classification);
+      const out = document.getElementById('out');
+      out.hidden = false;
+      out.innerHTML = `
+        <h2>${escapeHtml(report.companyName)}</h2>
+        <div class="kpi">
+          <div><span class="muted">Обхват</span><b>${escapeHtml(report.classification.bg)}</b></div>
+          <div><span class="muted">Уязвимост</span><b>${report.vulnerabilityScore}/100</b></div>
+          <div><span class="muted">Закон в сила</span><b>${NIS2_LAW.inForce}</b></div>
+        </div>
+        <p>${escapeHtml(report.entityFineCeiling || 'Няма корпоративен таван — извън обхват или ръчен преглед.')}</p>
+        <p class="warn">${escapeHtml(report.managerAdminFine)}</p>
+        <p>Часовник за инциденти: ${escapeHtml(report.incidentClock)}</p>
+        <h3>Липси</h3>
+        <ul>${report.gaps.map((g) => `<li>${escapeHtml(g.bg)}</li>`).join('') || '<li>Няма отбелязани липси в самодекларираните полета.</li>'}</ul>
+        <h3>Следващи стъпки</h3>
+        <ol>${report.nextStepsBg.map((s) => `<li>${escapeHtml(s)}</li>`).join('')}</ol>
+        <p class="muted">${escapeHtml(report.disclaimer)}</p>
+      `;
+    });
+
+    function escapeHtml(s) {
+      return String(s ?? '').replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+  </script>
+</body>
+</html>
