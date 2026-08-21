@@ -1,0 +1,33 @@
+name: Hourly Governance Check
+on:
+  schedule:
+    - cron: '17 * * * *'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: governance-hourly
+  cancel-in-progress: true
+jobs:
+  governance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify controlled governance register
+        run: |
+          set -eu
+          test -f docs/OWNERSHIP_LICENSE_POLICY_REGISTER.md
+          test -f docs/DECISION_ENGINE.md
+      - name: Detect obvious credential material
+        run: |
+          if grep -RInE 'BEGIN (RSA|OPENSSH|EC|DSA) PRIVATE KEY|sk-[A-Za-z0-9]{20,}|whsec_[A-Za-z0-9]{20,}' . --exclude-dir=.git; then
+            echo 'Potential credential material detected; stop.'
+            exit 1
+          fi
+      - name: Emit decision posture
+        run: |
+          echo 'GOVERNANCE=MONITORED'
+          echo 'LEGAL_OR_OWNERSHIP_UNKNOWN=BLOCK'
+          echo 'CONSEQUENTIAL_CHANGE=CEO_GATE'
+          echo 'BACKUP_BEFORE_CHANGE=REQUIRED'
+          echo 'VERIFY_AFTER_CHANGE=REQUIRED'
