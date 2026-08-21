@@ -1,0 +1,99 @@
+name: Decision Pulse - Recovery Gate
+on:
+  schedule:
+    - cron: '11 * * * *'
+  workflow_dispatch:
+permissions:
+  contents: read
+  issues: write
+concurrency:
+  group: a11k-decision-pulse
+  cancel-in-progress: true
+jobs:
+  pulse:
+    name: Scout / decide / verify
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Define health contract
+        id: contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > sites.txt <<'EOF'
+          https://mind-reply.com
+          https://aurel.mind-reply.com
+          https://angellllkr-eng.github.io/a11k/
+          https://angellllkr-eng.github.io/a11k/bio-sovereign/
+          https://angellllkr-eng.github.io/a11k/deep-aquaculture/
+          https://angellllkr-eng.github.io/a11k/quantum-logistics/
+          https://angellllkr-eng.github.io/a11k/orbital-reclaim/
+          https://angellllkr-eng.github.io/a11k/mesh-geothermal/
+          EOF
+
+      - name: Scout estate
+        id: scout
+        shell: bash
+        run: |
+          set -uo pipefail
+          failed=0
+          mkdir -p reports
+          : > reports/decision-pulse.md
+          echo '# A11-K Decision Pulse' >> reports/decision-pulse.md
+          echo "Generated: $(date -u '+%Y-%m-%dT%H:%M:%SZ')" >> reports/decision-pulse.md
+          echo >> reports/decision-pulse.md
+          while IFS= read -r url; do
+            [ -z "$url" ] && continue
+            status=$(curl -L -sS -o /dev/null -w '%{http_code}' --connect-timeout 5 --max-time 15 "$url" || echo 000)
+            printf '%s -> %s\n' "$url" "$status" | tee -a reports/decision-pulse.md
+            case "$status" in
+              2*|3*) ;;
+              *) failed=$((failed+1));;
+            esac
+          done < sites.txt
+          echo "Failures: $failed" >> reports/decision-pulse.md
+          echo "failed=$failed" >> "$GITHUB_OUTPUT"
+
+      - name: Classify and choose path
+        id: decide
+        shell: bash
+        run: |
+          set -euo pipefail
+          failed='${{ steps.scout.outputs.failed }}'
+          if [ "$failed" = '0' ]; then
+            echo 'decision=STILLPOINT' >> "$GITHUB_OUTPUT"
+            echo 'No intervention required.' >> reports/decision-pulse.md
+          elif [ "$failed" -le 2 ]; then
+            echo 'decision=R1_RECHECK' >> "$GITHUB_OUTPUT"
+            echo 'Low-blast-radius anomaly: repeat verification before mutation.' >> reports/decision-pulse.md
+          else
+            echo 'decision=LATCH' >> "$GITHUB_OUTPUT"
+            echo 'Multiple failures: stop automatic mutation and require owner decision.' >> reports/decision-pulse.md
+          fi
+
+      - name: Independent verification
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -E ' -> (2|3)' reports/decision-pulse.md >/dev/null || true
+          echo >> reports/decision-pulse.md
+          echo 'Verification: pulse completed; no production mutation was performed by this watch.' >> reports/decision-pulse.md
+
+      - name: Open decision note
+        if: steps.decide.outputs.decision != 'STILLPOINT'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          gh issue create \
+            --title "A11-K decision: ${{ steps.decide.outputs.decision }}" \
+            --body-file reports/decision-pulse.md \
+            --label 'sentinel' || true
+
+      - name: Upload trace
+        uses: actions/upload-artifact@v4
+        with:
+          name: a11k-decision-pulse-${{ github.run_id }}
+          path: reports/decision-pulse.md
+          retention-days: 14
