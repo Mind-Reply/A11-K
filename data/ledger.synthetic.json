@@ -1,0 +1,8 @@
+﻿{
+  "synthetic": true,
+  "schemaVersion": 1,
+  "entries": [
+    { "id": "SYN-001", "amountEur": 0, "hash": "synthetic-hash-001" },
+    { "id": "SYN-002", "amountEur": 0, "hash": "synthetic-hash-002" }
+  ]
+}

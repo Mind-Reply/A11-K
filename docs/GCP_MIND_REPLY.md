@@ -1,6 +1,6 @@
 # GCP target — MIND REPLY
 
-Verified from the live console screenshot on 22 Aug 2026.
+Verified from live console screenshots on 22 Aug 2026.
 
 - Project name: MIND REPLY
 - Project ID: `mind-reply-496111`
@@ -8,11 +8,32 @@ Verified from the live console screenshot on 22 Aug 2026.
 - Console: https://console.cloud.google.com/welcome?project=mind-reply-496111
 - Preferred region: `europe-west3` (Frankfurt) for EU data residency
 
+## IAM (screenshot 022014 / 022106)
+
+| Principal | Label | Role seen |
+| --- | --- | --- |
+| `mind.repl@gmail.com` | Angel Krastev | Owner |
+| `mind-reply@mind-reply-496111.iam.gserviceaccount.com` | mind-reply | Access Context Manager Admin (+ keys) |
+| `mindreply@mind-reply-496111.iam.gserviceaccount.com` | mindreply | Access Approval Admin · no keys |
+| `services@mind-reply-496111.iam.gserviceaccount.com` | mind-reply.netlify.app | Owner · no keys |
+| `angellllkrustev@gmail.com` | Gal | App Hub / Application Design Center / Cloud Hub Operator |
+| `notifications@datingpositives.com` | (blank) | Access Context Manager Admin |
+| Google-managed service agents | API Hub, Gemini, Dataform, Eventarc, Pub/Sub, ML Engine | default service agents |
+
+## Service-account keys (screenshots 014941 + 015447)
+
+Account `mind-reply@mind-reply-496111.iam.gserviceaccount.com` has **two active keys**, both created 12 May 2026, expiry shown as 1 Jan 10000:
+
+- `ab6f272ca475c83df1ee36371ad45b0f117ea1f8`
+- `2febf280c12797497dd40722efb2c19518dc1347`
+
+Those IDs were **not** found in indexed source files. Do not download, print, or commit private key JSON. Prefer Workload Identity later.
+
 ## Bound, not provisioned
 
-This repo is wired to that project as the cloud target. Nothing below has been created yet:
+This repo is wired to that project as the cloud target. Welcome-card actions have **not** been clicked. Still not created:
 
-- no Gemini API key
+- no Gemini API key from the welcome card
 - no Vertex agent
 - no VM
 - no BigQuery job

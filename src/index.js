@@ -1,4 +1,4 @@
-import { getFixtureDataset } from "./providers/fixture.js";
+﻿import { getFixtureDataset } from "./providers/fixture.js";
 import {
   digitalIntensityDelta,
   digitalIntensityTrend,
@@ -125,7 +125,8 @@ function defaultAsOf() {
 if (process.argv[1]?.replaceAll("\\", "/").endsWith("/src/index.js") || process.argv[1]?.endsWith("index.js")) {
   const asOfArg = process.argv.find((arg) => arg.startsWith("--as-of="));
   const asOf = asOfArg ? asOfArg.split("=")[1] : undefined;
-  const { report, files, ledger, publish } = await run({ asOf });
+  const requestedProvider = process.env.STL_PROVIDER || (process.env.STL_LIVE === "1" ? "live" : "fixture");
+  const { report, files, ledger, publish } = await run({ asOf, provider: requestedProvider });
   console.log(
     JSON.stringify(
       {
@@ -154,3 +155,5 @@ if (process.argv[1]?.replaceAll("\\", "/").endsWith("/src/index.js") || process.
     ),
   );
 }
+
+

@@ -1,0 +1,9 @@
+﻿{
+  "synthetic": true,
+  "schemaVersion": 1,
+  "score": 0,
+  "targets": [
+    { "id": "synthetic-essential", "criticality": "essential" },
+    { "id": "synthetic-important", "criticality": "important" }
+  ]
+}
