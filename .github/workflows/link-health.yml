@@ -1,0 +1,59 @@
+name: A11-K link health
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '17 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  links:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check repository links
+        id: repo_links
+        uses: lycheeverse/lychee-action@v2
+        continue-on-error: true
+        with:
+          args: --verbose --no-progress './**/*.md' './**/*.html'
+          fail: true
+          format: markdown
+          output: ./lychee/repo-links.md
+
+      - name: Check public A11-K pages
+        id: public_links
+        uses: lycheeverse/lychee-action@v2
+        continue-on-error: true
+        with:
+          args: --verbose --no-progress 'https://mind-reply.github.io/A11-K/' 'https://mind-reply.github.io/A11-K/announcements.html' 'https://mind-reply.github.io/A11-K/a11k-founder.html' 'https://mind-reply.github.io/A11-K/buy.html' 'https://mind-reply.github.io/A11-K/docs/' 'https://mind-reply.github.io/A11-K/docs/directory.html' 'https://mind-reply.github.io/A11-K/docs/status.html'
+          fail: true
+          format: markdown
+          output: ./lychee/public-links.md
+
+      - name: Publish broken-link report
+        if: steps.repo_links.outcome == 'failure' || steps.public_links.outcome == 'failure'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const parts = [];
+            for (const f of ['./lychee/repo-links.md','./lychee/public-links.md']) {
+              if (fs.existsSync(f)) parts.push(fs.readFileSync(f,'utf8'));
+            }
+            const body = `Automated A11-K link-health check detected broken links.\n\n${parts.join('\n\n')}`.slice(0, 60000);
+            const { data: issues } = await github.rest.issues.listForRepo({owner: context.repo.owner, repo: context.repo.repo, state: 'open', labels: 'broken-link', per_page: 20});
+            if (!issues.some(i => i.title === 'Automated link-health failures')) {
+              await github.rest.issues.create({owner: context.repo.owner, repo: context.repo.repo, title: 'Automated link-health failures', body, labels: ['broken-link']});
+            }
+
+      - name: Fail when broken links are present
+        if: steps.repo_links.outcome == 'failure' || steps.public_links.outcome == 'failure'
+        run: exit 1
