@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>BRUSHworks — Create & publish</title>
+  <meta name="description" content="BRUSHworks: creative site builder. Login, chat, design, publish straight away. Mobile-friendly." />
+  <meta name="robots" content="index,follow" />
+  <link rel="canonical" href="https://mind-reply.github.io/A11-K/Brushworks/" />
+  <meta name="theme-color" content="#0a0908" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Top bar: logo · chat · login -->
+  <header class="topbar">
+    <a class="logo" href="./" aria-label="BRUSHworks home">
+      <span class="logo-brush">BRUSH</span><span class="logo-works">works</span>
+    </a>
+
+    <div class="top-cluster">
+      <!-- AI chat toggle (next to logo area on mobile stacks under) -->
+      <button type="button" class="icon-chip" id="btnChat" aria-expanded="false" aria-controls="chatPanel" title="Chat">
+        <span class="chip-ico">✦</span>
+        <span class="chip-txt">Chat</span>
+      </button>
+      <button type="button" class="icon-chip ghost" id="btnLogin" title="Login">
+        <span class="chip-ico">◎</span>
+        <span class="chip-txt" id="loginLabel">Login</span>
+      </button>
+      <a class="icon-chip ghost" href="tools/firecrawl.html" title="Firecrawl research">
+        <span class="chip-ico">⌕</span>
+        <span class="chip-txt">Research</span>
+      </a>
+      <button type="button" class="btn publish-now" id="btnPublishNow">Publish</button>
+    </div>
+  </header>
+
+  <!-- Chat drawer -->
+  <aside class="chat-panel" id="chatPanel" hidden>
+    <div class="chat-head">
+      <strong>BRUSHworks chat</strong>
+      <button type="button" class="x" id="btnChatClose" aria-label="Close chat">×</button>
+    </div>
+    <div class="chat-log" id="chatLog" role="log" aria-live="polite">
+      <div class="bubble bot">Hi — tell me what site you want. I’ll drop pieces on the canvas. No tech needed.</div>
+    </div>
+    <form class="chat-form" id="chatForm">
+      <input type="text" id="chatInput" placeholder="e.g. beauty shop with video…" autocomplete="off" />
+      <button type="submit" class="btn sm">Send</button>
+    </form>
+  </aside>
+
+  <!-- Login modal -->
+  <div class="modal" id="loginModal" hidden>
+    <div class="modal-card">
+      <div class="modal-top">
+        <h2>Welcome back</h2>
+        <button type="button" class="x" id="btnLoginClose" aria-label="Close">×</button>
+      </div>
+      <p class="muted">Local session only — your name stays on this device until you clear it.</p>
+      <label class="field">
+        <span>Name or email</span>
+        <input type="text" id="loginName" placeholder="you@studio.com" />
+      </label>
+      <label class="field">
+        <span>Passphrase</span>
+        <input type="password" id="loginPass" placeholder="••••••••" />
+      </label>
+      <button type="button" class="btn block" id="btnDoLogin">Continue</button>
+      <p class="tiny">No account server yet — this unlocks your workspace UI.</p>
+    </div>
+  </div>
+
+  <!-- Publish modal — straight away -->
+  <div class="modal" id="publishModal" hidden>
+    <div class="modal-card wide">
+      <div class="modal-top">
+        <h2>Publish straight away</h2>
+        <button type="button" class="x" id="btnPubClose" aria-label="Close">×</button>
+      </div>
+      <div class="pub-grid">
+        <div>
+          <label class="field"><span>Site title</span><input type="text" id="pubTitle" /></label>
+          <label class="field"><span>Live URL (optional)</span><input type="url" id="pubUrl" placeholder="https://….pages.dev" /></label>
+          <label class="checkline"><input type="checkbox" id="pubOk" /> I’m ready — publish this version</label>
+          <button type="button" class="btn block" id="btnDoPublish" disabled>Publish now 🚀</button>
+        </div>
+        <pre class="pub-out" id="pubOut">Your package appears here after publish.</pre>
+      </div>
+      <p class="tiny honest">Publishes a full package + CLI handoff. Live DNS needs GitHub/Cloudflare once — then it’s automatic.</p>
+    </div>
+  </div>
+
+  <main class="stage">
+    <!-- Creative page tabs -->
+    <nav class="pages-rail" aria-label="Pages">
+      <button type="button" class="page-tab active" data-page="home">Home</button>
+      <button type="button" class="page-tab" data-page="look">Look</button>
+      <button type="button" class="page-tab" data-page="shop">Shop</button>
+      <button type="button" class="page-tab" data-page="story">Story</button>
+      <button type="button" class="page-add" id="btnAddPage" title="Add page">+</button>
+    </nav>
+
+    <!-- HOME page — creative entry -->
+    <section class="page active" id="page-home">
+      <div class="hero-creative">
+        <p class="kicker">Tap. Build. Publish.</p>
+        <h1 contenteditable="true" id="siteTitle" spellcheck="false">Your beautiful site</h1>
+        <p class="lede" contenteditable="true" id="siteTag" spellcheck="false">
+          Start with a spark. Chat for ideas. Drag the vibe. Publish when it feels right.
+        </p>
+        <div class="spark-row">
+          <button type="button" class="spark" data-spark="beauty">✨ Beauty shop</button>
+          <button type="button" class="spark" data-spark="me">👋 About me</button>
+          <button type="button" class="spark" data-spark="luxury">🥂 Luxury</button>
+          <button type="button" class="spark" data-spark="app">🚀 App / SaaS</button>
+        </div>
+        <div class="cta-row">
+          <button type="button" class="btn" id="btnOpenStudio">Open design room</button>
+          <button type="button" class="btn ghost" id="btnPubFromHero">Publish now</button>
+        </div>
+      </div>
+
+      <div class="block-grid" id="blockGrid">
+        <!-- puzzle blocks — creative, tappable -->
+        <article class="block on" data-block="hero">
+          <span class="b-ico">🏠</span>
+          <h3>Welcome</h3>
+          <p>Big first impression</p>
+        </article>
+        <article class="block on" data-block="products">
+          <span class="b-ico">🛍️</span>
+          <h3>Products</h3>
+          <p>What you sell / offer</p>
+        </article>
+        <article class="block" data-block="video">
+          <span class="b-ico">🎬</span>
+          <h3>Video</h3>
+          <p>Social-ready clip</p>
+        </article>
+        <article class="block on" data-block="contact">
+          <span class="b-ico">✉️</span>
+          <h3>Contact</h3>
+          <p>Buy / book / write</p>
+        </article>
+        <article class="block" data-block="gallery">
+          <span class="b-ico">🖼️</span>
+          <h3>Gallery</h3>
+          <p>Mood photos</p>
+        </article>
+        <article class="block" data-block="faq">
+          <span class="b-ico">💬</span>
+          <h3>FAQ</h3>
+          <p>Simple answers</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- LOOK — design room -->
+    <section class="page" id="page-look">
+      <div class="look-bar">
+        <div>
+          <h2>Design room</h2>
+          <p class="muted">Pro editor underneath. Your BRUSHworks frame on top.</p>
+        </div>
+        <button type="button" class="btn sm" id="btnLoadEditor">Launch editor</button>
+      </div>
+      <div class="editor-frame">
+        <div class="editor-cover" id="editorCover">
+          <p>🎨 Your canvas</p>
+          <button type="button" class="btn" id="btnLoadEditor2">Start designing</button>
+        </div>
+        <iframe id="editor" title="BRUSHworks editor" src="about:blank" allow="clipboard-read; clipboard-write; fullscreen"></iframe>
+      </div>
+    </section>
+
+    <!-- SHOP preview page -->
+    <section class="page" id="page-shop">
+      <div class="preview-page">
+        <p class="kicker">Shop page preview</p>
+        <h2 contenteditable="true" id="shopTitle">#sets</h2>
+        <div class="product-row" id="productRow">
+          <div class="product"><div class="ph"></div><strong>Set One</strong><span>Signature</span></div>
+          <div class="product"><div class="ph"></div><strong>Set Two</strong><span>Daily</span></div>
+          <div class="product"><div class="ph"></div><strong>Set Three</strong><span>Night</span></div>
+        </div>
+        <button type="button" class="btn" data-open-pub>Publish shop</button>
+      </div>
+    </section>
+
+    <!-- STORY page -->
+    <section class="page" id="page-story">
+      <div class="preview-page story">
+        <p class="kicker">Story</p>
+        <h2 contenteditable="true">Made without fear</h2>
+        <p contenteditable="true" class="story-body">
+          Write your brand story here. Keep it human. Keep it bold. BRUSHworks is just the brush —
+          the picture is yours.
+        </p>
+        <button type="button" class="btn ghost" data-open-pub>Publish story</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <span class="logo-mini"><span class="logo-brush">BRUSH</span><span class="logo-works">works</span></span>
+    <span class="fp">LIBRA-BW-AK-2026 · wrap &amp; ship</span>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

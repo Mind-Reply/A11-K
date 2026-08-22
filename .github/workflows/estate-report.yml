@@ -1,0 +1,36 @@
+name: EstateReport - Daily Status
+on:
+  schedule:
+    - cron: '0 7 * * *'
+  workflow_dispatch:
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate estate report
+        run: |
+          echo "# MRPPRODUCTION v1.0 - Estate Report" > report.md
+          echo "Generated: $(date)" >> report.md
+          echo "" >> report.md
+          echo "# Sites" >> report.md
+          SITES=("https://angelllkr-eng.github.io/a11k/" https://angelllkr-eng.github.io/a11k/bio-sovereign/" https://angelllkr-eng.github.io/a11k/deep-aquaculture/" https://angelllkr-eng.github.io/a11k/quantum-logistics/" https://angelllkr-eng.github.io/a11k/orbital-reclaim/" https://angelllkr-eng.github.io/a11k/mesh-geothermal/" https://aurel.mind-reply.com" https://mind-reply.com)
+          for url in "${SITES[@]}"; do
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 "$")
+            echo "- $url: $STATUS" >> report.md
+          done
+          echo "" >>> report.md
+          echo "# Owner" >> report.md
+          echo "Angel Krastev (DOB: 10/04/1997) - A.K. Estate" >> report.md
+          cat report.md
+      - name: Save report
+        run: |
+          mkdir -p reports
+          cp report.md "reports/estate-$(date -u +%Y-%m-%d).md"
+      - name: Commit
+        run: |
+          git config user.name "MRPPRODUCTION-EstateReport"
+          git config user.email "actions@github.com"
+          git add reports/ || true
+          git diff --quiet && git diff --cached --quiet || git commit -m "EstateReport: $(date -u +%Y-%m-%d)"
+          git push || true

@@ -1,0 +1,30 @@
+name: DocKeeper - Documentation
+on:
+  schedule:
+    - cron: '0 0 * * 1'
+  workflow_dispatch:
+jobs:
+  dockeeper:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Update dateModified
+        run: |
+          TODAY=$(date -u +"%Y-%m-%d")
+          find . -name "*.html" -not-path "./.git/*" -exec sed -i "s/"dateModified":"[0-9]*"/"dateModified":"$TODAY"/g" {} \;
+      - name: Generate sitemap
+        run: |
+          echo '<?xml version="1.0" encoding="UTF-8"?>' > sitemap.xml
+          echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' >> sitemap.xml
+          find . -name "index.html" -not-path "./.git/*" | while read f; do
+            PATH_URL=$(echo "$f" | sed 's|^./||' | sed 's|index.html||' | sed 's|^/||')
+            echo "<url><loc>https://angelllkr-eng.github.io/a11k/$PATH_URL</loc><lastmod>$(date -u +%Y-%m-%d)</lastmod></url>" >> sitemap.xml
+          done
+          echo '</urlset>' >> sitemap.xml
+      - name: Commit
+        run: |
+          git config user.name "MRPPRODUCTION-DocKeeper"
+          git config user.email "actions@github.com"
+          git add -A || true
+          git diff --quiet && git diff --cached --quiet || git commit -m "DocKeeper: Auto-update schema + sitemap"
+          git push || true

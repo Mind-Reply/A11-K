@@ -1,0 +1,21 @@
+html, body { margin:0; width:100%; height:100%; overflow:hidden; background:#050608; color:#e8ecff; font-family:Inter,Segoe UI,Arial,sans-serif; }
+#stars { position:fixed; inset:0; width:100%; height:100%; }
+#app { position:relative; width:100vw; height:100vh; display:flex; align-items:center; justify-content:center; }
+.core { position:relative; z-index:2; text-align:center; max-width:720px; padding:24px; }
+.sigil { font-size:72px; letter-spacing:0.18em; font-weight:800; text-shadow:0 0 18px rgba(120,170,255,.55); }
+.subtitle { margin-top:12px; opacity:.72; letter-spacing:.12em; text-transform:uppercase; font-size:12px; }
+#summary { margin-top:20px; display:flex; justify-content:center; gap:12px; flex-wrap:wrap; }
+.card { background:rgba(255,255,255,.04); border:1px solid rgba(130,160,255,.18); border-radius:14px; padding:12px 14px; min-width:160px; backdrop-filter:blur(10px); }
+.card b { display:block; font-size:18px; margin-bottom:4px; }
+.card span { font-size:12px; opacity:.72; }
+.rings { position:absolute; inset:0; display:grid; place-items:center; pointer-events:none; }
+.ring { position:absolute; border:1px solid rgba(130,160,255,.12); border-radius:50%; }
+.ring-1 { width:340px; height:340px; animation:spin 60s linear infinite; }
+.ring-2 { width:520px; height:520px; animation:spin 90s linear reverse infinite; }
+.ring-3 { width:720px; height:720px; animation:spin 120s linear infinite; }
+#nodes { position:absolute; inset:0; pointer-events:none; }
+.node { position:absolute; width:12px; height:12px; border-radius:50%; background:#9cc1ff; box-shadow:0 0 12px rgba(156,193,255,.8); transform:translate(-50%,-50%); }
+.node.partner { background:#ffd18a; box-shadow:0 0 14px rgba(255,209,138,.9); }
+.node.repo { background:#6ef0b6; box-shadow:0 0 14px rgba(110,240,182,.8); }
+.label { position:absolute; transform:translate(-50%, -50%); font-size:11px; white-space:nowrap; opacity:.82; }
+@keyframes spin { from { transform:rotate(0deg); } to { transform:rotate(360deg); } }

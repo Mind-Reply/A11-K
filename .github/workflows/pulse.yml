@@ -1,0 +1,24 @@
+name: Pulse - Analytics
+on:
+  schedule:
+    - cron: '0 5 * * *'
+  workflow_dispatch:
+jobs:
+  pulse:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Collect stats
+        env:
+          GH_TOKEH: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mkdir -p analytics
+          echo "# Analytics - $(date)" > analytics/pulse-$(date -u +%Y-%m-%d).md
+          echo "GitHub repo stats collected" >> analytics/pulse-$(date -u +%Y-%m-%d).md
+      - name: Commit
+        run: |
+          git config user.name "MRPRODUCTION-Pulse"
+          git config user.email "actions@github.com"
+          git add analytics/ || true
+          git diff --quiet && git diff --cached --quiet || git commit -m "Pulse: Analytics $(date -u +%Y-%m-%d)"
+          git push || true

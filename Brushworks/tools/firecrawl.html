@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BRUSHworks · Firecrawl Research</title>
+  <meta name="robots" content="noindex" />
+  <link rel="stylesheet" href="../style.css" />
+  <style>
+    .fc-wrap { max-width: 720px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+    .fc-wrap h1 { font-family: var(--display, Syne, sans-serif); font-size: 1.75rem; margin: .5rem 0 1rem; }
+    .fc-card {
+      border: 1px solid var(--line, #333);
+      border-radius: 16px;
+      padding: 1.15rem;
+      background: var(--bg-elev, #12100e);
+      margin-bottom: 1rem;
+    }
+    .fc-card code, .fc-card pre {
+      display: block;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-size: .78rem;
+      background: #070706;
+      padding: .85rem;
+      border-radius: 12px;
+      margin-top: .65rem;
+      color: #d8d0c4;
+    }
+    .fc-actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1rem; }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="logo" href="../">
+      <span class="logo-brush">BRUSH</span><span class="logo-works">works</span>
+    </a>
+    <div class="top-cluster">
+      <a class="icon-chip" href="https://www.firecrawl.dev/app/playground?endpoint=search" target="_blank" rel="noopener">Playground</a>
+      <a class="btn publish-now" href="../">Back</a>
+    </div>
+  </header>
+
+  <main class="fc-wrap">
+    <p class="kicker">RESEARCH AGENT · WRAP ONLY</p>
+    <h1>Firecrawl is wired</h1>
+    <p class="muted">
+      Use the official playground + local agent. API keys never ship in public pages.
+    </p>
+
+    <div class="fc-card">
+      <strong>1. Open Firecrawl Search playground</strong>
+      <p class="muted" style="margin-top:.4rem">Create/copy your key, test queries in the UI.</p>
+      <div class="fc-actions">
+        <a class="btn" href="https://www.firecrawl.dev/app/playground?endpoint=search" target="_blank" rel="noopener">Open playground →</a>
+      </div>
+    </div>
+
+    <div class="fc-card">
+      <strong>2. Run estate agent (fresh PowerShell)</strong>
+      <pre>$env:FIRECRAWL_API_KEY = "fc-YOUR_KEY"
+cd D:\MRPRODUCTION\ESTATE\agents\firecrawl
+.\search.ps1 -Query "luxury cosmetics dropshipping suppliers"
+.\search.ps1 -Query "Unapologetic beauty #sets competitors" -Limit 8
+.\scrape.ps1 -Url "https://example.com"</pre>
+    </div>
+
+    <div class="fc-card">
+      <strong>3. What it feeds</strong>
+      <p class="muted" style="margin-top:.4rem">
+        BRUSHworks templates · Unapologetic supplier/SEO research · later n8n Amplifier posts.
+        Results save under <code style="display:inline;padding:.1rem .35rem">agents/firecrawl/out/</code>
+      </p>
+    </div>
+
+    <p class="tiny">Directive 001 · fingerprint LIBRA-BW-AK-2026 · never rebuild a crawler</p>
+  </main>
+</body>
+</html>

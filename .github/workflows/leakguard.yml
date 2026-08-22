@@ -1,0 +1,29 @@
+name: LeakGuard - Secret Scanner
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+jobs:
+  leakguard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Scan for secrets
+        run: |
+          FOUND=0
+          for pattern in 'xai-[A-Za-z0-9]{20,}' 'sk-[A-Za-z0-9]{20,}' 'AKIA[A-Z0-9]{16}' 'ghp_[A-Za-z0-9]{36}' 'AIza[A-Za-z0-9_-]{35}'; do
+            MATCHES=$(grep -rn --include="*.ts" --include="*.js" --include="*.html" --include="*.json" -E "$pattern" . 2>/dev/null | grep -v ".git/" | grep -v "node_modules/" | grep -v "leakguard" || true)
+            if [ -n "$MATCHES" ]; then echo "::error::LEAK: $pattern"; echo "$MATCHES"; FOUND=1; fi
+          done
+          if [ "$FOUND" = "1" ]; then exit 1; fi
+          echo "No leaks. Estate clean."
+      - name: Alert on leak
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.create({ owner: context.repo.owner, repo: context.repo.repo, title: 'LEAKGUARD: Secrets exposed!', body: 'ROTATE keys immediately.', labels: ['leakguard','critical','security','auto-generated'] });

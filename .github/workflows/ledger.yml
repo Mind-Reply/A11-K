@@ -1,0 +1,25 @@
+name: Ledger - Accounting
+on:
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+jobs:
+  ledger:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Update ledger
+        run: |
+          mkdir -p ledger
+          TODAY=$(date -u +%Y-%m-%d)
+          if [ ! -f ledger/ledger.json ]; then
+            echo '{"estate":"MRPRODUCTION v1.0","owner":"Angel Krastev","entries":[]}' > ledger/ledger.json
+          fi
+          echo "Ledger updated for $TODAY"
+      - name: Commit
+        run: |
+          git config user.name "MRPPRODUCTION-Ledger"
+          git config user.email "actions@github.com"
+          git add ledger/ || true
+          git diff --quiet && git diff --cached --quiet || git commit -m "Ledger: $(date -u +%Y-%m-%d)"
+          git push || true

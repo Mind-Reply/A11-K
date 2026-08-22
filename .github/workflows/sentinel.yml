@@ -1,0 +1,25 @@
+name: Sentinel - Uptime Monitor
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+jobs:
+  sentinel:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check estate sites
+        run: |
+          SITES=(https://angelllkr-eng.github.io/a11k/ https://angelllkr-eng.github.io/a11k/bio-sovereign/ https://angelllkr-eng.github.io/a11k/deep-aquaculture/ https://angelllkr-eng.github.io/a11k/quantum-logistics/ https://angelllkr-eng.github.io/a11k/orbital-reclaim/ https://angelllkr-eng.github.io/a11k/mesh-geothermal/ https://aurel.mind-reply.com https://mind-reply.com)
+          FAILED=0
+          for url in "${SITES[@]}"; do
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 "$url")
+            echo "$url -> $STATUS"
+            if [ "$STATUS" != "200" ]; then FAILED=1; fi
+          done
+          exit $FAILED
+      - name: Alert on failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.create({ owner: context.repo.owner, repo: context.repo.repo, title: 'SENTINEL: Sites DOWN', body: 'Check workflow logs.', labels: ['sentinel','critical','auto-generated'] });

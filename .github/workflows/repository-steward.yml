@@ -1,0 +1,32 @@
+name: Repository Steward
+on:
+  schedule:
+    - cron: '17 * * * *'
+  workflow_dispatch:
+permissions:
+  contents: read
+  issues: write
+jobs:
+  steward:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Inspect A11-K
+        run: |
+          set -u
+          {
+            echo "repo=$GITHUB_REPOSITORY sha=$GITHUB_SHA utc=$(date -u '+%Y-%m-%d %H:%M:%S')"
+            find . -maxdepth 3 -type f -not -path './.git/*' | sort | head -150
+            if find . -type f -not -path './.git/*' -not -path './node_modules/*' -print0 | xargs -0 grep -IlE '(BEGIN (RSA|OPENSSH|EC|DSA) PRIVATE KEY|sk-[A-Za-z0-9]{20,}|whsec_[A-Za-z0-9]{20,})' 2>/dev/null | head -20 | grep -q .; then echo 'SECRET_SIGNAL=possible-hardcoded-secret'; else echo 'SECRET_SIGNAL=none-detected'; fi
+          } > steward-report.md
+          cat steward-report.md
+      - name: Alert
+        if: always()
+        env: { GH_TOKEN: '${{ github.token }}' }
+        run: |
+          if grep -q 'SECRET_SIGNAL=possible-hardcoded-secret' steward-report.md; then gh issue list --state open --json number --jq '.[0].number' | grep -q . || gh issue create --title 'Steward alert: possible secret exposure' --body 'Hourly steward detected a credential-like string. Review before changing code.'; fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: steward-report-${{ github.run_id }}
+          path: steward-report.md
+          retention-days: 7
