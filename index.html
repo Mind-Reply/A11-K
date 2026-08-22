@@ -3,10 +3,20 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <title>A11-K — Multiverse Enterprise Directory</title>
+  <title>A11-K — Concept research systems</title>
+  <meta name="description" content="A11-K is a public concept-research directory for five standalone simulation systems. Live GitHub Pages. No customers claimed. Stripe stays test-mode.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://mind-reply.github.io/A11-K/">
+  <meta property="og:title" content="A11-K — Concept research systems">
+  <meta property="og:description" content="Five public concept-research systems. Honest status only: live pages, test-mode checkout, no closed customers.">
+  <meta property="og:url" content="https://mind-reply.github.io/A11-K/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="A11-K">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="A11-K — Concept research systems">
+  <meta name="twitter:description" content="Five public concept-research systems. Live GitHub Pages. No customers claimed.">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;700&display=swap');
-
     :root {
       --bg: #030408;
       --text: #f3f4f6;
@@ -21,11 +31,10 @@
       --font-sans: 'Plus Jakarta Sans', sans-serif;
       --font-mono: 'Space Grotesk', sans-serif;
     }
-
     * { box-sizing: border-box; }
     body {
       font-family: var(--font-sans);
-      background: 
+      background:
         radial-gradient(circle at 10% 15%, rgba(0, 242, 254, 0.15), transparent 45rem),
         radial-gradient(circle at 90% 85%, rgba(253, 38, 126, 0.12), transparent 50rem),
         var(--bg);
@@ -37,7 +46,6 @@
       display: flex;
       flex-direction: column;
     }
-
     header {
       border-bottom: 1px solid var(--border);
       padding: 24px 0;
@@ -53,6 +61,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 16px;
     }
     .brand {
       font-family: var(--font-logo);
@@ -62,10 +71,15 @@
       color: #fff;
       font-weight: 900;
     }
-    .brand span {
-      color: var(--neon-cyan);
-      text-shadow: 0 0 10px var(--neon-cyan);
+    .brand span { color: var(--neon-cyan); text-shadow: 0 0 10px var(--neon-cyan); }
+    .navlinks { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
+    .navlinks a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 600;
     }
+    .navlinks a:hover { color: #fff; }
     .badge {
       font-family: var(--font-mono);
       font-size: 0.75rem;
@@ -78,17 +92,8 @@
       border-radius: 999px;
       color: var(--muted);
     }
-
-    main {
-      width: min(1300px, 94vw);
-      margin: 40px auto 80px;
-      flex-grow: 1;
-    }
-
-    .hero-sec {
-      text-align: center;
-      margin-bottom: 60px;
-    }
+    main { width: min(1300px, 94vw); margin: 40px auto 80px; flex-grow: 1; }
+    .hero-sec { text-align: center; margin-bottom: 36px; }
     .hero-sec h1 {
       font-family: var(--font-logo);
       font-size: clamp(2.5rem, 5vw, 4.5rem);
@@ -104,15 +109,40 @@
     .hero-sec p {
       font-size: 1.15rem;
       color: var(--muted);
-      max-width: 700px;
+      max-width: 720px;
       margin: auto;
       font-weight: 300;
     }
-
+    .proof {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin: 28px 0 18px;
+    }
+    .proof span {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 8px 12px;
+      color: var(--muted);
+    }
+    .cta {
+      display: inline-flex;
+      margin-top: 8px;
+      padding: 12px 18px;
+      border-radius: 12px;
+      background: var(--neon-cyan);
+      color: #030408;
+      text-decoration: none;
+      font-weight: 800;
+    }
     .niche-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
       gap: 24px;
+      margin-top: 48px;
     }
     .niche-card {
       border: 1px solid var(--border);
@@ -124,7 +154,6 @@
       justify-content: space-between;
       position: relative;
       overflow: hidden;
-      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .niche-card::before {
       content: '';
@@ -132,15 +161,6 @@
       top: 0; left: 0; right: 0;
       height: 2px;
       background: linear-gradient(90deg, transparent, var(--theme-color), transparent);
-    }
-    .niche-card:hover {
-      transform: translateY(-5px);
-      border-color: var(--theme-color);
-      box-shadow: 0 30px 60px rgba(0,0,0,0.6), 0 0 25px rgba(var(--theme-rgb), 0.04);
-    }
-    
-    .card-top {
-      margin-bottom: 24px;
     }
     .niche-tag {
       font-family: var(--font-mono);
@@ -156,16 +176,8 @@
       font-family: var(--font-logo);
       font-size: 1.7rem;
       margin: 0 0 12px;
-      letter-spacing: -0.02em;
     }
-    .niche-card p {
-      color: var(--muted);
-      font-size: 0.95rem;
-      margin: 0;
-      font-weight: 300;
-      line-height: 1.5;
-    }
-    
+    .niche-card p { color: var(--muted); font-size: 0.95rem; margin: 0; font-weight: 300; }
     .system-badge {
       background: rgba(255,255,255,0.02);
       border: 1px solid var(--border);
@@ -175,15 +187,8 @@
       font-family: var(--font-mono);
       font-size: 0.8rem;
     }
-    .system-badge strong {
-      color: var(--theme-color);
-    }
-
-    .card-actions {
-      display: flex;
-      gap: 12px;
-      margin-top: 25px;
-    }
+    .system-badge strong { color: var(--theme-color); }
+    .card-actions { display: flex; gap: 12px; margin-top: 25px; }
     .card-btn {
       flex-grow: 1;
       display: flex;
@@ -194,129 +199,110 @@
       text-decoration: none;
       font-size: 0.88rem;
       font-weight: 700;
-      transition: all 0.2s;
     }
-    .card-btn.primary {
-      background: var(--theme-color);
-      color: #030408;
-    }
-    .card-btn.primary:hover {
-      box-shadow: 0 0 15px var(--theme-color);
-    }
+    .card-btn.primary { background: var(--theme-color); color: #030408; }
     .card-btn.secondary {
       border: 1px solid var(--border);
       color: #fff;
       background: rgba(255,255,255,0.02);
     }
-    .card-btn.secondary:hover {
-      background: rgba(255,255,255,0.05);
-      border-color: rgba(255,255,255,0.15);
+    footer {
+      width: min(1300px, 94vw);
+      margin: 0 auto 40px;
+      color: var(--muted);
+      font-size: 0.85rem;
     }
-
     @media(max-width: 900px) {
-      .niche-grid {
-        grid-template-columns: 1fr;
-      }
+      .niche-grid { grid-template-columns: 1fr; }
+      .navlinks a:not(.badge) { display: none; }
     }
   </style>
 </head>
 <body>
-
   <header>
     <div class="header-container">
-      <a href="#" class="brand">A11-K<span>✦</span> DIRECTORY</a>
-      <div class="badge">Decoupled Multiverse</div>
+      <a href="./" class="brand">A11-K<span>✦</span> DIRECTORY</a>
+      <nav class="navlinks" aria-label="Primary">
+        <a href="./founder.html">Founder / Trust</a>
+        <a href="./announcements.html">Announcements</a>
+        <span class="badge">Concept research</span>
+      </nav>
     </div>
   </header>
-
   <main>
     <section class="hero-sec">
-      <h1>Sovereign <span>Multiverse</span> Assets</h1>
-      <p>Five highly niche development pipelines constructed with hyper-advanced client-side mathematical systems. Zero external dependencies, pure standalone sovereign tech.</p>
+      <h1>Public <span>concept</span> systems</h1>
+      <p>A11-K is a public directory of five standalone concept-research simulations. These are fixtures for exploration, not production products, legal tools, or live operations.</p>
+      <div class="proof" aria-label="Proof strip">
+        <span>Live: GitHub Pages HTTP 200</span>
+        <span>Fixture: concept simulations</span>
+        <span>Blocked: live charges / closed customers</span>
+      </div>
+      <a class="cta" href="./founder.html">Read what is live, fixture, and blocked</a>
     </section>
-
     <div class="niche-grid">
-      <!-- Site 1: Bio-Sovereign -->
-      <div class="niche-card" style="--theme-color: var(--neon-green); --theme-rgb: 92, 255, 177;">
-        <div class="card-top">
-          <span class="niche-tag">Synthetic Bio / Genetics</span>
+      <div class="niche-card" style="--theme-color: var(--neon-green);">
+        <div>
+          <span class="niche-tag">Concept / Genetics</span>
           <h2>Bio-Sovereign</h2>
-          <p>Decentralized synthetic biological synthesis blueprints. Local peer-to-peer CAD pipelines bypassing state or corporate sequencing gatekeepers.</p>
-          <div class="system-badge">
-            <strong>System:</strong> Synthetic CRISPR Codon & Hamming Off-Target Simulator
-          </div>
+          <p>Browser fixture for synthetic-biology concepts and sequence-analysis thought experiments. Not a lab, clinic, or sequencing service.</p>
+          <div class="system-badge"><strong>Status:</strong> Concept research fixture</div>
         </div>
         <div class="card-actions">
-          <a href="./bio-sovereign/index.html" class="card-btn primary">Initialize System</a>
-          <a href="./bio-sovereign/simulation.html" class="card-btn secondary">Console Only</a>
+          <a href="./bio-sovereign/index.html" class="card-btn primary">Open fixture</a>
+          <a href="./bio-sovereign/simulation.html" class="card-btn secondary">Console only</a>
         </div>
       </div>
-
-      <!-- Site 2: Deep-Aquaculture -->
-      <div class="niche-card" style="--theme-color: var(--neon-cyan); --theme-rgb: 0, 242, 254;">
-        <div class="card-top">
-          <span class="niche-tag">Carbon Sinks / Algaculture</span>
+      <div class="niche-card" style="--theme-color: var(--neon-cyan);">
+        <div>
+          <span class="niche-tag">Concept / Ocean</span>
           <h2>Deep-Aquaculture</h2>
-          <p>Autonomous marine thermal upwelling networks farming pelagic sargassum crops to construct deep-sea carbon-sequestration sinks.</p>
-          <div class="system-badge">
-            <strong>System:</strong> Hydrostatic Deep-Water Lift & Carbon-Sequestration Engine
-          </div>
+          <p>Exploration surface for marine cultivation and carbon-system scenarios. Not an operating farm or carbon-credit product.</p>
+          <div class="system-badge"><strong>Status:</strong> Concept research fixture</div>
         </div>
         <div class="card-actions">
-          <a href="./deep-aquaculture/index.html" class="card-btn primary">Initialize System</a>
-          <a href="./deep-aquaculture/simulation.html" class="card-btn secondary">Console Only</a>
+          <a href="./deep-aquaculture/index.html" class="card-btn primary">Open fixture</a>
+          <a href="./deep-aquaculture/simulation.html" class="card-btn secondary">Console only</a>
         </div>
       </div>
-
-      <!-- Site 3: Quantum-Logistics -->
-      <div class="niche-card" style="--theme-color: var(--neon-purple); --theme-rgb: 157, 78, 221;">
-        <div class="card-top">
-          <span class="niche-tag">Pharmaceutical Isotope Cold-Chain</span>
+      <div class="niche-card" style="--theme-color: var(--neon-purple);">
+        <div>
+          <span class="niche-tag">Concept / Logistics</span>
           <h2>Quantum-Logistics</h2>
-          <p>Routing critical oncology isotopes and ultra-cold superconductors via dynamic paths optimized to solar radiation & half-life decay.</p>
-          <div class="system-badge">
-            <strong>System:</strong> Decay Path Half-Life Calculator & Isotope Optimizer
-          </div>
+          <p>Scenario workspace for time-sensitive routing ideas. Not a live cold-chain, isotope, or medical logistics service.</p>
+          <div class="system-badge"><strong>Status:</strong> Concept research fixture</div>
         </div>
         <div class="card-actions">
-          <a href="./quantum-logistics/index.html" class="card-btn primary">Initialize System</a>
-          <a href="./quantum-logistics/simulation.html" class="card-btn secondary">Console Only</a>
+          <a href="./quantum-logistics/index.html" class="card-btn primary">Open fixture</a>
+          <a href="./quantum-logistics/simulation.html" class="card-btn secondary">Console only</a>
         </div>
       </div>
-
-      <!-- Site 4: Orbital-Reclaim -->
-      <div class="niche-card" style="--theme-color: var(--neon-pink); --theme-rgb: 253, 38, 126;">
-        <div class="card-top">
-          <span class="niche-tag">Defense / Space Debris Mitigation</span>
+      <div class="niche-card" style="--theme-color: var(--neon-pink);">
+        <div>
+          <span class="niche-tag">Concept / Orbital</span>
           <h2>Orbital-Reclaim</h2>
-          <p>Ground-station laser arrays utilizing short pulse thermal ablation vectors to safely de-orbit hazardous LEO space debris.</p>
-          <div class="system-badge">
-            <strong>System:</strong> Delta-V Thermal Laser Ablation Deflection Calculator
-          </div>
+          <p>Research interface for debris-mitigation scenarios. Not a defense system or operational laser array.</p>
+          <div class="system-badge"><strong>Status:</strong> Concept research fixture</div>
         </div>
         <div class="card-actions">
-          <a href="./orbital-reclaim/index.html" class="card-btn primary">Initialize System</a>
-          <a href="./orbital-reclaim/simulation.html" class="card-btn secondary">Console Only</a>
+          <a href="./orbital-reclaim/index.html" class="card-btn primary">Open fixture</a>
+          <a href="./orbital-reclaim/simulation.html" class="card-btn secondary">Console only</a>
         </div>
       </div>
-
-      <!-- Site 5: Mesh-Geothermal -->
-      <div class="niche-card" style="--theme-color: var(--neon-gold); --theme-rgb: 216, 183, 106;">
-        <div class="card-top">
-          <span class="niche-tag">Energy / Thermosiphons</span>
+      <div class="niche-card" style="--theme-color: var(--neon-gold);">
+        <div>
+          <span class="niche-tag">Concept / Energy</span>
           <h2>Mesh-Geothermal</h2>
-          <p>Closed-loop, sub-surface heat harvesters using supercritical carbon dioxide (sCO2) thermosiphons in deep abandoned wells.</p>
-          <div class="system-badge">
-            <strong>System:</strong> sCO2 Thermodynamic Heat Flux & Density Velocity Simulator
-          </div>
+          <p>Exploration workspace for closed-loop thermal concepts. Not a deployed energy plant or well-field operator.</p>
+          <div class="system-badge"><strong>Status:</strong> Concept research fixture</div>
         </div>
         <div class="card-actions">
-          <a href="./mesh-geothermal/index.html" class="card-btn primary">Initialize System</a>
-          <a href="./mesh-geothermal/simulation.html" class="card-btn secondary">Console Only</a>
+          <a href="./mesh-geothermal/index.html" class="card-btn primary">Open fixture</a>
+          <a href="./mesh-geothermal/simulation.html" class="card-btn secondary">Console only</a>
         </div>
       </div>
     </div>
   </main>
-
+  <footer>A11-K · public concept-research directory · no live charges · no closed customers claimed · 2026</footer>
 </body>
 </html>
