@@ -1,0 +1,49 @@
+name: SEO baseline
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 6 * * *'
+
+permissions:
+  contents: read
+
+jobs:
+  technical-baseline:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check public SEO endpoints
+        env:
+          SEO_BASE_URL: https://a11-k.space
+        run: |
+          set -euo pipefail
+          base="${SEO_BASE_URL%/}"
+          for path in /robots.txt /sitemap.xml; do
+            code=$(curl -L -sS -o /tmp/seo-check -w '%{http_code}' --max-time 20 "$base$path")
+            echo "$path -> HTTP $code"
+            test "$code" -ge 200
+            test "$code" -lt 400
+          done
+
+      - name: Check homepage availability
+        env:
+          SEO_BASE_URL: https://a11-k.space
+        run: |
+          set -euo pipefail
+          code=$(curl -L -sS -o /tmp/home -w '%{http_code}' --max-time 20 "$SEO_BASE_URL")
+          echo "homepage -> HTTP $code"
+          test "$code" -ge 200
+          test "$code" -lt 400
+          grep -qi '<html' /tmp/home
+
+      - name: Record analytics integration state
+        run: |
+          cat <<'EOF'
+          GSC Wizard analytics lanes are integration-ready but require external credentials/data sources:
+          - Google Search Console
+          - Bing Webmaster Tools
+          - GA4
+          - GSC Wizard MCP/API
+          - IndexNow key where applicable
+          No credentials are read or stored by this workflow.
+          EOF
