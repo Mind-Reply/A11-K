@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/reseller", "destination": "/reseller.html" },
+    { "source": "/api/health", "destination": "/api/health.js" },
+    { "source": "/api/deployment-target", "destination": "/api/deployment-target.js" },
+    { "source": "/api/portfolio", "destination": "/api/portfolio.js" },
+    { "source": "/api/leads", "destination": "/api/leads.js" }
+  ]
+}

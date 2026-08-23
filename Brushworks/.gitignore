@@ -1,0 +1,8 @@
+.brushworks/
+node_modules/
+*.crdownload
+.env
+.env.*
+!.env.example
+.brushworks-server*.log
+.vercel

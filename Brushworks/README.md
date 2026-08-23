@@ -1,32 +1,40 @@
 # Brushworks
 
-**MRPRODUCTION system layer** — Create. Design. Publish.
+**A11-K local-first design-to-site studio — create, shape, package.**
 
-| Surface | Path | Engine |
-|---|---|---|
-| Home | `index.html` | Brand shell |
-| Studio | `studio.html` | Photopea wrap |
-| Builder | `builder.html` | MRstation draft → approve → publish UI |
+Brushworks turns a brief into a structured, conversion-focused site package while keeping drafts and exports on the local machine. It includes a portfolio surface for **A11-K.space, MindReply, Aurel, Brushworks, and LetReseller**.
 
-## Directive 001
+## Start
 
-Never build from scratch. Wrap existing tools, brand them, ship.
-
-## Local CLI
-
-From `C:\Users\skyri\MRPRODUCTION\brands\brushworks`:
-
-```bash
-node builder.js create "ProjectName" premium-saas
-node builder.js list
-node builder.js deploy-prep <projectId>
+```powershell
+npm run dev
 ```
 
-## Deploy
+Open `http://127.0.0.1:4177/`.
 
-Static files in this folder → GitHub Pages / Cloudflare Pages.  
-No build step required for the shell.
+## Verify
 
-## Ownership
+```powershell
+npm test
+npm run verify
+```
 
-See `LICENSE` and `OWNERSHIP.md`. Fingerprint: `LIBRA-BW-AK-2026`.
+## Surfaces
+
+| Surface | Path | Role |
+|---|---|---|
+| Home | `index.html` | Creative entry, sparks, blocks, and publish flow |
+| Portfolio | In-app `Portfolio` tab | A11-K catalogue and commercial project workspace |
+| Studio | `studio.html` | Photopea-wrapped design room |
+| Builder | `builder.html` | Existing draft-to-approve interface |
+| API | `server.mjs` | Local projects, generation, duplication, and packaging |
+
+## Local storage
+
+Project state and package exports are created under `.brushworks/`. This directory is Git-ignored. Keep secrets, credentials, payment data, customer PII, and restricted accounting content out of the workspace.
+
+## Status boundary
+
+Local package generation is verifiable. Live deployment, DNS, billing, provider connectivity, customer sales, and revenue are not claimed by this repository.
+
+See `WORKSPACE.md`, `PORTFOLIO.md`, `SALES_KIT.md`, and `A11-K_PORTFOLIO_WORKSPACE.md` for operating and commercial guidance.

@@ -1,0 +1,26 @@
+.platform-page { min-height: 520px; }
+.portfolio-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin: 24px 0; }
+.portfolio-card { display: flex; min-height: 160px; flex-direction: column; justify-content: space-between; gap: 9px; padding: 18px; border: 1px solid rgba(255,255,255,.13); border-radius: 18px; color: inherit; text-decoration: none; background: linear-gradient(145deg, rgba(255,255,255,.08), rgba(255,255,255,.025)); transition: transform .18s ease, border-color .18s ease, background .18s ease; }
+.portfolio-card:hover { transform: translateY(-3px); border-color: rgba(255,255,255,.42); background: rgba(255,255,255,.12); }
+.portfolio-card strong { font-size: 1.05rem; }
+.portfolio-card span { color: var(--muted, #a9a29b); font-size: .88rem; line-height: 1.35; }
+.portfolio-card small { color: #f4c58a; line-height: 1.35; }
+.portfolio-card em { color: rgba(255,255,255,.48); font-size: .68rem; font-style: normal; }
+.sales-actions, .workspace-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 12px 0; }
+.local-workspace { margin-top: 28px; padding: 20px; border: 1px solid rgba(255,255,255,.12); border-radius: 20px; background: rgba(0,0,0,.16); }
+.workspace-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+.workspace-head h3 { margin: 0; }
+.status-pill { padding: 6px 9px; border: 1px solid rgba(244,197,138,.42); border-radius: 999px; color: #f4c58a; font-size: .68rem; letter-spacing: .12em; white-space: nowrap; }
+.project-form { display: grid; grid-template-columns: minmax(150px, .8fr) minmax(200px, 1.5fr) auto; gap: 8px; margin: 16px 0; }
+.project-form input { min-width: 0; padding: 11px 12px; border: 1px solid rgba(255,255,255,.16); border-radius: 10px; color: inherit; background: rgba(255,255,255,.06); }
+.project-list { display: grid; gap: 8px; margin: 14px 0; }
+.project-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px; border: 1px solid rgba(255,255,255,.1); border-radius: 12px; background: rgba(255,255,255,.04); }
+.project-row div:first-child { display: grid; gap: 4px; min-width: 0; }
+.project-row span { color: var(--muted, #a9a29b); font-size: .76rem; }
+.project-buttons { display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; }
+.btn.xs { padding: 6px 9px; font-size: .72rem; }
+.lead-form { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin: 12px 0 20px; padding: 14px; border: 1px solid rgba(255,255,255,.1); border-radius: 14px; background: rgba(255,255,255,.035); }
+.lead-form input, .lead-form select, .lead-form textarea { min-width: 0; padding: 10px 11px; border: 1px solid rgba(255,255,255,.16); border-radius: 9px; color: inherit; background: rgba(255,255,255,.06); }
+.lead-form textarea { grid-column: 1 / -1; min-height: 74px; resize: vertical; }
+.lead-form button { justify-self: start; }
+@media (max-width: 720px) { .project-form, .lead-form { grid-template-columns: 1fr; } .lead-form textarea { grid-column: auto; } .project-row { align-items: flex-start; flex-direction: column; } .project-buttons { justify-content: flex-start; } .workspace-head { flex-direction: column; } }

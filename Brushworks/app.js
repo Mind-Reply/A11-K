@@ -353,7 +353,11 @@
         localStorage.setItem("bw_last_publish", JSON.stringify(payload));
       } catch (_) {}
 
-      botSay("Published package ready for “" + title + "”. Copy the handoff or run the CLI to go fully live.");
+      if (window.BWPlatform && typeof window.BWPlatform.publish === "function") {
+        window.BWPlatform.publish(payload);
+      }
+
+      botSay("Package ready for “" + title + "”. Local export is stored when the local API is running; live deployment is not claimed.");
       btnDoPublish.textContent = "Published ✓";
       setTimeout(() => {
         btnDoPublish.textContent = "Publish now 🚀";
