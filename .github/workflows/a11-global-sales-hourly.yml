@@ -1,0 +1,59 @@
+name: A11 Global Sales Pulse
+
+on:
+  schedule:
+    - cron: '17 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: a11-global-sales-pulse
+  cancel-in-progress: true
+
+jobs:
+  pulse:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build evidence-only hourly sales pulse
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p evidence/sales-hourly
+          ts="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+          cat > "evidence/sales-hourly/${ts//:/-}.md" <<EOF
+          # A11 Global Sales Pulse
+          Timestamp: $ts
+          
+          ## Objective
+          Promote verified A11-K/MindReply/AUREL offers through respectful, permission-based channels.
+          
+          ## Guardrails
+          - No purchased lists, spam, deceptive identity, fake scarcity, fake endorsements, or fabricated results.
+          - No secrets, payment data, customer PII, or ledger data.
+          - No automatic external messages from this workflow.
+          - No billing mutations.
+          - Only verified public claims may be reused.
+          
+          ## Hourly work queue
+          1. Recheck public offer pages and links.
+          2. Select the highest-value country/industry target not recently reviewed.
+          3. Generate one concise, personalised outreach draft using public information only.
+          4. Record target category and evidence URL; do not contact automatically.
+          5. Flag qualified opportunities for CEO-approved outreach.
+          
+          ## Commercial priority
+          AI transparency and literacy; automation recovery; enterprise assurance; EU market intelligence; AUREL strategic systems.
+          
+          ## Status
+          READY — automated preparation only; human approval required for external outreach, contracts, payments, or irreversible changes.
+          EOF
+      - name: Commit evidence
+        run: |
+          git config user.name "A11 Automation"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add evidence/sales-hourly/
+          git commit -m "ops: record hourly global sales pulse" || exit 0
+          git push
