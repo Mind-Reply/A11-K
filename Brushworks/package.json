@@ -7,7 +7,8 @@
   "scripts": {
     "dev": "node server.mjs",
     "start": "node server.mjs",
-    "verify": "node --check app.js && node --check server.mjs && node scripts/verify.mjs",
-    "test": "node --test tests/verify.test.mjs"
+    "verify": "node --check app.js && node --check server.mjs && node --check providers/index.mjs && node scripts/verify.mjs",
+    "test": "node --test tests/verify.test.mjs",
+    "reliability": "node reliability/run.mjs"
   }
 }

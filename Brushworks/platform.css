@@ -18,9 +18,17 @@
 .project-row div:first-child { display: grid; gap: 4px; min-width: 0; }
 .project-row span { color: var(--muted, #a9a29b); font-size: .76rem; }
 .project-buttons { display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; }
+.badge-row { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 4px; }
+.badge { font-style: normal; font-size: .66rem; letter-spacing: .04em; padding: 3px 7px; border-radius: 999px; border: 1px solid rgba(244,197,138,.3); color: #f4c58a; background: rgba(244,197,138,.06); }
 .btn.xs { padding: 6px 9px; font-size: .72rem; }
 .lead-form { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin: 12px 0 20px; padding: 14px; border: 1px solid rgba(255,255,255,.1); border-radius: 14px; background: rgba(255,255,255,.035); }
 .lead-form input, .lead-form select, .lead-form textarea { min-width: 0; padding: 10px 11px; border: 1px solid rgba(255,255,255,.16); border-radius: 9px; color: inherit; background: rgba(255,255,255,.06); }
 .lead-form textarea { grid-column: 1 / -1; min-height: 74px; resize: vertical; }
 .lead-form button { justify-self: start; }
+.workflow-rail { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 8px; padding: 0; list-style: none; }
+.workflow-rail li { padding: 7px 10px; border: 1px solid rgba(244,197,138,.35); border-radius: 999px; color: #f4c58a; font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; }
+.project-meta { display: flex; flex-wrap: wrap; gap: 6px; }
+.evidence-pill { padding: 3px 7px; border: 1px solid rgba(255,255,255,.16); border-radius: 999px; color: rgba(255,255,255,.72); font-size: .64rem; letter-spacing: .06em; text-transform: uppercase; }
+.evidence-pill.ready { border-color: rgba(244,197,138,.42); color: #f4c58a; }
+.evidence-pill.warn { border-color: rgba(255,180,120,.35); color: #ffd7a8; }
 @media (max-width: 720px) { .project-form, .lead-form { grid-template-columns: 1fr; } .lead-form textarea { grid-column: auto; } .project-row { align-items: flex-start; flex-direction: column; } .project-buttons { justify-content: flex-start; } .workspace-head { flex-direction: column; } }
