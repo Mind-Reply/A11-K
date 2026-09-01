@@ -1,0 +1,55 @@
+# Cloud Build config: build the MindReply Gemini proxy image and deploy to Cloud Run.
+#
+# Usage (after gcloud auth + ADC configured):
+#   gcloud builds submit --config cloudbuild.yaml \
+#     --substitutions=_SERVICE=mindreply-proxy,_REGION=europe-west1,_PROJECT=YOUR_PROJECT_ID
+#
+# Required substitutions:
+#   _SERVICE  - Cloud Run service name (default: mindreply-proxy)
+#   _REGION   - Cloud Run region (default: europe-west1)
+#   _PROJECT  - GCP project ID (no default; must be provided)
+
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '--tag'
+      - '${_REGION}-docker.pkg.dev/${_PROJECT}/mindreply/mindreply-proxy:${SHORT_SHA}'
+      - '.'
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - '${_REGION}-docker.pkg.dev/${_PROJECT}/mindreply/mindreply-proxy:${SHORT_SHA}'
+
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - '${_SERVICE}'
+      - '--image'
+      - '${_REGION}-docker.pkg.dev/${_PROJECT}/mindreply/mindreply-proxy:${SHORT_SHA}'
+      - '--region'
+      - '${_REGION}'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+      - '--memory'
+      - '512Mi'
+      - '--cpu'
+      - '1'
+      - '--min-instances'
+      - '0'
+      - '--max-instances'
+      - '10'
+      - '--set-env-vars'
+      - 'GOOGLE_CLOUD_PROJECT=${_PROJECT},GOOGLE_CLOUD_LOCATION=${_REGION},GOOGLE_GENAI_USE_ENTERPRISE=True'
+      # GOOGLE_API_KEY is intentionally NOT set here. Set it as a Cloud Run
+      # secret/env var at deploy time if using the API-key fallback path.
+
+images:
+  - '${_REGION}-docker.pkg.dev/${_PROJECT}/mindreply/mindreply-proxy:${SHORT_SHA}'
+
+options:
+  logging: CLOUD_LOGGING_ONLY

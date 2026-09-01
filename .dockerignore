@@ -1,0 +1,20 @@
+# Keep the Cloud Run image lean.
+.git
+.github
+node_modules
+Brushworks
+backups
+Brushworks-backup-*
+data
+evidence
+docs
+fixtures
+tests
+*.log
+*.md
+Dockerfile
+cloudbuild.yaml
+service.yaml
+.env
+.env.*
+!.env.example

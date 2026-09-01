@@ -1,0 +1,59 @@
+# Cloud Run service definition for the MindReply Gemini proxy.
+# Apply with:
+#   gcloud run services replace service.yaml --region=REGION --project=PROJECT
+#
+# NOTE: Replace IMAGE_URL with the built image, e.g.
+#   europe-west1-docker.pkg.dev/PROJECT/mindreply/mindreply-proxy:TAG
+#
+# Credential paths (fail-closed — at least one must be set):
+#   API-key path:  set GOOGLE_API_KEY (recommend a Secret Manager reference)
+#   Vertex path:   GOOGLE_CLOUD_PROJECT + GOOGLE_CLOUD_LOCATION + ADC on the
+#                  Cloud Run service account (default compute SA works if it
+#                  has Vertex AI User role).
+
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: mindreply-proxy
+  labels:
+    app: mindreply
+    component: gemini-proxy
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/minScale: "0"
+        autoscaling.knative.dev/maxScale: "10"
+        run.googleapis.com/startup-cpu-boost: "true"
+    spec:
+      containerConcurrency: 80
+      timeoutSeconds: 120
+      containers:
+        - image: IMAGE_URL
+          ports:
+            - containerPort: 8080
+          resources:
+            limits:
+              cpu: "1"
+              memory: 512Mi
+          env:
+            - name: GOOGLE_CLOUD_PROJECT
+              value: "YOUR_PROJECT_ID"
+            - name: GOOGLE_CLOUD_LOCATION
+              value: "europe-west1"
+            - name: GOOGLE_GENAI_USE_ENTERPRISE
+              value: "True"
+            # API-key fallback path (uncomment and set if using an API key):
+            # - name: GOOGLE_API_KEY
+            #   valueFrom:
+            #     secretKeyRef:
+            #       name: google-api-key
+            #       key: latest
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
