@@ -6,7 +6,7 @@ on:
     - cron: '11 */4 * * *'
 
 permissions:
-  contents: write
+  contents: read
   issues: write
 
 concurrency:
@@ -59,15 +59,12 @@ jobs:
             echo 'READY — scheduled evidence/maintenance cycle.'
           } > "$file"
 
-      - name: Commit cycle evidence
-        shell: bash
-        run: |
-          set -euo pipefail
-          git config user.name 'A11 Automation'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add evidence/a11-four-hour/
-          git commit -m 'ops: record A11 four-hour cycle' || exit 0
-          git push
+      - name: Publish evidence as workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: a11-four-hour-cycle-${{ github.run_number }}
+          path: evidence/a11-four-hour/
+          retention-days: 14
 
       - name: Record exception
         if: failure()
