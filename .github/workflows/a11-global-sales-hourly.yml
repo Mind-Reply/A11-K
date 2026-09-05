@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: a11-global-sales-pulse
@@ -50,10 +50,9 @@ jobs:
           ## Status
           READY — automated preparation only; human approval required for external outreach, contracts, payments, or irreversible changes.
           EOF
-      - name: Commit evidence
-        run: |
-          git config user.name "A11 Automation"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add evidence/sales-hourly/
-          git commit -m "ops: record hourly global sales pulse" || exit 0
-          git push
+      - name: Publish evidence as workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: a11-global-sales-pulse-${{ github.run_number }}
+          path: evidence/sales-hourly/
+          retention-days: 14
