@@ -1,0 +1,56 @@
+name: Daily Content — Sofia Tech Ledger
+
+on:
+  schedule:
+    - cron: '17 6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-content
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Generate live content
+        run: node scripts/publish-daily-content.mjs
+        env:
+          STL_LIVE: '1'
+          PROVIDER: live
+          PUBLISH_MODE: draft
+
+      - name: Verify generated content
+        run: |
+          test -s ledger/index.html
+          test -s ledger/latest.json
+          test -s ledger/latest.svg
+          test -s ledger/latest.social.txt
+          test -s ledger/manifest.json
+          node -e "const m=require('./ledger/manifest.json'); if(m.provider!=='live') process.exit(1); if(!m.live?.eurostat && !m.live?.egov && !m.live?.ted) process.exit(1)"
+
+      - name: Commit generated content
+        run: |
+          git config user.name 'A11-K Content Steward'
+          git config user.email 'actions@users.noreply.github.com'
+          git add ledger out
+          if git diff --cached --quiet; then
+            echo 'No content changes to publish.'
+            exit 0
+          fi
+          git commit -m "content: publish daily Sofia Tech Ledger"
+          git push
