@@ -3,76 +3,34 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#07080d">
-  <title>A11-K | Copilot</title>
-  <meta name="description" content="A11-K Copilot — a chat surface with selectable model structures. Provider connections are gated until configured.">
-  <link rel="canonical" href="https://mind-reply.github.io/A11-K/copilot.html">
+  <meta name="theme-color" content="#0A0A0A">
+  <title>A11-K — MindReply</title>
+  <meta name="description" content="A11-K — a premium operating surface by MindReply for realtime interaction, verified workflows and visible system state.">
+  <link rel="canonical" href="https://mind-reply.github.io/A11-K/">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./copilot.css">
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#0a0a0a;--surface:#171717;--text:#fafafa;--muted:#a3a3a3;--accent:#3b82f6;--line:rgba(255,255,255,.1);--max:1180px}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 78% 8%,rgba(59,130,246,.14),transparent 30%),radial-gradient(circle at 8% 92%,rgba(59,130,246,.07),transparent 26%),var(--bg);color:var(--text);font-family:Geist,system-ui,sans-serif;line-height:1.6}a{color:inherit;text-decoration:none}
+    .grain{position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.035;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+    .wrap{width:min(var(--max),90vw);margin:auto}.nav{position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:26px 0;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:12px;font-weight:700;letter-spacing:.2em;font-size:13px}.mark{display:grid;place-items:center;width:34px;height:34px;border:1px solid rgba(255,255,255,.25);border-radius:10px;font-family:Geist Mono;font-size:10px}.nav-links{display:flex;gap:26px;color:#737373;font:11px Geist Mono;text-transform:uppercase;letter-spacing:.16em}.nav-links a{transition:color .25s}.nav-links a:hover{color:#fff}.nav-status{padding:8px 11px;border:1px solid var(--line);border-radius:999px;color:#737373;font:10px Geist Mono;letter-spacing:.12em;text-transform:uppercase}.nav-status i{display:inline-block;width:6px;height:6px;margin-right:7px;border-radius:50%;background:#7df5bd;box-shadow:0 0 12px #7df5bd;animation:pulse 2.8s ease-in-out infinite}
+    .hero{position:relative;z-index:5;min-height:76vh;display:grid;grid-template-columns:1.1fr .9fr;gap:50px;align-items:center;padding:80px 0}.eyebrow{margin:0;color:#737373;font:10px Geist Mono;letter-spacing:.28em;text-transform:uppercase}.hero h1{max-width:900px;margin:18px 0;font-size:clamp(4rem,9vw,9.2rem);font-weight:500;line-height:.83;letter-spacing:-.075em}.hero h1 span{color:#525252}.hero p{max-width:610px;color:#a3a3a3;font-size:clamp(1.05rem,1.4vw,1.25rem);line-height:1.8}.actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}.button{display:inline-flex;align-items:center;gap:26px;padding:14px 17px;border-radius:12px;background:#fafafa;color:#0a0a0a;font-size:13px;font-weight:600;transition:transform .25s,box-shadow .25s}.button:hover{transform:translateY(-3px);box-shadow:0 18px 45px rgba(255,255,255,.12)}.button.secondary{background:transparent;color:#fafafa;border:1px solid var(--line)}
+    .orb{position:relative;aspect-ratio:1;width:min(42vw,480px);margin:auto;display:grid;place-items:center}.orb:before{content:'';position:absolute;inset:12%;border-radius:50%;background:radial-gradient(circle,rgba(59,130,246,.13),transparent 67%);filter:blur(10px);animation:breathe 5s ease-in-out infinite}.ring{position:absolute;border:1px solid rgba(255,255,255,.1);border-radius:50%}.ring.one{inset:5%;animation:spin 24s linear infinite}.ring.two{inset:18%;animation:spin-reverse 17s linear infinite;border-color:rgba(59,130,246,.18)}.ring.three{inset:32%;animation:spin 12s linear infinite;border-color:rgba(255,255,255,.06)}.ring:after{content:'';position:absolute;width:6px;height:6px;top:9%;left:50%;border-radius:50%;background:#fff;box-shadow:0 0 20px rgba(255,255,255,.8)}.core{width:36%;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 35% 28%,#fff,#d8d9e0 28%,#777 58%,#1a1a1a 78%);color:#0a0a0a;box-shadow:0 0 90px rgba(255,255,255,.14),inset -24px -24px 45px rgba(0,0,0,.42);animation:float 6s ease-in-out infinite}.core strong{font-size:clamp(22px,3vw,34px);letter-spacing:-.08em}.core small{font:8px Geist Mono;letter-spacing:.45em;opacity:.5}.orb-label{position:absolute;bottom:4%;color:#737373;font:9px Geist Mono;letter-spacing:.3em}
+    .section{position:relative;z-index:5;padding:70px 0}.section-title{max-width:680px;margin-bottom:28px}.section-title h2{margin:13px 0 9px;font-size:clamp(2rem,4vw,4rem);font-weight:500;line-height:.98;letter-spacing:-.05em}.section-title p{margin:0;color:#737373}.grid{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line)}.card{min-height:240px;padding:28px 26px;border-right:1px solid var(--line);opacity:0;animation:reveal .8s ease forwards}.card:last-child{border-right:0}.index{color:#525252;font:10px Geist Mono;letter-spacing:.2em}.card h3{margin:46px 0 12px;font-size:13px;letter-spacing:.18em}.card p{max-width:300px;margin:0;color:#737373;font-size:14px;line-height:1.8}.manifest{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}.manifest span{padding:8px 10px;border:1px solid var(--line);border-radius:999px;color:#8a8a8a;font:10px Geist Mono}
+    .footer{position:relative;z-index:5;border-top:1px solid var(--line);padding:25px 0 40px;color:#525252;font:10px Geist Mono;letter-spacing:.16em;text-transform:uppercase;display:flex;justify-content:space-between;gap:20px}.footer a:hover{color:#fff}
+    @keyframes reveal{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}@keyframes breathe{50%{transform:scale(1.16);opacity:.7}}@keyframes float{50%{transform:translateY(-8px)}}@keyframes spin{to{transform:rotate(360deg)}}@keyframes spin-reverse{to{transform:rotate(-360deg)}}@keyframes pulse{50%{opacity:.45;transform:scale(.85)}}
+    @media(max-width:860px){.nav-links{display:none}.hero{grid-template-columns:1fr;padding:64px 0}.orb{width:min(80vw,430px)}.grid{grid-template-columns:1fr}.card{border-right:0;border-bottom:1px solid var(--line)}.card:last-child{border-bottom:0}.footer{flex-direction:column}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.001ms!important}}
+  </style>
 </head>
 <body>
-  <header class="nav wrap">
-    <a class="brand" href="./index.html">A11-K<i>✦</i></a>
-    <div class="nav-right">
-      <div class="model-picker">
-        <button class="picker-trigger" id="modelTrigger" type="button" aria-haspopup="true" aria-expanded="false">
-          <span class="model-badge" id="activeBadge">G</span>
-          <span class="model-info">
-            <span class="model-name" id="activeName">Gemini 3.1 Pro</span>
-            <span class="model-meta" id="activeMeta">Reasoning · connection gated</span>
-          </span>
-          <span class="chevron">▾</span>
-        </button>
-        <div class="dropdown" id="modelMenu" role="menu">
-          <div class="menu-group">
-            <div class="group-title">Deep Reasoning</div>
-            <button class="menu-item selected" data-name="Gemini 3.1 Pro" data-badge="G" data-meta="Reasoning · connection gated" type="button" role="menuitem"><b>G</b><span><strong>Gemini 3.1 Pro</strong><small>Reasoning structure</small></span></button>
-            <button class="menu-item" data-name="DeepSeek R1" data-badge="D" data-meta="Reasoning · connection gated" type="button" role="menuitem"><b>D</b><span><strong>DeepSeek R1</strong><small>Reasoning structure</small></span></button>
-          </div>
-          <div class="menu-group">
-            <div class="group-title">Analysis</div>
-            <button class="menu-item" data-name="Claude Sonnet" data-badge="C" data-meta="Analysis · connection gated" type="button" role="menuitem"><b>C</b><span><strong>Claude Sonnet</strong><small>Analysis structure</small></span></button>
-          </div>
-          <div class="menu-group">
-            <div class="group-title">Code</div>
-            <button class="menu-item" data-name="Grok Code" data-badge="X" data-meta="Code · connection gated" type="button" role="menuitem"><b>X</b><span><strong>Grok Code</strong><small>Code structure</small></span></button>
-          </div>
-          <div class="menu-group">
-            <div class="group-title">Local</div>
-            <button class="menu-item" data-name="Llama" data-badge="L" data-meta="Local · not configured" type="button" role="menuitem"><b>L</b><span><strong>Llama</strong><small>Local structure</small></span></button>
-          </div>
-        </div>
-      </div>
-      <a class="back" href="./index.html">Back to A11-K</a>
-    </div>
-  </header>
-
-  <main class="chat-wrap">
-    <section class="chat-scroll" id="chatScroll">
-      <div class="intro" id="intro">
-        <span class="intro-mark">✦</span>
-        <h1>How can I help?</h1>
-        <p>Choose a model structure and start a chat. This public page does not have knowledge of your private work and does not claim a live provider connection.</p>
-      </div>
-      <div class="messages" id="messages" aria-live="polite"></div>
-    </section>
-
-    <section class="composer-area">
-      <div class="quick-actions">
-        <button type="button" data-prompt="Help me plan a task">Plan a task</button>
-        <button type="button" data-prompt="Review this text">Review text</button>
-        <button type="button" data-prompt="Write code for this">Write code</button>
-      </div>
-      <form id="chatForm" class="composer">
-        <textarea id="prompt" rows="1" placeholder="Message Copilot…" aria-label="Message Copilot"></textarea>
-        <button class="send" type="submit" aria-label="Send message">↑</button>
-      </form>
-      <div class="composer-note">No API key in the browser · a private server-side gateway is required for live responses</div>
-    </section>
+  <div class="grain"></div>
+  <header class="nav wrap"><a class="brand" href="./index.html"><span class="mark">K</span><span>A11-K</span></a><nav class="nav-links" aria-label="Primary"><a href="#system">System</a><a href="#signal">Signal</a><a href="./copilot.html">Copilot</a></nav><div class="nav-status"><i></i>MindReply surface</div></header>
+  <main>
+    <section class="hero wrap"><div><p class="eyebrow">A11-K · Built by MindReply · 2026</p><h1>Make the system<br><span>feel immediate.</span></h1><p>A11-K is a premium operating surface for realtime interaction, visible state and verified execution. The interface stays quiet so the architecture can speak clearly.</p><div class="actions"><a class="button" href="./copilot.html">Enter Copilot <span>↗</span></a><a class="button secondary" href="#system">Explore system</a></div><div class="manifest"><span>Realtime</span><span>Control</span><span>Proof</span><span>MindReply</span></div></div><div class="orb" id="signal" aria-label="A11-K signal visual"><div class="ring one"></div><div class="ring two"></div><div class="ring three"></div><div class="core"><strong>A11</strong><small>K</small></div><div class="orb-label">READY · SIGNAL</div></div></section>
+    <section id="system" class="section wrap"><div class="section-title"><p class="eyebrow">Architecture → experience</p><h2>One language from intent to execution.</h2><p>The public surface now mirrors the A11-K architecture: realtime interaction, controlled execution and evidence-led confidence.</p></div><div class="grid"><article class="card" style="animation-delay:.05s"><span class="index">01</span><h3>REALTIME</h3><p>Voice-first interaction with a responsive, calm visual state. Enter the dedicated Copilot surface when the interaction needs more depth.</p></article><article class="card" style="animation-delay:.17s"><span class="index">02</span><h3>CONTROL</h3><p>Operational surfaces are presented as clear pathways rather than a maze of features: inspect, decide, execute and recover.</p></article><article class="card" style="animation-delay:.29s"><span class="index">03</span><h3>PROOF</h3><p>Signals are explicit. The experience avoids claiming connectivity or success where the underlying system has not verified it.</p></article></div></section>
   </main>
-
-  <script src="./copilot.js" defer></script>
+  <footer class="footer wrap"><span>A11-K · MindReply</span><span><a href="./a11-sites.html">Sites</a> · <a href="./a11-working-standard.html">Working standard</a> · © 2026</span></footer>
 </body>
 </html>
