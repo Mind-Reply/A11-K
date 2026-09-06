@@ -17,43 +17,64 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Build evidence-only hourly sales pulse
+
+      - name: Build AI-independent revenue pulse
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p evidence/sales-hourly
           ts="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
-          cat > "evidence/sales-hourly/${ts//:/-}.md" <<EOF
-          # A11 Global Sales Pulse
+          file="evidence/sales-hourly/${ts//:/-}.md"
+          cat > "$file" <<EOF
+          # A11 Global Revenue Pulse
           Timestamp: $ts
-          
-          ## Objective
-          Promote verified A11-K/MindReply/AUREL offers through respectful, permission-based channels.
-          
-          ## Guardrails
-          - No purchased lists, spam, deceptive identity, fake scarcity, fake endorsements, or fabricated results.
-          - No secrets, payment data, customer PII, or ledger data.
-          - No automatic external messages from this workflow.
-          - No billing mutations.
-          - Only verified public claims may be reused.
-          
-          ## Hourly work queue
-          1. Recheck public offer pages and links.
-          2. Select the highest-value country/industry target not recently reviewed.
-          3. Generate one concise, personalised outreach draft using public information only.
-          4. Record target category and evidence URL; do not contact automatically.
-          5. Flag qualified opportunities for CEO-approved outreach.
-          
+
+          ## Revenue continuity
+          Revenue-critical paths MUST operate without generative AI, model APIs, inference credits, or assistant availability.
+          AI may accelerate research or drafting, but it is not a revenue dependency.
+
+          ## Deterministic revenue loop
+          1. Discover — owned search, directories, partnerships, referrals and public distribution.
+          2. Qualify — explicit rules, forms and human review.
+          3. Offer — fixed packages, pricing and clear terms.
+          4. Checkout — hosted payment, invoice or approved bank settlement.
+          5. Deliver — documented fulfilment runbook and human fallback.
+          6. Renew — subscription/invoice calendar and renewal queue.
+          7. Refer — tracked referral mechanism with disclosed terms.
+          8. Measure — payment exports, ledger records and deterministic metrics.
+
+          ## Hourly automated checks
+          - Verify public offer and checkout links are present.
+          - Check that each priority offer has a price, fulfilment owner and settlement route documented.
+          - Detect stale revenue opportunities and renewal dates when deterministic data is available.
+          - Record evidence without customer PII, payment data or secrets.
+          - Prepare internal CEO action queues only; do not contact prospects automatically.
+
           ## Commercial priority
-          AI transparency and literacy; automation recovery; enterprise assurance; EU market intelligence; AUREL strategic systems.
-          
+          Productised services; subscriptions; paid intelligence/data products; implementation and assurance; templates/operating systems; transparent partnerships/referrals; measured usage/transaction revenue.
+
+          ## Guardrails
+          - No purchased lists, spam, deceptive identity, fake scarcity, fake endorsements or fabricated results.
+          - No secrets, payment data, customer PII or private ledger data.
+          - No automatic external messages from this workflow.
+          - No billing or price mutations.
+          - No unverified commercial claims.
+          - Every revenue-critical action must have a deterministic/manual fallback.
+
+          ## AI independence gate
+          PASS means the offer can still be discovered, purchased/requested, fulfilled, recorded, supported and renewed when all AI providers are unavailable.
+
           ## Status
-          READY — automated preparation only; human approval required for external outreach, contracts, payments, or irreversible changes.
+          READY — automated preparation and verification only; human approval remains required for external outreach, contracts, payments and irreversible changes.
           EOF
+
+          test -s "$file"
+          test -f docs/REVENUE_INDEPENDENT_OPERATING_SYSTEM.md
+
       - name: Commit evidence
         run: |
           git config user.name "A11 Automation"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add evidence/sales-hourly/
-          git commit -m "ops: record hourly global sales pulse" || exit 0
+          git add evidence/sales-hourly/ docs/REVENUE_INDEPENDENT_OPERATING_SYSTEM.md .github/workflows/a11-global-sales-hourly.yml
+          git commit -m "ops: record AI-independent revenue pulse" || exit 0
           git push
