@@ -1,0 +1,73 @@
+{
+  "version": "1.0.0",
+  "principle": "Revenue-critical actions must remain executable without a model.",
+  "model_dependency": "optional",
+  "default_mode": "deterministic",
+  "money_actions": {
+    "lead_capture": "deterministic",
+    "qualification": "deterministic_rules_first",
+    "offer_selection": "deterministic_rules_first",
+    "pricing": "deterministic",
+    "quote": "deterministic",
+    "checkout": "deterministic_provider_route",
+    "order_state": "deterministic_state_machine",
+    "delivery": "deterministic_state_machine",
+    "acceptance": "evidence_and_rule_based",
+    "settlement": "deterministic_ledger_rules",
+    "reconciliation": "deterministic",
+    "refund": "deterministic_policy",
+    "renewal": "deterministic_schedule",
+    "commission": "deterministic_formula",
+    "reporting": "deterministic",
+    "audit": "deterministic"
+  },
+  "model_allowed_for": [
+    "drafting",
+    "summarisation",
+    "classification_assistance",
+    "research_assistance",
+    "creative_variants"
+  ],
+  "model_must_not_be_required_for": [
+    "price_calculation",
+    "payment_authorisation",
+    "order_creation",
+    "entitlement_grant",
+    "delivery_confirmation",
+    "acceptance_decision",
+    "settlement_calculation",
+    "ledger_posting",
+    "refund_calculation",
+    "reconciliation",
+    "revenue_reporting"
+  ],
+  "hard_gates": {
+    "no_secret_in_repo": true,
+    "no_customer_pii_in_public_evidence": true,
+    "no_fabricated_results": true,
+    "no_unapproved_external_outreach": true,
+    "no_unapproved_billing_mutation": true,
+    "no_settlement_without_evidence": true,
+    "no_entitlement_without_paid_or_authorised_state": true
+  },
+  "required_evidence": [
+    "offer_id",
+    "price_snapshot",
+    "order_or_opportunity_id",
+    "event_timestamp",
+    "action_result",
+    "evidence_reference"
+  ],
+  "revenue_state_machine": [
+    "identified",
+    "qualified",
+    "offered",
+    "accepted",
+    "paid",
+    "fulfilled",
+    "evidence_ready",
+    "settled",
+    "retained",
+    "closed"
+  ]
+}
