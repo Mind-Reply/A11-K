@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "release": {
+    "id": "estate-2026-09-06",
+    "version": "2026.09.06",
+    "status": "release-candidate",
+    "sourceOfTruth": "github",
+    "delivery": "vercel"
+  },
+  "brands": [
+    {
+      "id": "a11-k",
+      "name": "A11-K",
+      "role": "Owner Flight Deck",
+      "tagline": "See the estate. Decide clearly. Dispatch safely.",
+      "canonicalRepo": "Mind-Reply/A11-K"
+    },
+    {
+      "id": "sofia-tech-ledger",
+      "name": "Sofia Tech Ledger",
+      "role": "Bilingual regional intelligence",
+      "tagline": "Sofia SME digitalisation intelligence, verified and current.",
+      "canonicalRepo": "Mind-Reply/A11-K"
+    },
+    {
+      "id": "aurel",
+      "name": "AUREL",
+      "role": "Brand/product surface",
+      "tagline": "Premium product identity within the estate.",
+      "canonicalRepo": "Mind-Reply/Aurel"
+    },
+    {
+      "id": "resellerpro",
+      "name": "ResellerPro",
+      "role": "Commerce and hosting platform",
+      "tagline": "Commerce, domains and hosting operations.",
+      "canonicalRepo": "Mind-Reply/resellerpro"
+    },
+    {
+      "id": "mindreply",
+      "name": "MindReply",
+      "role": "Decision and operating layer",
+      "tagline": "The operating intelligence layer for the estate.",
+      "canonicalRepo": "Mind-Reply/mindreply"
+    }
+  ],
+  "brandingRules": {
+    "identity": "Every public surface declares exactly one canonical product brand.",
+    "footer": "Canonical brand name + year + ownership notice.",
+    "metadata": "title, description, Open Graph and structured data must use the same canonical brand.",
+    "release": "Every production release records repository, commit, deployment and verification evidence.",
+    "noFalseLive": true
+  }
+}
