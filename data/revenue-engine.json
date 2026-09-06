@@ -1,0 +1,36 @@
+{
+  "schema": "a11-k.revenue-engine.v1",
+  "principle": "NO_AI_STILL_SELL",
+  "ai_dependency": "optional",
+  "critical_path": [
+    "offer",
+    "audience",
+    "landing",
+    "cta",
+    "checkout",
+    "payment",
+    "fulfilment",
+    "revenue_record",
+    "follow_up",
+    "retention"
+  ],
+  "states": ["DISCOVERED", "OFFER_READY", "CONVERSION_READY", "PAYMENT_READY", "FULFILMENT_READY", "REVENUE_READY", "BLOCKED"],
+  "offers": [
+    {
+      "offer_id": "mindreply-client-communication-followup",
+      "name": "Client Communication + Follow-up",
+      "status": "DISCOVERED",
+      "ai_required": false,
+      "human_fallback": true,
+      "checkout_path": "/checkout",
+      "proof_path": "/a11-sites.html",
+      "record_required": true
+    }
+  ],
+  "verification": {
+    "payment_confirmation_required": true,
+    "durable_revenue_record_required": true,
+    "fulfilment_confirmation_required": true,
+    "last_verified_at": null
+  }
+}
