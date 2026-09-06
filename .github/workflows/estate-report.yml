@@ -1,36 +1,59 @@
 name: EstateReport - Daily Status
+
 on:
   schedule:
     - cron: '0 7 * * *'
   workflow_dispatch:
+
+permissions:
+  contents: write
+
 jobs:
   report:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - name: Generate estate report
+        shell: bash
         run: |
-          echo "# MRPPRODUCTION v1.0 - Estate Report" > report.md
-          echo "Generated: $(date)" >> report.md
-          echo "" >> report.md
-          echo "# Sites" >> report.md
-          SITES=("https://angelllkr-eng.github.io/a11k/" https://angelllkr-eng.github.io/a11k/bio-sovereign/" https://angelllkr-eng.github.io/a11k/deep-aquaculture/" https://angelllkr-eng.github.io/a11k/quantum-logistics/" https://angelllkr-eng.github.io/a11k/orbital-reclaim/" https://angelllkr-eng.github.io/a11k/mesh-geothermal/" https://aurel.mind-reply.com" https://mind-reply.com)
-          for url in "${SITES[@]}"; do
-            STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 "$")
-            echo "- $url: $STATUS" >> report.md
-          done
-          echo "" >>> report.md
-          echo "# Owner" >> report.md
-          echo "Angel Krastev (DOB: 10/04/1997) - A.K. Estate" >> report.md
-          cat report.md
-      - name: Save report
-        run: |
+          set -euo pipefail
           mkdir -p reports
-          cp report.md "reports/estate-$(date -u +%Y-%m-%d).md"
-      - name: Commit
+          report="reports/estate-$(date -u +%Y-%m-%d).md"
+          {
+            echo "# A11-K Estate Evidence Report"
+            echo
+            echo "Generated: $(date -u --iso-8601=seconds)"
+            echo
+            echo "## HTTP surfaces"
+            urls=(
+              "https://angelllkr-eng.github.io/a11k/"
+              "https://angelllkr-eng.github.io/a11k/bio-sovereign/"
+              "https://angelllkr-eng.github.io/a11k/deep-aquaculture/"
+              "https://angelllkr-eng.github.io/a11k/quantum-logistics/"
+              "https://angelllkr-eng.github.io/a11k/orbital-reclaim/"
+              "https://angelllkr-eng.github.io/a11k/mesh-geothermal/"
+              "https://aurel.mind-reply.com"
+              "https://mind-reply.com"
+            )
+            for url in "${urls[@]}"; do
+              status=$(curl -L -sS -o /dev/null -w '%{http_code}' --max-time 10 "$url" || true)
+              printf '%s: %s\n' "$url" "$status"
+            done
+          } > "$report"
+
+          cat "$report"
+
+      - name: Commit evidence only
+        shell: bash
         run: |
-          git config user.name "MRPPRODUCTION-EstateReport"
-          git config user.email "actions@github.com"
-          git add reports/ || true
-          git diff --quiet && git diff --cached --quiet || git commit -m "EstateReport: $(date -u +%Y-%m-%d)"
-          git push || true
+          set -euo pipefail
+          git config user.name "A11 Automation"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add reports/
+          if git diff --cached --quiet; then
+            echo "No report changes"
+            exit 0
+          fi
+          git commit -m "ops: record estate evidence $(date -u +%Y-%m-%d)"
+          git push
