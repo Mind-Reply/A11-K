@@ -1,0 +1,40 @@
+{
+  "schema": "a11k.reality-claim/v1",
+  "source_of_truth": "github",
+  "delivery_evidence": "vercel",
+  "design_intent": "figma",
+  "publishing_surface": "websitepublisher",
+  "claims": [
+    {
+      "id": "a11k-main-delivery",
+      "subject": "Mind-Reply/A11-K",
+      "claim": "Current Vercel delivery returns HTTP 200",
+      "state": "VERIFIED",
+      "github": {
+        "ref": "ops/vercel-production-verification",
+        "commit": "1625fb8baa909b2b7d4eba98ca6f7da639b8ba7c"
+      },
+      "vercel": {
+        "deployment": "dpl_9vNmp2zbQbkKf8kkjPhVchHY6aS3",
+        "url": "a11-k-git-ops-vercel-production-verification-a11-k.vercel.app",
+        "ready_state": "READY",
+        "http_status": 200
+      },
+      "notes": "Verification deployment only; not a production-routing assertion."
+    },
+    {
+      "id": "a11k-production-routing",
+      "subject": "Mind-Reply/A11-K",
+      "claim": "The current Vercel project is production-live",
+      "state": "UNKNOWN",
+      "github": {
+        "ref": "main"
+      },
+      "vercel": {
+        "project": "prj_bD22PZRYC3Mgwe7awo2TR3EyqHI5",
+        "live": false
+      },
+      "notes": "Do not infer production routing from READY deployments. Owner approval is required for routing changes."
+    }
+  ]
+}
