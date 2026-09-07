@@ -1,5 +1,16 @@
 import { calculateMargin, calculateMoney, canTransition, REVENUE_STATES, settlement, transition } from './engine.mjs';
 
+const STATE = Object.freeze({
+  IDENTIFIED: 'identified',
+  QUALIFIED: 'qualified',
+  OFFERED: 'offered',
+  ACCEPTED: 'accepted',
+  PAID: 'paid',
+  FULFILLED: 'fulfilled',
+  EVIDENCE_READY: 'evidence_ready',
+  SETTLED: 'settled'
+});
+
 function required(value, name) {
   const text = String(value ?? '').trim();
   if (!text) throw new Error(`${name} is required`);
@@ -18,59 +29,64 @@ export function createOrder({ orderId, offerId, offerVersion, currency, quantity
   required(offerVersion, 'offerVersion');
   required(currency, 'currency');
   const money = calculateMoney({ quantity, unitPrice, discount, tax, fees });
-  const margin = calculateMargin({ revenue: money.netAmount, directCost });
+  const margin = calculateMargin({ revenue: money.net, directCost });
   return {
     orderId, offerId, offerVersion, currency: String(currency).toUpperCase(), quantity,
     unitPrice, discount, tax, fees, directCost,
-    subtotal: money.subtotal, grossAmount: money.grossAmount, netAmount: money.netAmount,
+    subtotal: money.subtotal, grossAmount: money.gross, netAmount: money.net,
     marginAmount: margin.marginAmount, marginRate: margin.marginRate,
-    state: REVENUE_STATES.IDENTIFIED, state_before: null,
+    state: STATE.IDENTIFIED, state_before: null,
     evidence_reference: null, payment: { state: 'unpaid', provider: null, providerReference: null },
     fulfillment: { state: 'not_ready', evidenceReference: null }, occurred_at: occurredAt
   };
 }
 
+export function recordQualification(order, evidenceReference) {
+  return transition(order, STATE.QUALIFIED, required(evidenceReference, 'evidenceReference'));
+}
+
+export function recordOffer(order, evidenceReference) {
+  return transition(order, STATE.OFFERED, required(evidenceReference, 'evidenceReference'));
+}
+
 export function recordOfferAcceptance(order, evidenceReference) {
-  return transition(order, REVENUE_STATES.ACCEPTED, required(evidenceReference, 'evidenceReference'));
+  return transition(order, STATE.ACCEPTED, required(evidenceReference, 'evidenceReference'));
 }
 
 export function recordPaymentAuthorised(order, { provider, providerReference, evidenceReference }) {
   required(provider, 'provider');
   required(providerReference, 'providerReference');
   required(evidenceReference, 'evidenceReference');
-  if (order.state !== REVENUE_STATES.ACCEPTED) throw new Error(`Payment requires accepted order; current state: ${order.state}`);
-  const next = transition(order, REVENUE_STATES.PAID, evidenceReference);
-  next.payment = { state: 'paid', provider, providerReference };
-  return next;
+  if (order.state !== STATE.ACCEPTED) throw new Error(`Payment requires accepted order; current state: ${order.state}`);
+  const next = transition(order, STATE.PAID, evidenceReference);
+  return { ...next, payment: { state: 'paid', provider, providerReference } };
 }
 
 export function confirmFulfillment(order, evidenceReference) {
   required(evidenceReference, 'evidenceReference');
-  if (order.state !== REVENUE_STATES.PAID) throw new Error(`Fulfillment requires paid order; current state: ${order.state}`);
-  const next = transition(order, REVENUE_STATES.FULFILLED, evidenceReference);
-  next.fulfillment = { state: 'fulfilled', evidenceReference };
-  return next;
+  if (order.state !== STATE.PAID) throw new Error(`Fulfillment requires paid order; current state: ${order.state}`);
+  const next = transition(order, STATE.FULFILLED, evidenceReference);
+  return { ...next, fulfillment: { state: 'fulfilled', evidenceReference } };
 }
 
 export function markEvidenceReady(order, evidenceReference) {
   required(evidenceReference, 'evidenceReference');
-  if (order.state !== REVENUE_STATES.FULFILLED) throw new Error(`Evidence requires fulfilled order; current state: ${order.state}`);
-  return transition(order, REVENUE_STATES.EVIDENCE_READY, evidenceReference);
+  if (order.state !== STATE.FULFILLED) throw new Error(`Evidence requires fulfilled order; current state: ${order.state}`);
+  return transition(order, STATE.EVIDENCE_READY, evidenceReference);
 }
 
 export function settleOrder(order, { fees = 0, refunds = 0, commission = 0, evidenceReference }) {
   required(evidenceReference, 'evidenceReference');
-  if (order.state !== REVENUE_STATES.EVIDENCE_READY) throw new Error(`Settlement requires evidence-ready order; current state: ${order.state}`);
+  if (order.state !== STATE.EVIDENCE_READY) throw new Error(`Settlement requires evidence-ready order; current state: ${order.state}`);
   const result = settlement({ orderId: order.orderId, offerId: order.offerId, currency: order.currency, grossAmount: order.grossAmount, fees: nonNegative(fees, 'fees'), refunds: nonNegative(refunds, 'refunds'), commission: nonNegative(commission, 'commission'), evidenceReference });
-  const next = transition(order, REVENUE_STATES.SETTLED, evidenceReference);
-  next.settlement = result;
-  return next;
+  const next = transition(order, STATE.SETTLED, evidenceReference);
+  return { ...next, settlement: result };
 }
 
 export function reconcileOrder(order, { authoritativePaymentState, evidenceReference }) {
   required(evidenceReference, 'evidenceReference');
   required(authoritativePaymentState, 'authoritativePaymentState');
-  if (authoritativePaymentState !== 'paid' && authoritativePaymentState !== 'unpaid' && authoritativePaymentState !== 'refunded') {
+  if (!['paid', 'unpaid', 'refunded'].includes(authoritativePaymentState)) {
     throw new Error(`Unsupported authoritative payment state: ${authoritativePaymentState}`);
   }
   if (authoritativePaymentState === 'paid' && order.payment.state !== 'paid') throw new Error('Payment mismatch: authoritative provider says paid');
@@ -78,5 +94,5 @@ export function reconcileOrder(order, { authoritativePaymentState, evidenceRefer
 }
 
 export function revenueRuntimeHealth() {
-  return { deterministic: true, modelRequired: false, networkRequired: false, externalWrites: false, states: Object.values(REVENUE_STATES), transitionGuard: canTransition };
+  return { deterministic: true, modelRequired: false, networkRequired: false, externalWrites: false, states: [...REVENUE_STATES], transitionGuard: canTransition };
 }
