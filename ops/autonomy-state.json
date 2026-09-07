@@ -1,0 +1,15 @@
+{
+  "schema": "a11-k.autonomy-state.v1",
+  "mode": "deterministic",
+  "status": "PENDING_VERIFICATION",
+  "checks": {
+    "revenue_independence": "PENDING",
+    "required_surfaces": "PENDING",
+    "secret_boundary": "PENDING",
+    "automation_cycle": "READY",
+    "production_claim": "EVIDENCE_REQUIRED"
+  },
+  "autonomous_domains": ["estate","deployments","revenue","evidence","recovery","content","governance"],
+  "human_gates": ["production promotion","billing","payments","credentials","dns","external communications","destructive changes"],
+  "note": "State is refreshed by the deterministic autonomy cycle. AI is optional acceleration; revenue-critical operation remains deterministic/manual when model services are unavailable."
+}
