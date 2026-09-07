@@ -1,0 +1,16 @@
+{
+  "schema": "a11-k.autonomy-state.v1",
+  "mode": "deterministic",
+  "status": "READY",
+  "last_verified": "repository baseline",
+  "checks": {
+    "revenue_independence": "PASS",
+    "required_surfaces": "PASS",
+    "secret_boundary": "PASS",
+    "automation_cycle": "READY",
+    "production_claim": "EVIDENCE_REQUIRED"
+  },
+  "autonomous_domains": ["estate", "deployments", "revenue", "evidence", "recovery", "content", "governance"],
+  "human_gates": ["production promotion", "billing", "payments", "credentials", "dns", "external communications", "destructive changes"],
+  "note": "AI is optional acceleration; revenue-critical operation remains deterministic/manual when model services are unavailable."
+}
