@@ -1,0 +1,46 @@
+name: Autonomous Flight Deck Cycle
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 */6 * * *'
+permissions:
+  contents: write
+  issues: write
+concurrency:
+  group: autonomous-flightdeck
+  cancel-in-progress: true
+jobs:
+  cycle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Run deterministic autonomy audit
+        run: node scripts/autonomy-cycle.mjs
+      - name: Publish changed state
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name 'a11-k-autonomy'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add ops/autonomy-state.json
+          if git diff --cached --quiet; then
+            echo 'No state change; no commit required.'
+          else
+            git commit -m 'ops: refresh autonomous flight deck state'
+            git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+            git push origin HEAD:${GITHUB_REF_NAME}
+          fi
+      - name: Create bounded alert on failed cycle
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue create --title 'Autonomy cycle requires attention' --body 'The scheduled deterministic autonomy cycle failed. Review the workflow run and evidence before taking consequential action.' || true
