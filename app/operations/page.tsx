@@ -1,0 +1,44 @@
+'use client';
+
+const rows = [
+  ['Repository state', 'READY', 'auto'],
+  ['Deployment state', 'MONITORED', 'auto'],
+  ['Automation state', 'SCHEDULED', 'auto'],
+  ['Safe maintenance', 'AUTO', 'auto'],
+  ['Evidence capture', 'AUTO', 'auto'],
+  ['Consequential action', 'OWNER GATE', 'owner'],
+];
+
+export default function Operations() {
+  return (
+    <main className="min-h-screen bg-[#070807] px-5 py-10 text-white sm:px-10 lg:px-16">
+      <div className="mx-auto max-w-6xl">
+        <a href="/flight-deck">← Flight Deck</a>
+        <p className="mt-16 text-[10px] uppercase tracking-[.3em] text-white/35">01 / OPERATIONS</p>
+        <h1 className="mt-5 text-5xl font-light tracking-[-.055em] sm:text-7xl">One operating loop.</h1>
+        <p className="mt-6 max-w-3xl text-lg leading-8 text-white/50">Observe the estate, classify the next safe move, execute bounded work, verify it, record evidence and hand off consequential decisions.</p>
+        <section className="mt-12 grid gap-4 md:grid-cols-2">
+          <article className="rounded-2xl border border-white/10 p-6">
+            <h2>Observe</h2>
+            {rows.slice(0, 3).map((r) => (
+              <div className="flex justify-between border-b border-white/10 py-4 text-sm" key={r[0]}>
+                <span>{r[0]}</span>
+                <b className={r[2] === 'owner' ? 'text-amber-200' : 'text-green-200'}>{r[1]}</b>
+              </div>
+            ))}
+          </article>
+          <article className="rounded-2xl border border-white/10 p-6">
+            <h2>Execute safely</h2>
+            <p className="mt-4 text-white/50">Validation, tests, link health, dependency checks, documentation, content preparation and bounded repository maintenance can run without model services.</p>
+            <button type="button" onClick={() => { window.location.href = '/flight-deck'; }} className="mt-6 rounded-xl border border-white/15 px-4 py-3 text-xs uppercase tracking-widest">Run validation →</button>
+          </article>
+        </section>
+        <nav className="mt-8 flex flex-wrap gap-3 text-sm">
+          <a href="/automations">Automation matrix →</a>
+          <a href="/evidence">Evidence →</a>
+          <a href="/recovery">Recovery →</a>
+        </nav>
+      </div>
+    </main>
+  );
+}
