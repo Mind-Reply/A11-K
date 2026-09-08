@@ -1,129 +1,123 @@
 # A11-K / Mind-Reply Canonical Reconstruction Audit
 
-**Date:** 2026-09-07
+**Date:** 2026-09-08
 **Source of truth:** GitHub
 **Delivery/observability:** Vercel
 **Design/control-plane:** Figma
 **Publishing surface:** WebsitePublisher
 **Execution rule:** evidence before trust; owner approval before irreversible production changes.
 
-## Reconstruction pass — GitHub + Vercel
+## Reconstruction pass — actual estate inspection
 
-This pass inspected actual repository files/trees, application entrypoints, package/runtime configuration, Vercel project/deployment metadata, build output, runtime errors, and live HTTP output. No deletion, archive, rename, transfer, DNS, credential, billing, production-routing, or external-communication mutation was performed.
+This pass inspected the authorised GitHub repository inventory, A11-K root tree and package manifest, Mind-Reply core repository tree, WebsitePublisher project state, and attempted Vercel/Figma state reads. No deletion, archive, rename, transfer, DNS, credential, billing, production-routing, or external-communication mutation was performed.
 
 ## 1. Canonical source reality
 
 ### A11-K
 - Repository: `Mind-Reply/A11-K`, default branch `main`.
-- Root is a mixed estate: static public surfaces (`index.html`, other HTML), Next.js application code under `app/`, nested `Brushworks` and `NOVA_PRIME`, brand/product documentation, Docker assets and a substantial automation estate.
-- `app/` contains `page.tsx`, `layout.tsx`, `globals.css`, `capability/`, and `world-engine/`.
-- `package.json` declares `sofia-tech-ledger` v0.2.0, Next.js 14.2.5, React 18.3.1, Node `>=20`, and both Next web and Node ledger execution scripts.
-- `vercel.json` explicitly sets `framework: null` and `outputDirectory: "."`.
+- Root is a mixed estate containing static HTML surfaces, a Next.js application under `app/`, product/brand documentation, Docker assets, nested product folders (`Brushworks`, `NOVA_PRIME`, `Unapologetic`), and a broad workflow/automation estate.
+- Root tree includes `.env.example`, `.gitignore`, `Dockerfile`, `CNAME`, `PRODUCT_IDENTITY.md`, `BRAND.md`, `BRAND_SYSTEM_2026.md`, `BRAND-RELEASE-REGISTRY.md`, `README.md`, and 4k/404 static surfaces. The empty `CNAME` file is present; this is a domain-binding signal but not proof of an active custom-domain route.
+- `package.json` currently declares package name `sofia-tech-ledger`, version `0.2.1`, Next.js `16.3.3`, React `^19.1.0`, Node `>=20`, and both Next web and Node ledger execution scripts. This is a real identity collision: repository/app branding is A11-K / Flight Deck while the package identity remains Sofia Tech Ledger.
+- Current file-level evidence confirms that A11-K is not a single clean product repository; it is a product-and-control estate with embedded modules and legacy public surfaces.
 
-### Critical routing finding
-The live A11-K Vercel production surface is **not currently the Next.js `app/page.tsx` application**. Vercel is configured to publish the repository root, and the live HTML returned by the production alias matches root `index.html` in structure/content.
+### Mind-Reply core candidate
+- Repository: `angellllkr-eng/mind-reply-core`, default branch `main`, public and code-search indexed.
+- Actual root tree contains `.agents`, `.circleci`, `.github`, `.husky`, `.mcp.json`, `.vscode`, `.env.example`, `.env.production.example`, `ACTIVATION_PLAYBOOK.md`, `AGENTS.md`, `ARCHITECTURE/`, `BRAND.md`, `BUILD_SUMMARY.md`, and `CANONICAL-SOURCE.md`, with a larger source tree than the A11-K shell.
+- This is substantive source, not an orphan or empty placeholder. It remains a merge/reuse candidate, not a merge target, until manifests, entrypoints, APIs, schemas, deployment bindings, and overlap are compared file-by-file.
 
-**Canonical public delivery today = root static A11-K surface.**
-**Next.js app = source-resident application/module estate, not proven as the live public route.**
+## 2. Estate classification from authorised repository inventory
 
-This distinction must remain explicit until a deliberate routing decision is owner-approved.
+### Active / substantive candidates
+- `Mind-Reply/A11-K` — **REAL / ACTIVE / MIXED ESTATE**; current canonical A11-K source candidate.
+- `angellllkr-eng/mind-reply-core` — **REAL / ACTIVE / SUBSTANTIVE**; Mind-Reply core candidate.
+- `angellllkr-eng/mindreply` — **REAL / ACTIVE CANDIDATE**; inspect as workspace/monorepo candidate.
+- `angellllkr-eng/agent-control-plane` — **REAL / ACTIVE CONTROL-PLANE CANDIDATE**; canonical audit evidence already stored here.
+- `angellllkr-eng/a11k-surface` — **REAL / ACTIVE SATELLITE / HISTORICAL FOUNDATION**.
+- `angellllkr-eng/a11-k-multiverse-5d` — **REAL / ACTIVE CANDIDATE / SNAPSHOT-SCALE ESTATE**.
+- `angellllkr-eng/resellerpro-platform` and `angellllkr-eng/reseller-pro-enterprise` — **REAL / PRODUCT-FAMILY CANDIDATES**.
 
-## 2. Vercel delivery state
+### Frozen / archived / historical
+- Archived repositories visible in the authorised inventory include `angellllkr-eng/chatbot`, `angellllkr-eng/chatbot1`, `angellllkr-eng/linear-card-interaction`, `angellllkr-eng/leadrevive`, `angellllkr-eng/empirepulse`, `angellllkr-eng/marginpilot`, plus archived `Mind-Reply/Mind-Reply`, `Mind-Reply/Mind-Reply-1`, `Mind-Reply/chatbot`, `Mind-Reply/hono`, `Mind-Reply/mind-reply.com`, `Mind-Reply/mindreply-org-site`, `Mind-Reply/repo-secrets-actions`, and `Mind-Reply/symmetrical-tribble-demo-repository`.
+- Archived status is preserved as historical evidence. No lifecycle change was made.
 
-- Team: `a11-k`.
-- Canonical project: `a11-k`, linked directly to GitHub `Mind-Reply/A11-K`.
-- Project currently reports Node `24.x`.
-- Latest production deployment inspected for audit commit `ca90f0a443b9f275a32421086c7f220bd18465a1` is `READY`; aliases include `a11-k-rho.vercel.app`, `a11-k-a11-k.vercel.app`, and `a11-k-git-main-a11-k.vercel.app`.
-- A newer feature deployment from `feat/activate-revenue-guard` is currently `BUILDING`; it is not production truth until `READY` and target/alias are verified.
-- Production history contains many successful superseding deployments and several canceled builds. Canceled deployments alone are not evidence of instability; classify them by branch/commit and supersession.
-- Runtime error aggregation for the canonical project returned **no runtime errors in the last 7 days**.
-- The current building deployment emits a warning because `package.json` declares a floating `>=20` engine range. Vercel is using Node 24.x, but source should eventually pin the intended major for reproducibility.
+### Likely duplicates / snapshots requiring file proof
+- `Mind-Reply/Mind-Reply` vs `Mind-Reply/Mind-Reply-1`.
+- `angellllkr-eng/chatbot` vs `angellllkr-eng/chatbot1` vs `Mind-Reply/chatbot`.
+- `angellllkr-eng/nextjs-boilerplate` vs `angellllkr-eng/nextjs1`.
+- `angellllkr-eng/Own1` vs `angellllkr-eng/own`.
+- `angellllkr-eng/a11-k-multiverse` vs `angellllkr-eng/a11-k-multiverse-5d`.
+- `angellllkr-eng/a11k-surface` vs `angellllkr-eng/a11-homepage` vs `angellllkr-eng/a11-evidence-surface`.
+- `angellllkr-eng/mindreply` vs `Mind-Reply/mindreply` vs `angellllkr-eng/mindreply-org-site`.
+- `angellllkr-eng/a11k-operator-desk` vs `angellllkr-eng/agent-control-plane` vs `angellllkr-eng/mindreply-control`.
+- `angellllkr-eng/a11-live-cloud-execution` vs `angellllkr-eng/a11k-orchestration`.
+- These are **merge/rename candidates only**, not approved actions.
 
-## 3. Live HTTP reality
+### Small / empty / orphan-risk assets
+- Inventory contains zero- or near-zero-size repositories such as `Own1`, `megaagent-pc-builder`, `kody-eve-template`, `thetalk`, `personal-agent`, `mind-repl`, `source1`, `source2`, `revenuepulse`, `empirepulse`, `marginpilot`, and others.
+- Classification must use actual file trees, commit history, workflow references, and deployment bindings before declaring orphaned.
 
-The production GitHub-main alias returned HTTP **200 OK** from Vercel. The returned document is the A11-K static public surface with A11-K/MindReply branding, Realtime/Control/Proof positioning, Copilot/Sites/Working Standard links, responsive/mobile CSS and reduced-motion handling.
+## 3. Delivery and observability state
 
-The document's canonical link currently points to `https://mind-reply.github.io/A11-K/`. This is SEO/routing metadata drift, not a runtime outage, and must not be changed without owner approval.
+### Vercel
+- The Vercel connector is currently unavailable in this run, so no current project list, deployment list, build logs, runtime errors, domain bindings, or project state could be re-read.
+- Previously recorded A11-K Vercel evidence remains historical only until a fresh authorised Vercel read succeeds. No new deployment or routing claim is made in this pass.
+- Required next evidence: current team/project access, Git binding, latest production deployment SHA/state, build logs, runtime errors, aliases, and domain bindings.
 
-## 4. Product reconstruction
+### WebsitePublisher
+- One authorised project is visible: project `24053`, domain `project24053.websitepublisher.ai`.
+- State: **published**; 5 pages; 2 assets; 0 entities; last published `2026-07-02T05:11:14Z`; no design context recorded.
+- This is a real published surface but is not yet reconciled to any GitHub repository or Vercel project. Treat as **PUBLISHED / OWNERSHIP UNKNOWN** until page content and assets are compared to source.
 
-### Canonical
-1. **A11-K Flight Deck / public reality surface** — canonical governance/public shell.
-2. **Sofia Tech Ledger** — substantive product implementation currently housed inside A11-K; no evidence yet justifies extracting it.
-3. **Capability + World Engine** — active A11-K modules, not independently canonical products until route/API/data ownership is proven.
-4. **Brushworks** — embedded module/product candidate; standalone reconciliation remains open.
+## 4. Design/control-plane state
 
-### Mind-Reply candidates requiring reconciliation
-- `Mind-Reply/mindreply`: real workspace-style monorepo with `apps/*` and `packages/*`; Node `>=18`, so it has a separate runtime policy from A11-K.
-- `Mind-Reply/mind-reply-core`: actual source estate containing AUREL, assistant, atlas, pilot, profit, reseller, mail and multiple `site-*` surfaces. This is a substantive reuse/merge candidate, not an orphan by default.
-- `Mind-Reply/mindreply-control`: source ownership/control-plane candidate; exact internal structure still requires inspection.
-- `Mind-Reply/agent-control-plane`, `a11k-operator-desk`, `a11k-surface`, `a11-k-multiverse`: operator/control-plane candidates requiring file-level comparison before merge decisions.
+### Figma
+- The known Figma file `A11-K New Brands & Site System` could not be re-read because the Figma MCP Starter-plan tool-call limit was reached.
+- No new design or token/component claim is made in this pass.
+- Required next evidence: top-level pages, frames, variables, published components, Code Connect mappings, and screenshots for the current control-plane/design file.
 
-### Provisional / orphan / archived
-- Vercel projects without GitHub bindings: `alphawin-color-advisor`, `accounting-asset-monitoring` — uncontrolled/provisional until source ownership is established.
-- `chatneo`: GitHub-linked Vercel project; source/deployment reconciliation remains open.
-- GitHub contains genuinely archived repositories including `chatbot`, `chatbot1`, `linear-card-interaction`, `leadrevive`, `empirepulse`, and `marginpilot`. They remain historical assets; no lifecycle changes were made.
-- Small/empty repositories such as `source1`, `source2`, `revenuepulse`, `leadrevive`, `empirepulse`, `marginpilot` must be classified by actual contents/history, not names.
+## 5. Product and module reconstruction
 
-## 5. Revenue / API / data reality
+### Canonical product candidates
+1. **A11-K Flight Deck / public governance shell** — strongest canonical A11-K surface based on current source and prior audited runtime evidence.
+2. **Mind-Reply core** — substantive implementation candidate, currently separate from A11-K and not yet proven as a safe merge target.
+3. **Sofia Tech Ledger** — active product identity in `package.json`; currently embedded in A11-K identity and must be resolved before extraction or renaming.
+4. **Capability / World Engine / Revenue / Evidence / Recovery / Operations / Automations** — application modules, not separate canonical products until ownership and runtime boundaries are proven.
+5. **Rethvane / Nerithos / Avenlyr** — current provisional brand layer documented in the estate; no independent production binding has been proven in this pass.
 
-Targeted A11-K searches for Stripe, checkout, payment, webhook, database/schema and route-handler terms returned no code-search matches. This does **not** prove those capabilities are absent because GitHub search is not a complete filesystem inventory.
+## 6. Manifests, entrypoints, APIs, schemas and workflows
 
-Status:
-- Public revenue doctrine: **PRESENT**.
-- Runtime payment execution: **UNPROVEN**.
-- Fulfilment: **UNPROVEN**.
-- Durable order/revenue persistence: **UNPROVEN**.
-- Model-independent revenue policy: **SOURCE PRESENT; LIVE EXECUTION PROOF INCOMPLETE**.
+- A11-K manifest evidence confirms a Next.js 16 / React 19 application plus an independent Node ledger entrypoint (`src/index.js`).
+- The mixed root includes static HTML and Next.js App Router code; architecture must continue to be treated as two delivery layers until the routing decision is owner-approved and verified.
+- A11-K contains broad GitHub workflow automation. The current pass did not re-read each workflow run/job/log because connector budget was prioritised for estate inventory and source evidence; workflow authority and failure semantics remain open.
+- Mind-Reply core contains explicit agent/architecture/activation/MCP files, indicating a larger operational system rather than a simple website.
+- API/schema durability, payment wiring, connector health, and deployment bindings remain **UNPROVEN** without fresh route/file/runtime evidence.
 
-No revenue claim should be promoted to verified merely because a deployment exists.
+## 7. Security, dependency and design-drift findings
 
-## 6. Automation health
+- A11-K currently uses Next.js 16.3.3 and React 19.1-compatible ranges; compatibility is materially better than the previously recorded Next 14 state, but the current build/runtime must still be verified in Vercel.
+- Node remains floating as `>=20`, while historical Vercel evidence used Node 24.x. Pinning the intended major is still a reproducibility improvement, but no dependency mutation was made without fresh build evidence.
+- `.env.example` and `.env.production.example` are present in source inventories; no secret values were exposed or modified. Secret scanning and ignore-rule verification remain required.
+- Design-system drift is currently **UNKNOWN** because Figma could not be re-read and WebsitePublisher has no design context recorded.
 
-`.github/workflows` contains a broad automation estate including four-hour cycle, hourly sales, amplifier, daily content, estate reporting, hourly Flight Deck, leakguard, ledger, link health, pulse, reality proof, repository stewardship and sentinel workflows.
+## 8. Current blockers
 
-The architecture has strong automation intent but a **control-plane normalization problem**: ownership, cadence, permissions, failure semantics and overlapping responsibilities are distributed across many workflows. Recent-run/job/log inspection is required before treating automation as authoritative.
+1. Vercel connector unavailable; current delivery state cannot be freshly verified.
+2. Figma connector rate-limited; current design/token/component state cannot be freshly verified.
+3. WebsitePublisher project is published but not mapped to GitHub/Vercel ownership.
+4. A11-K package identity (`sofia-tech-ledger`) conflicts with A11-K / Flight Deck product identity.
+5. Mixed static-root and Next.js runtime architecture remains unresolved.
+6. Duplicate/merge candidates require content, lineage, API, workflow and binding comparison before any rename or merge.
+7. Workflow health, security findings, and runtime smoke tests need a fresh evidence pass.
 
-## 7. Security / dependency / platform findings
+## 9. Exact next execution sequence
 
-- Next.js 14.2.5 is materially behind patched releases. Vercel's May 2026 security notice states all Next.js 13.x/14.x versions were affected by multiple advisories and recommends patched 15.5.18 or 16.2.6+ lines. Upgrade must be tested against the mixed static/Next architecture rather than applied blindly.
-- Vercel is correctly on Node 24.x. The repository's floating `>=20` declaration is weaker than the delivery environment and should eventually be pinned.
-- Vercel states Node 20 will be disabled for new deployments on October 1, 2026, reinforcing the need to remove runtime ambiguity.
-- No credentials or secrets were exposed or modified.
-- No destructive repository/Vercel lifecycle operation was performed.
-
-## 8. Architecture conclusion
-
-The estate is **not one application**. It has at least three layers:
-
-**Layer A — Public delivery:** root static A11-K surface currently served by Vercel.
-
-**Layer B — Application/product runtime:** Next.js/TypeScript application and Sofia Tech Ledger modules inside A11-K, plus larger Mind-Reply source estates.
-
-**Layer C — Operator/control infrastructure:** control-plane, automation, registrar, reseller and monitoring repositories.
-
-The correct reconstruction strategy is **reconciliation before consolidation**, not mass merging.
-
-## 9. Current blockers
-
-1. Complete A11-K route/API/schema/manifest/lockfile inventory.
-2. Prove which Next.js routes are intended to become live versus remain source modules.
-3. Resolve static-root-vs-Next routing architecture deliberately.
-4. Build revenue execution proof from checkout/payment through durable record/fulfilment.
-5. Inspect workflow runs/jobs/logs and normalize automation ownership.
-6. Inspect `mind-reply-core`, `mindreply`, `mindreply-control`, `agent-control-plane`, `a11k-operator-desk`, `a11k-surface` and `a11-k-multiverse` by actual files before merge classification.
-7. Obtain complete Figma node/token/component inventory and reconcile against deployed surfaces.
-8. Reconcile WebsitePublisher pages against GitHub/Vercel ownership.
-9. Resolve canonical URL metadata drift only after owner approval.
-10. Establish a tested dependency upgrade path for Next.js rather than upgrading production blindly.
-
-## 10. Exact next execution sequence
-
-1. Enumerate every A11-K directory/file of architectural significance: routes, API handlers, schemas, data stores, lockfiles, manifests, Docker/config, tests and workflows.
-2. Inspect the primary Mind-Reply/control-plane candidate repositories at file level and build a module-to-module overlap graph.
-3. Inspect recent GitHub Actions runs and logs and classify failures versus expected supersession.
-4. Inspect the latest Vercel production and building deployments against their exact Git SHAs; run route-level HTTP smoke tests.
-5. Decide, with owner approval, whether A11-K remains static-root canonical or promotes the Next.js application to delivery.
-6. Only after that decision, prepare a non-destructive migration/merge PR with rollback evidence.
+1. Restore authorised Vercel access and re-read project, deployments, build logs, runtime errors, aliases, domains and Git integration.
+2. Re-read Figma file metadata, variables, components, Code Connect and screenshots after the MCP rate limit resets.
+3. Read WebsitePublisher pages/assets for project 24053 and compare content fingerprints against GitHub sources.
+4. Enumerate A11-K `app/`, `src/`, `tests/`, `.github/workflows/`, Docker/config and lockfile content.
+5. Inspect `mind-reply-core`, `mindreply`, `mindreply-control`, `agent-control-plane`, `a11k-operator-desk`, `a11k-surface`, `a11-k-multiverse`, and ResellerPro candidates by actual files and recent commits.
+6. Produce a non-destructive overlap graph: shared modules, unique modules, duplicate files, runtime ownership, deployment bindings, and canonical recommendation per cluster.
+7. Run fresh security/dependency/workflow/runtime checks; record evidence and exact failures.
+8. Prepare owner-gated rename/merge candidates only after lineage and external binding checks. No destructive or production-sensitive mutation without explicit approval.
 
 **Owner-gated rule:** no delete/archive/rename/transfer, DNS, credentials, billing, production-routing or external communication changes without explicit owner approval.
