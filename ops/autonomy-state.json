@@ -2,39 +2,15 @@
   "schema": "a11-k.autonomy-state.v1",
   "mode": "deterministic",
   "status": "READY",
+  "last_verified": "repository baseline",
   "checks": {
-    "index.html": true,
-    "flight-deck.html": true,
-    "operations.html": true,
-    "revenue.html": true,
-    "automations.html": true,
-    "evidence.html": true,
-    "recovery.html": true,
-    "estate.html": true,
-    "revenue-action-policy.json": true,
-    "docs/REVENUE_AUTONOMY_CANON.md": true,
-    ".github/workflows/revenue-determinism.yml": true,
-    "revenue_independence": true,
-    "secret_boundary": true,
-    "repository_tests": "PASS",
+    "revenue_independence": "PASS",
+    "required_surfaces": "PASS",
+    "secret_boundary": "PASS",
+    "automation_cycle": "READY",
     "production_claim": "EVIDENCE_REQUIRED"
   },
-  "autonomous_domains": [
-    "estate",
-    "deployments",
-    "revenue",
-    "evidence",
-    "recovery",
-    "content",
-    "governance"
-  ],
-  "human_gates": [
-    "production promotion",
-    "billing",
-    "payments",
-    "credentials",
-    "dns",
-    "external communications",
-    "destructive changes"
-  ]
+  "autonomous_domains": ["estate", "deployments", "revenue", "evidence", "recovery", "content", "governance"],
+  "human_gates": ["production promotion", "billing", "payments", "credentials", "dns", "external communications", "destructive changes"],
+  "note": "AI is optional acceleration; revenue-critical operation remains deterministic/manual when model services are unavailable."
 }
