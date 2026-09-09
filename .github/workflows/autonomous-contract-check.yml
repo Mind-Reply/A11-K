@@ -1,0 +1,37 @@
+name: Autonomous contract check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: autonomous-contract-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  contract-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate contract and repository safety
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s docs/A11K_AUTONOMOUS_RUNTIME_CONTRACT.md
+          if git ls-files | grep -E '(^|/)(\.env|\.next)(/|$)' ; then
+            echo 'Unsafe generated or secret artifact tracked in repository' >&2
+            exit 1
+          fi
+          test -f .gitignore
+          grep -qE '^\.env' .gitignore
+          grep -qE '^\.next' .gitignore
+          echo 'Autonomous runtime contract and repository safety checks passed.'
