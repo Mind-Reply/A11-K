@@ -21,7 +21,7 @@ jobs:
     steps:
       - name: Verify production surface
         env:
-          PRODUCTION_URL: https://a11-k-rho.vercel.app/
+          PRODUCTION_URL: https://chat.a11-k.space/
         run: |
           set -euo pipefail
           status="$(curl -L -sS -o /tmp/response.html -w '%{http_code}' --max-time 20 "$PRODUCTION_URL")"
