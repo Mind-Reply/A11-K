@@ -21,14 +21,13 @@ jobs:
     steps:
       - name: Verify production surface
         env:
-          PRODUCTION_URL: https://a11-k-rho.vercel.app/
+          PRODUCTION_URL: https://chat.a11-k.space/
         run: |
           set -euo pipefail
           status="$(curl -L -sS -o /tmp/response.html -w '%{http_code}' --max-time 20 "$PRODUCTION_URL")"
           test "$status" = "200"
           test -s /tmp/response.html
           grep -qi "A11-K" /tmp/response.html
-          echo "production_status=healthy" >> "$GITHUB_OUTPUT"
           echo "## Runtime verification" >> "$GITHUB_STEP_SUMMARY"
           echo "- URL: $PRODUCTION_URL" >> "$GITHUB_STEP_SUMMARY"
           echo "- HTTP status: $status" >> "$GITHUB_STEP_SUMMARY"
@@ -45,21 +44,3 @@ jobs:
           echo "- No committed .env file" >> "$GITHUB_STEP_SUMMARY"
           echo "- No committed .next directory" >> "$GITHUB_STEP_SUMMARY"
           echo "- .gitignore present" >> "$GITHUB_STEP_SUMMARY"
-
-      - name: Optional Slack incident/update
-        if: always() && secrets.SLACK_WEBHOOK_URL != ''
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          JOB_STATUS: ${{ job.status }}
-          REPO: ${{ github.repository }}
-          SHA: ${{ github.sha }}
-        run: |
-          set -euo pipefail
-          payload=$(python - <<'PY'
-          import json, os
-          print(json.dumps({
-            'text': f"A11-K autonomous cloud brain guard: {os.environ['JOB_STATUS']} | {os.environ['REPO']} | {os.environ['SHA'][:12]}"
-          }))
-          PY
-          )
-          curl -fsS -X POST -H 'Content-Type: application/json' --data "$payload" "$SLACK_WEBHOOK_URL"
