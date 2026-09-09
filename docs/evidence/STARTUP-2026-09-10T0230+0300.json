@@ -1,0 +1,29 @@
+{
+  "operation_id":"startup-20260910-0230",
+  "requested_by":"owner",
+  "timestamp":"2026-09-10T02:30:00+03:00",
+  "intent":"A11-K startup inspection",
+  "target":"Mind-Reply/A11-K",
+  "provider":"GitHub",
+  "operation":"inspect",
+  "risk_level":"SAFE",
+  "reversible":true,
+  "pre_state":{
+    "repository":"Mind-Reply/A11-K",
+    "default_branch":"main",
+    "latest_main_commit":"56f72196ccaeabdab254b05ca9fb986d76b0fab3",
+    "latest_commit_message":"Add explicit A11-K implementation contract",
+    "open_prs":0,
+    "branches_visible":33,
+    "github_access":"verified: admin/maintain/push/pull"
+  },
+  "proposed_change":{"diff":"Create startup evidence record and harmless README draft on isolated branch; do not merge."},
+  "approval_required":false,
+  "approval_status":"APPROVED",
+  "execution_status":"VERIFIED",
+  "post_state":{"branch":"ops/startup-evidence-2026-09-10","startup_record_created":true},
+  "verification":{"method":"GitHub branch creation and file creation response","result":"verified"},
+  "evidence":["branch:ops/startup-evidence-2026-09-10","commit:returned-by-create-file"],
+  "rollback":{"available":true,"instructions":"Delete the isolated branch or leave unmerged; no main-branch changes were made."},
+  "final_status":"VERIFIED"
+}
