@@ -1,0 +1,21 @@
+[Unit]
+Description=A11-K Layer 2 local reasoning engine
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=%i
+WorkingDirectory=/opt/mindreply
+Environment=MODEL_DIR=/opt/models/mindreply-core-reasoning
+Environment=PORT=8000
+Environment=AUDIT_LOG_DIR=/mnt/nvme_array/compliance_logs
+Environment=INFERENCE_CORES=25-48
+Environment=GPU_MEMORY_UTILIZATION=0.85
+Environment=MAX_MODEL_LEN=8192
+ExecStart=/opt/mindreply/ops/pc/init_layer2_engine.sh
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
