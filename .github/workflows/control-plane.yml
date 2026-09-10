@@ -15,7 +15,7 @@ concurrency:
 jobs:
   verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -25,6 +25,7 @@ jobs:
       - run: npm ci
       - run: npm run typecheck
       - run: npm test
+      - run: npm run build
       - name: Reject tracked secrets and build artifacts
         shell: bash
         run: |
@@ -37,3 +38,17 @@ jobs:
             echo 'Potential credential material detected.'
             exit 1
           fi
+
+  slack:
+    needs: verify
+    if: ${{ always() && secrets.SLACK_WEBHOOK_URL != '' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Post CI result
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          RESULT: ${{ needs.verify.result }}
+        run: |
+          payload=$(printf '{"text":"A11-K control-plane CI: %s | %s"}' "$RESULT" "$GITHUB_SHA")
+          curl --fail-with-body -X POST -H 'Content-Type: application/json' --data "$payload" "$SLACK_WEBHOOK_URL"
