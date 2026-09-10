@@ -13,9 +13,11 @@ Environment=AUDIT_LOG_DIR=/mnt/nvme_array/compliance_logs
 Environment=INFERENCE_CORES=25-48
 Environment=GPU_MEMORY_UTILIZATION=0.85
 Environment=MAX_MODEL_LEN=8192
-ExecStart=/opt/mindreply/ops/pc/init_layer2_engine.sh
+ExecStart=/usr/bin/taskset -c 25-48 /usr/bin/python3 -m vllm.entrypoints.openai.api_server --model /opt/models/mindreply-core-reasoning --gpu-memory-utilization 0.85 --max-model-len 8192 --host 127.0.0.1 --port 8000 --enforce-eager
 Restart=on-failure
 RestartSec=5
+StandardOutput=append:/mnt/nvme_array/compliance_logs/engine_runtime.log
+StandardError=append:/mnt/nvme_array/compliance_logs/engine_runtime.log
 
 [Install]
 WantedBy=multi-user.target
