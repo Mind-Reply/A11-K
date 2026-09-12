@@ -1,0 +1,103 @@
+name: A11K Opportunity Radar
+
+on:
+  workflow_dispatch:
+    inputs:
+      notify:
+        description: 'Send the generated report to the configured owner webhook'
+        required: false
+        default: 'false'
+  schedule:
+    - cron: '15 */6 * * *'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: a11k-opportunity-radar
+  cancel-in-progress: true
+
+jobs:
+  radar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check source URLs
+        env:
+          USER_AGENT: A11K-Opportunity-Radar/1.0
+        run: |
+          python - <<'PY'
+          import json, urllib.request, urllib.error
+          targets = [
+            ('Anthropic RL', 'https://job-boards.greenhouse.io/anthropic/jobs/5115935008'),
+            ('OpenAI ChatGPT Infrastructure', 'https://openai.com/careers/software-engineer-chatgpt-infrastructure-london-uk/'),
+            ('Electric Twin Research Engineer', 'https://jobs.lever.co/electric-twin/830093d0-b5bf-4e97-ae4e-385a431ba095'),
+            ('OpenAI Model Deployment', 'https://openai.com/careers/software-engineer-model-deployment-chatgpt-engineering-london-uk/'),
+            ('Apollo Evaluations', 'https://jobs.lever.co/apolloresearch/4a65c6e1-785a-4f88-8998-a97574afb7ee'),
+            ('White Circle AI Behaviours', 'https://www.linkedin.com/jobs/view/4437119882'),
+            ('Nuro AI Labs', 'https://www.nuroailabs.com/careers'),
+            ('Anthropic RL Velocity', 'https://job-boards.greenhouse.io/anthropic/jobs/5198074008'),
+          ]
+          out=[]
+          for name,url in targets:
+              row={'name':name,'url':url,'status':'UNVERIFIED'}
+              try:
+                  req=urllib.request.Request(url, headers={'User-Agent': 'A11K-Opportunity-Radar/1.0'})
+                  with urllib.request.urlopen(req, timeout=15) as r:
+                      row['status']='REACHABLE' if 200 <= r.status < 400 else 'UNVERIFIED'
+                      row['http_status']=r.status
+                      row['final_url']=r.geturl()
+              except Exception as e:
+                  row['status']='UNVERIFIED'
+                  row['error']=str(e)[:200]
+              out.append(row)
+          report={
+              'schema':'a11k.opportunity-radar/v1',
+              'generated_at':'${{ github.run_started_at }}',
+              'source_snapshot':'2026-08-24',
+              'roles_checked':out,
+              'fast_revenue_assets':'source-research only; no purchase enabled',
+              'purchase_authority':'DISABLED'
+          }
+          with open('opportunity-radar-results.json','w') as f: json.dump(report,f,indent=2)
+          print(json.dumps(report,indent=2))
+          PY
+
+      - name: Build owner summary
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open('opportunity-radar-results.json'))
+          reachable=sum(x['status']=='REACHABLE' for x in r['roles_checked'])
+          lines=['# A11K Opportunity Radar','',f"Generated: {r['generated_at']}",'',f'Official source URLs reachable: {reachable}/{len(r["roles_checked"])}','', '## First-wave roles']
+          for x in r['roles_checked']:
+              lines.append(f"- **{x['name']}** — {x['status']} — {x['url']}")
+          lines += ['', '## Boundary', '- Employment applications are not submitted by this workflow.', '- Purchases/acquisitions are not executed.', '- Source-research asset metrics remain UNVERIFIED until diligence.', '- Owner approval is required for consequential external action.']
+          open('opportunity-radar-report.md','w').write('\n'.join(lines)+'\n')
+          PY
+
+      - name: Optional owner notification
+        if: ${{ (github.event_name == 'workflow_dispatch' && inputs.notify == 'true') && secrets.OPPORTUNITY_RADAR_WEBHOOK_URL != '' }}
+        env:
+          WEBHOOK_URL: ${{ secrets.OPPORTUNITY_RADAR_WEBHOOK_URL }}
+        run: |
+          python - <<'PY'
+          import json, os, urllib.request
+          report=json.load(open('opportunity-radar-results.json'))
+          payload=json.dumps({'subject':'A11K Opportunity Radar','message':open('opportunity-radar-report.md').read(),'report':report}).encode()
+          req=urllib.request.Request(os.environ['WEBHOOK_URL'], data=payload, headers={'Content-Type':'application/json'}, method='POST')
+          with urllib.request.urlopen(req, timeout=20) as r:
+              print('Webhook HTTP', r.status)
+          PY
+
+      - name: Upload evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: a11k-opportunity-radar-${{ github.run_id }}
+          path: |
+            opportunity-radar-results.json
+            opportunity-radar-report.md
+          retention-days: 30
