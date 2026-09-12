@@ -1,0 +1,41 @@
+name: A11K Opportunity Radar
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '15 6 * * 1-5'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: a11k-opportunity-radar
+  cancel-in-progress: true
+
+jobs:
+  verify-radar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify radar surface
+        run: |
+          test -s opportunity-radar/index.html
+          test -s opportunity-radar/README.md
+          grep -q 'A11K Opportunity Radar' opportunity-radar/index.html
+          grep -q 'Recommendation ≠ approval ≠ purchase' opportunity-radar/index.html
+
+      - name: Verify official career links are present
+        run: |
+          grep -q 'anthropic' opportunity-radar/index.html
+          grep -q 'openai.com/careers' opportunity-radar/index.html
+          grep -q 'electric-twin' opportunity-radar/index.html
+
+      - name: Publish verification artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: a11k-opportunity-radar-${{ github.run_id }}
+          path: opportunity-radar/
+          retention-days: 14
