@@ -1,5 +1,6 @@
 import fs from 'node:fs/promises';
 import net from 'node:net';
+import dns from 'node:dns/promises';
 import { URL } from 'node:url';
 
 const registryPath = process.env.PRICE_MONITOR_REGISTRY || new URL('./targets.json', import.meta.url);
@@ -16,11 +17,18 @@ function isPrivateIp(hostname) {
   return normalized === '::1' || normalized.startsWith('fc') || normalized.startsWith('fd') || normalized.startsWith('fe80:');
 }
 
-function assertSafeUrl(raw, allowedHosts) {
+async function assertSafeUrl(raw, allowedHosts) {
   const url = new URL(raw);
+  const hostname = url.hostname.toLowerCase();
   if (url.protocol !== 'https:') throw new Error('Only HTTPS targets are allowed');
-  if (isPrivateIp(url.hostname)) throw new Error('Private or local target is not allowed');
-  if (!allowedHosts.includes(url.hostname.toLowerCase())) throw new Error(`Host is not allowlisted: ${url.hostname}`);
+  if (isPrivateIp(hostname)) throw new Error('Private or local target is not allowed');
+  if (!allowedHosts.includes(hostname)) throw new Error(`Host is not allowlisted: ${hostname}`);
+
+  const addresses = await dns.lookup(hostname, { all: true, verbatim: true });
+  if (!addresses.length) throw new Error('Target hostname did not resolve');
+  if (addresses.some(({ address }) => isPrivateIp(address))) {
+    throw new Error('Target hostname resolves to a private or local address');
+  }
   return url;
 }
 
@@ -36,14 +44,29 @@ function parsePrice(raw) {
   return Number.isFinite(number) ? number : null;
 }
 
+function validateTarget(target) {
+  if (!target || typeof target !== 'object') throw new Error('Invalid target contract');
+  if (typeof target.id !== 'string' || !target.id.trim()) throw new Error('Target id is required');
+  if (typeof target.url !== 'string' || !target.url.trim()) throw new Error('Target url is required');
+  if (!Array.isArray(target.allowedHosts) || target.allowedHosts.length === 0) throw new Error('allowedHosts is required');
+  if (target.allowedHosts.some(host => typeof host !== 'string' || host !== host.toLowerCase())) {
+    throw new Error('allowedHosts must contain lowercase hostnames');
+  }
+  if (typeof target.pricePattern !== 'string' || !target.pricePattern) throw new Error('pricePattern is required');
+  if (target.below !== undefined && (!Number.isFinite(Number(target.below)) || Number(target.below) < 0)) {
+    throw new Error('below must be a non-negative number');
+  }
+  if (typeof target.currency !== 'string' || !/^[A-Z]{3}$/.test(target.currency)) throw new Error('currency must be an ISO 4217 code');
+}
+
 async function fetchTarget(target) {
-  let url = assertSafeUrl(target.url, target.allowedHosts.map(h => h.toLowerCase()));
+  let url = await assertSafeUrl(target.url, target.allowedHosts);
   const response = await fetch(url, {
     redirect: 'follow',
-    headers: { 'user-agent': 'A11K-Price-Monitor/1.0', accept: 'text/html,text/plain;q=0.9' },
+    headers: { 'user-agent': 'A11K-Price-Monitor/1.1', accept: 'text/html,text/plain;q=0.9' },
     signal: AbortSignal.timeout(20_000)
   });
-  url = assertSafeUrl(response.url, target.allowedHosts.map(h => h.toLowerCase()));
+  url = await assertSafeUrl(response.url, target.allowedHosts);
   if (!response.ok) throw new Error(`HTTP ${response.status}`);
   const contentType = response.headers.get('content-type') || '';
   if (!contentType.includes('text/html') && !contentType.includes('text/plain')) throw new Error(`Unsupported content type: ${contentType}`);
@@ -57,11 +80,9 @@ async function main() {
   const results = [];
 
   for (const target of targets) {
-    const base = { id: target.id, checkedAt, expectedCurrency: target.currency, sourceUrl: target.url };
+    const base = { id: target?.id, checkedAt, expectedCurrency: target?.currency, sourceUrl: target?.url };
     try {
-      if (!target.id || !target.url || !Array.isArray(target.allowedHosts) || !target.pricePattern) {
-        throw new Error('Invalid target contract');
-      }
+      validateTarget(target);
       const { url, text } = await fetchTarget(target);
       const match = new RegExp(target.pricePattern, 'i').exec(text);
       if (!match?.[1]) {
