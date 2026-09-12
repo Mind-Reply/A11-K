@@ -1,0 +1,33 @@
+name: A11K Price Monitor
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 */6 * * *'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: a11k-price-monitor
+  cancel-in-progress: false
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run price monitor
+        run: node automations/price-monitor/check.mjs
+
+      - name: Upload evidence artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: a11k-price-monitor-${{ github.run_id }}
+          path: price-monitor-results.json
+          if-no-files-found: warn
+          retention-days: 14
