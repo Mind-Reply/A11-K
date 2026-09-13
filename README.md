@@ -1,25 +1,20 @@
-# The Sofia Tech Ledger / Софийски Технологичен Регистър
+# A11-K — Sofia Tech Ledger
 
-Daily bilingual monitor of Sofia SME digitalization, EU grant awards, registry events, NIS2 findings, and sector gaps vs the EU average.
+A11-K is a distinct Mind-Reply product surface for evidence-driven regional technology and operations intelligence. It is not the canonical MindReply web root.
 
-## Run
+## Current role
 
-```powershell
-cd C:\Users\ANGEL\GitHubSync\sofia-tech-ledger
-node --test tests/
-node src/index.js --as-of=2026-08-21
-```
+- Regional intelligence / Sofia Tech Ledger.
+- Evidence-oriented reports, ledgers and operational artifacts.
+- A11-K owner/control capabilities may integrate with the MindReply control plane, but the product keeps its own identity and deployment contract.
+- Google Cloud targets documented in `docs/GCP_MIND_REPLY.md` remain planning targets until independently verified.
 
-Artifacts land in `out/`:
+## Operating rule
 
-- HTML bulletin
-- SVG intensity chart
-- social copy
-- JSON report
-- SHA-256 hash-chained ledger
+Source state is determined from files, entrypoints, manifests, workflows and live deployment evidence — not repository naming. Publish only capabilities that have passed verification.
 
-Ghost stays skipped until `GHOST_ADMIN_URL` and `GHOST_ADMIN_API_KEY` are set. Publish mode defaults to `draft`.
+## Current status
 
-## Cloud target
+The repository has active operational evidence commits and recent premium visual/product work. Deployment parity with the MindReply canonical platform remains a separate verification task.
 
-Google Cloud project **MIND REPLY** / `mind-reply-496111`. See `docs/GCP_MIND_REPLY.md`. No cloud resources have been created.
+For the cross-estate classification and blockers, see `Mind-Reply/mindreply/ESTATE_RECONSTRUCTION_AUDIT_2026-09-13.md`.
