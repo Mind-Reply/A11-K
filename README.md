@@ -1,20 +1,27 @@
 # A11-K — Sofia Tech Ledger
 
-A11-K is a distinct Mind-Reply product surface for evidence-driven regional technology and operations intelligence. It is not the canonical MindReply web root.
+A11-K is the distinct Mind-Reply regional intelligence and owner-operations product. It is **not** the canonical MindReply public web root.
 
-## Current role
+## Product function
 
-- Regional intelligence / Sofia Tech Ledger.
-- Evidence-oriented reports, ledgers and operational artifacts.
-- A11-K owner/control capabilities may integrate with the MindReply control plane, but the product keeps its own identity and deployment contract.
-- Google Cloud targets documented in `docs/GCP_MIND_REPLY.md` remain planning targets until independently verified.
+A11-K provides an evidence-first surface for regional technology intelligence, operational records, owner workflows and deployment/evidence coordination. It may consume shared MindReply control-plane services, but it retains its own product identity and release boundary.
 
-## Operating rule
+## Canonical estate relationship
 
-Source state is determined from files, entrypoints, manifests, workflows and live deployment evidence — not repository naming. Publish only capabilities that have passed verification.
+- MindReply production source: `Mind-Reply/mindreply`
+- Control plane: `Mind-Reply/control-plane`
+- A11-K: this repository
+- Aurel experience product: `Mind-Reply/Aurel`
+- Migration/reference source: `Mind-Reply/mind-reply-core`
+
+## Engineering contract
+
+Source presence is not production proof. A11-K changes must be validated through manifests, entrypoints, tests, CI, deployment provenance and live HTTP checks before being described as live.
+
+Do not place credentials, `.env` files, private keys or recovery material in the repository. Destructive deployment, routing, DNS and external-service changes require owner approval.
 
 ## Current status
 
-The repository has active operational evidence commits and recent premium visual/product work. Deployment parity with the MindReply canonical platform remains a separate verification task.
+Active product repository. Deployment parity with the canonical MindReply delivery estate remains independently verifiable and must not be inferred from repository state alone.
 
-For the cross-estate classification and blockers, see `Mind-Reply/mindreply/ESTATE_RECONSTRUCTION_AUDIT_2026-09-13.md`.
+Cross-estate evidence and classification: `Mind-Reply/mindreply/ESTATE_RECONSTRUCTION_AUDIT_2026-09-13.md`.
