@@ -1,25 +1,27 @@
-# The Sofia Tech Ledger / Софийски Технологичен Регистър
+# A11-K — Sofia Tech Ledger
 
-Daily bilingual monitor of Sofia SME digitalization, EU grant awards, registry events, NIS2 findings, and sector gaps vs the EU average.
+A11-K is the distinct Mind-Reply regional intelligence and owner-operations product. It is **not** the canonical MindReply public web root.
 
-## Run
+## Product function
 
-```powershell
-cd C:\Users\ANGEL\GitHubSync\sofia-tech-ledger
-node --test tests/
-node src/index.js --as-of=2026-08-21
-```
+A11-K provides an evidence-first surface for regional technology intelligence, operational records, owner workflows and deployment/evidence coordination. It may consume shared MindReply control-plane services, but it retains its own product identity and release boundary.
 
-Artifacts land in `out/`:
+## Canonical estate relationship
 
-- HTML bulletin
-- SVG intensity chart
-- social copy
-- JSON report
-- SHA-256 hash-chained ledger
+- MindReply production source: `Mind-Reply/mindreply`
+- Control plane: `Mind-Reply/control-plane`
+- A11-K: this repository
+- Aurel experience product: `Mind-Reply/Aurel`
+- Migration/reference source: `Mind-Reply/mind-reply-core`
 
-Ghost stays skipped until `GHOST_ADMIN_URL` and `GHOST_ADMIN_API_KEY` are set. Publish mode defaults to `draft`.
+## Engineering contract
 
-## Cloud target
+Source presence is not production proof. A11-K changes must be validated through manifests, entrypoints, tests, CI, deployment provenance and live HTTP checks before being described as live.
 
-Google Cloud project **MIND REPLY** / `mind-reply-496111`. See `docs/GCP_MIND_REPLY.md`. No cloud resources have been created.
+Do not place credentials, `.env` files, private keys or recovery material in the repository. Destructive deployment, routing, DNS and external-service changes require owner approval.
+
+## Current status
+
+Active product repository. Deployment parity with the canonical MindReply delivery estate remains independently verifiable and must not be inferred from repository state alone.
+
+Cross-estate evidence and classification: `Mind-Reply/mindreply/ESTATE_RECONSTRUCTION_AUDIT_2026-09-13.md`.

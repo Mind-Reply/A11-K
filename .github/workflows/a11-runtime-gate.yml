@@ -1,0 +1,33 @@
+name: A11-K Runtime Gate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: a11-runtime-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm install --ignore-scripts
+      - run: npm run typecheck
+      - run: npm run build
+      - name: Secret hygiene
+        shell: bash
+        run: |
+          ! find . -type f \( -name '.env' -o -name '.env.local' \) -not -path './node_modules/*' | grep -q .
+          ! grep -RInE 'sk_(live|test)_[A-Za-z0-9]+|whsec_[A-Za-z0-9]+' --exclude-dir=.git --exclude-dir=node_modules .

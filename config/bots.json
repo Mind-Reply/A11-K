@@ -1,0 +1,18 @@
+{
+  "bots": [
+    {
+      "id": "a11-owner-global",
+      "name": "A11-K",
+      "region": "global",
+      "vibe": "Evidence-gated owner operating layer",
+      "accent": "21m00Tcm4TlvDq8ikWAM"
+    },
+    {
+      "id": "a11-nowline-eu",
+      "name": "Nowline",
+      "region": "eu",
+      "vibe": "Signal selection and opportunity pulse",
+      "accent": "21m00Tcm4TlvDq8ikWAM"
+    }
+  ]
+}
