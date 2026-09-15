@@ -1,0 +1,31 @@
+version: '3.9'
+
+services:
+  app:
+    image: ${REGISTRY}:${REPO}:${VERSION:-latest}
+    container_name: ${REPO}-prod
+    ports:
+      - "${PORT:-3000}:3000"
+    environment:
+      NODE_ENV: production
+      NEXT_TELEMETRY_DISABLED: 1
+      DATABASE_URL: ${DATABASE_URL}
+      REDIS_URL: ${REDIS_URL}
+    networks:
+      - platform-network
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+
+networks:
+  platform-network:
+    external: true
