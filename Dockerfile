@@ -1,32 +1,46 @@
-# MindReply Gemini proxy + Sofia Tech Ledger server — Cloud Run image.
-# Runs src/server.js which serves /healthz, /run, and /gemini (fail-closed).
+# Sofia Tech Register — Multi-stage Node.js build
+# Optimized for cloud run and local development
 
+FROM node:20-slim AS base
+
+WORKDIR /app
+
+# Copy package files for layer caching
+COPY package*.json ./
+
+# Install dependencies (dev in build stage, omit in runtime)
+RUN npm ci
+
+# Copy application source
+COPY src ./src
+COPY config ./config
+COPY data ./data
+
+# Production stage — copy only runtime dependencies
 FROM node:20-slim
 
 WORKDIR /app
 
-# Copy package files first for layer caching.
-COPY package.json package-lock.json* ./
-
-# No runtime npm dependencies are required (uses native fetch + node:http),
-# but install if a lockfile exists to keep the image reproducible.
-RUN if [ -f package-lock.json ]; then npm ci --omit=dev; fi
-
-# Copy application source.
-COPY src ./src
-
-# Cloud Run expects the container to listen on $PORT (default 8080).
-ENV PORT=8080
+# Environment defaults (override at runtime)
 ENV NODE_ENV=production
+ENV PORT=8080
 
-# Fail-closed defaults: no credential means the /gemini endpoint returns 503.
-# Set these at deploy time via Cloud Run env vars / secrets:
-#   GOOGLE_API_KEY            (API-key path)  OR
-#   GOOGLE_CLOUD_PROJECT      (Vertex AI path)
-#   GOOGLE_CLOUD_LOCATION     (Vertex AI path, e.g. global or europe-west1)
-#   GOOGLE_GENAI_USE_ENTERPRISE=True
+# Create output directory for ledger
+RUN mkdir -p /app/output
 
+# Copy only production dependencies
+COPY --from=base /app/node_modules ./node_modules
+COPY --from=base /app/package.json ./
+COPY --from=base /app/src ./src
+COPY --from=base /app/config ./config
+COPY --from=base /app/data ./data
+
+# Expose application port
 EXPOSE 8080
 
-# Start the HTTP server (ledger + Gemini proxy).
+# Health check
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:8080/healthz', (r) => process.exit(r.statusCode === 200 ? 0 : 1))"
+
+# Start the ledger server
 CMD ["node", "src/server.js"]
