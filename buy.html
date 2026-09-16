@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Купи / Buy — Sofia Tech Ledger</title>
-  <meta name="description" content="NIS2 самооценка, дневен бюлетин, ResellerPro operations. Реални Stripe платежни линкове.">
+  <meta name="description" content="NIS2 самооценка, дневен бюлетин, ResellerPro operations. Stripe checkout.">
   <style>
     :root { --bg:#07080d; --panel:#12141e; --line:rgba(255,255,255,.1); --text:#f5f7fb; --muted:#9da6b8; --accent:#9b8cff; --ok:#34d399; }
     * { box-sizing:border-box }
@@ -45,17 +45,17 @@
         <a href="./announcements.html">Съобщения</a>
       </span>
     </nav>
-    <p class="eyebrow">22 август 2026 · София</p>
+    <p class="eyebrow">16 септември 2026 · София</p>
     <h1>Купи <span style="color:var(--accent)">сега.</span></h1>
-    <p class="lead">Три продукта. Реални Stripe платежни линкове. Платете с карта, получете достъп. Без скрейп, без студени писма, без фалшиви данни.</p>
+    <p class="lead">Три продукта. Stripe checkout. Платете с карта, получете достъп. Текущата checkout конфигурация е в Stripe test mode до финална production проверка.</p>
 
     <div class="test-warn" style="background:rgba(52,211,153,.08);border-color:rgba(52,211,153,.35);color:var(--ok)">
-      ✅ LIVE mode. Real card charges. Product: NIS2 Gap Audit €490 · plink_1U71dA7RB5Qag5g7VumWtG3B
+      TEST MODE · Stripe EUR checkout validated in the connected test account. No live charges are enabled by this page.
     </div>
 
     <div class="pricing">
       <div class="card featured">
-        <span class="badge">LIVE · €490</span>
+        <span class="badge">TEST · €490</span>
         <h2>NIS2 Gap Audit — 48h</h2>
         <div class="price">€490 <small>/ еднократно</small></div>
         <p>48-часова проверка на готовността по ЗКС/NIS2: обхват, 20-точкова матрица, таван на глобата, 90-дневен план, СЕРИКС, управителска декларация.</p>
@@ -65,7 +65,7 @@
           <li>Корпоративен таван на глоби</li>
           <li>24/72/30 часовник за инциденти</li>
         </ul>
-        <a class="btn" href="https://buy.stripe.com/00w9ANbQYfgkcyk3Gq63K07">Купи сега →</a>
+        <a class="btn" href="https://buy.stripe.com/test_9B69ATcUi7OvcnqegTd7q00">Тествай checkout →</a>
       </div>
 
       <div class="card">
@@ -78,7 +78,7 @@
           <li>7-дневна финансова скорост</li>
           <li>NIS2 констатации</li>
         </ul>
-        <a class="btn secondary" href="https://buy.stripe.com/test_14A3cufwscUsgCK5agfnO01">Абонирай се →</a>
+        <a class="btn secondary" href="https://buy.stripe.com/test_7sY6oH6vUb0Hbjm1u7d7q01">Тествай абонамент →</a>
       </div>
 
       <div class="card">
@@ -91,11 +91,11 @@
           <li>Поддръжка тикети</li>
           <li>Проект tracking</li>
         </ul>
-        <a class="btn secondary" href="https://buy.stripe.com/test_5kQ6oG1FC2fObiqbyEfnO02">Стартирай →</a>
+        <a class="btn secondary" href="https://buy.stripe.com/test_14A7sLdYmgl1fzC8Wzd7q02">Тествай по седалки →</a>
       </div>
     </div>
 
-    <p class="footer">Stripe LIVE · https://buy.stripe.com/00w9ANbQYfgkcyk3Gq63K07 · prod_V7G7ihOldaF5so · 22 август 2026</p>
+    <p class="footer">Stripe TEST mode · EUR · 16 септември 2026 · Production billing remains a separate explicit activation step.</p>
   </div>
 </body>
 </html>
