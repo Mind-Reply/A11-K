@@ -6,7 +6,7 @@
   <title>Купи / Buy — Sofia Tech Ledger</title>
   <meta name="description" content="NIS2 самооценка, дневен бюлетин, ResellerPro operations. Stripe checkout.">
   <style>
-    :root { --bg:#07080d; --panel:#12141e; --line:rgba(255,255,255,.1); --text:#f5f7fb; --muted:#9da6b8; --accent:#9b8cff; --ok:#34d399; }
+    :root { --bg:#07080d; --panel:#12141e; --line:rgba(255,255,255,.1); --text:#f5f7fb; --muted:#9da6b8; --accent:#9b8cff; --ok:#34d399; --warn:#fbbf24; }
     * { box-sizing:border-box }
     body { margin:0; background:radial-gradient(circle at 10% 0,#1d1633 0,transparent 32%),var(--bg); color:var(--text); font:16px/1.6 Inter,ui-sans-serif,system-ui,sans-serif }
     a { color:#c4bbff }
@@ -27,10 +27,10 @@
     .card ul li { margin-bottom:4px }
     .btn { display:block; text-align:center; padding:14px; border-radius:12px; background:#f4f2ff; color:#111; font-weight:800; text-decoration:none; font-size:15px; transition:transform .1s }
     .btn:hover { transform:translateY(-1px) }
-    .btn.secondary { background:rgba(255,255,255,.06); color:var(--text); border:1px solid var(--line) }
     .badge { display:inline-block; background:rgba(52,211,153,.12); color:var(--ok); padding:4px 10px; border-radius:6px; font-size:11px; font-weight:700; letter-spacing:.06em; text-transform:uppercase }
+    .pending { display:block; text-align:center; padding:14px; border-radius:12px; background:rgba(251,191,36,.08); color:var(--warn); border:1px solid rgba(251,191,36,.25); font-weight:700; font-size:14px }
     .footer { margin-top:40px; color:#737c8d; font-size:12px; border-top:1px solid var(--line); padding-top:18px }
-    .test-warn { background:rgba(251,191,36,.08); border:1px solid rgba(251,191,36,.3); border-radius:10px; padding:12px 16px; color:#fbbf24; font-size:13px; margin-top:20px }
+    .status { background:rgba(52,211,153,.08); border:1px solid rgba(52,211,153,.35); border-radius:10px; padding:12px 16px; color:var(--ok); font-size:13px; margin-top:20px }
   </style>
 </head>
 <body>
@@ -47,15 +47,15 @@
     </nav>
     <p class="eyebrow">16 септември 2026 · София</p>
     <h1>Купи <span style="color:var(--accent)">сега.</span></h1>
-    <p class="lead">Три продукта. Stripe checkout. Платете с карта, получете достъп. Текущата checkout конфигурация е в Stripe test mode до финална production проверка.</p>
+    <p class="lead">Три продукта. Stripe checkout. Производственото плащане е включено само там, където live checkout е потвърден. Няма скрити test-mode бутони на production повърхността.</p>
 
-    <div class="test-warn" style="background:rgba(52,211,153,.08);border-color:rgba(52,211,153,.35);color:var(--ok)">
-      TEST MODE · Stripe EUR checkout validated in the connected test account. No live charges are enabled by this page.
+    <div class="status">
+      LIVE MODE · Stripe production account verified. NIS2 Gap Audit checkout is live. Другите два recurring checkout-а остават скрити, докато техните production payment links не бъдат създадени и проверени.
     </div>
 
     <div class="pricing">
       <div class="card featured">
-        <span class="badge">TEST · €490</span>
+        <span class="badge">LIVE · €490</span>
         <h2>NIS2 Gap Audit — 48h</h2>
         <div class="price">€490 <small>/ еднократно</small></div>
         <p>48-часова проверка на готовността по ЗКС/NIS2: обхват, 20-точкова матрица, таван на глобата, 90-дневен план, СЕРИКС, управителска декларация.</p>
@@ -65,7 +65,7 @@
           <li>Корпоративен таван на глоби</li>
           <li>24/72/30 часовник за инциденти</li>
         </ul>
-        <a class="btn" href="https://buy.stripe.com/test_9B69ATcUi7OvcnqegTd7q00">Тествай checkout →</a>
+        <a class="btn" href="https://buy.stripe.com/00w9ANbQYfgkcyk3Gq63K07">Плати сигурно →</a>
       </div>
 
       <div class="card">
@@ -78,7 +78,7 @@
           <li>7-дневна финансова скорост</li>
           <li>NIS2 констатации</li>
         </ul>
-        <a class="btn secondary" href="https://buy.stripe.com/test_7sY6oH6vUb0Hbjm1u7d7q01">Тествай абонамент →</a>
+        <span class="pending">Production subscription link — pending live creation</span>
       </div>
 
       <div class="card">
@@ -91,11 +91,11 @@
           <li>Поддръжка тикети</li>
           <li>Проект tracking</li>
         </ul>
-        <a class="btn secondary" href="https://buy.stripe.com/test_14A7sLdYmgl1fzC8Wzd7q02">Тествай по седалки →</a>
+        <span class="pending">Production subscription link — pending live creation</span>
       </div>
     </div>
 
-    <p class="footer">Stripe TEST mode · EUR · 16 септември 2026 · Production billing remains a separate explicit activation step.</p>
+    <p class="footer">Stripe LIVE mode · EUR · 16 септември 2026 · Production checkout is shown only when the live payment link is verified.</p>
   </div>
 </body>
 </html>
