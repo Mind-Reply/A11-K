@@ -1,33 +1,250 @@
-version: '3.9'
+version: '3.8'
+
+# Unified docker-compose for all A11-K services
+# CRITICAL SERVICES: MindReply + Nowline + Real Estate Radar + OTA Suite
+# Orchestrated with shared database, cache, and monitoring
 
 services:
-  ledger:
+  # ============================================================
+  # FRONTEND SERVICES (Vercel CDN in production, local fallback)
+  # ============================================================
+
+  a11k-nowline:
     build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: sofia-tech-ledger
+      context: ./a11-sovereign-nowline
+      dockerfile: Dockerfile.nowline
     ports:
-      - "8080:8080"
+      - "3001:3000"
     environment:
-      - NODE_ENV=production
-      - PORT=8080
-      - STL_OUT_DIR=/app/output
-      # Optional: Override these at runtime for live data fetching
-      # - STL_LIVE=1
-      # - GOOGLE_API_KEY=${GOOGLE_API_KEY}
-      # - GOOGLE_CLOUD_PROJECT=${GOOGLE_CLOUD_PROJECT}
-      # - GOOGLE_CLOUD_LOCATION=${GOOGLE_CLOUD_LOCATION}
-    volumes:
-      # Persist ledger output across container restarts
-      - ledger-output:/app/output
+      NODE_ENV: production
+      NEXT_PUBLIC_APP_URL: http://localhost:3001
+    networks:
+      - estate
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/healthz"]
+      test: ["CMD", "curl", "-f", "http://localhost:3000/"]
       interval: 30s
+      timeout: 10s
+      retries: 3
+
+  mindreply-core:
+    build:
+      context: ./mr-app-copy
+      dockerfile: Dockerfile
+      target: production
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      NEXT_PUBLIC_APP_URL: http://localhost:3000
+      NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL:-}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY:-}
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-}
+      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-}
+      JWT_SECRET: ${JWT_SECRET:-}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - estate
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  real-estate-radar:
+    build:
+      context: ./a11k-real-estate-priority-dashboard
+      dockerfile: Dockerfile
+    ports:
+      - "3002:3000"
+    environment:
+      NODE_ENV: production
+      VITE_API_URL: http://localhost:3002
+      DATABASE_URL: postgresql://${DB_USER:-estate}:${DB_PASSWORD:-dev_only}@postgres:5432/a11k_properties
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - estate
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ============================================================
+  # OTA SUITE (Operator Tactical Assistant)
+  # ============================================================
+
+  ota-suite-api:
+    build:
+      context: ./ota-suite
+      dockerfile: Dockerfile.api
+    ports:
+      - "5000:5000"
+    environment:
+      NODE_ENV: production
+      FASTAPI_ENV: production
+      DATABASE_URL: postgresql://${DB_USER:-estate}:${DB_PASSWORD:-dev_only}@postgres:5432/ota_suite
+      REDIS_URL: redis://redis:6379/1
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      JWT_SECRET: ${JWT_SECRET:-}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - estate
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  ota-suite-frontend:
+    build:
+      context: ./ota-suite/frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3003:3000"
+    environment:
+      VITE_API_URL: http://localhost:5000
+    depends_on:
+      - ota-suite-api
+    networks:
+      - estate
+    restart: unless-stopped
+
+  # ============================================================
+  # DATA LAYER
+  # ============================================================
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${DB_USER:-estate}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-dev_only}
+      POSTGRES_INITDB_ARGS: -c max_connections=200
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./db/init.sql:/docker-entrypoint-initdb.d/01-init.sql
+      - ./db/migrations:/docker-entrypoint-initdb.d/02-migrations
+    networks:
+      - estate
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-estate}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - estate
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
       timeout: 5s
       retries: 3
-      start_period: 10s
+
+  # ============================================================
+  # INFRASTRUCTURE
+  # ============================================================
+
+  secrets-engine:
+    build:
+      context: ./docker-secrets-engine
+      dockerfile: Dockerfile
+    environment:
+      MASTER_KEY: ${MASTER_KEY:-}
+      ROTATION_SCHEDULE: "0 0 * * 0"  # Weekly
+      AUDIT_LOG_PATH: /var/log/secrets-audit
+    volumes:
+      - secrets_audit:/var/log/secrets-audit
+    networks:
+      - estate
+    restart: unless-stopped
+
+  n8n:
+    image: n8nio/n8n:latest
+    ports:
+      - "5678:5678"
+    environment:
+      DB_TYPE: postgresdb
+      DB_POSTGRESDB_HOST: postgres
+      DB_POSTGRESDB_USER: ${DB_USER:-estate}
+      DB_POSTGRESDB_PASSWORD: ${DB_PASSWORD:-dev_only}
+      DB_POSTGRESDB_DATABASE: n8n
+      N8N_BASIC_AUTH_ACTIVE: "true"
+      N8N_BASIC_AUTH_USER: ${N8N_USER:-admin}
+      N8N_BASIC_AUTH_PASSWORD: ${N8N_PASSWORD:-change_me}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - n8n_data:/home/node/.n8n
+    networks:
+      - estate
+    restart: unless-stopped
+
+  # ============================================================
+  # MONITORING & LOGGING
+  # ============================================================
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    networks:
+      - estate
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3100:3000"
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD:-admin}
+      GF_INSTALL_PLUGINS: grafana-piechart-panel
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
+    depends_on:
+      - prometheus
+    networks:
+      - estate
+    restart: unless-stopped
+
+networks:
+  estate:
+    driver: bridge
 
 volumes:
-  ledger-output:
-    driver: local
+  postgres_data:
+  redis_data:
+  n8n_data:
+  prometheus_data:
+  grafana_data:
+  secrets_audit:
