@@ -7,9 +7,9 @@ const metrics = [
 ];
 
 const products = [
-  ['Sofia Tech Ledger', 'Regional intelligence for Sofia and Bulgaria.', '/sofia-tech-ledger', 'INTELLIGENCE'],
-  ['A11-K Command', 'Private operations, deployments, recovery and evidence.', '/flight-deck', 'CONTROL'],
-  ['Proof View', 'A clear boundary between verified facts and signals.', '/a11-sites.html', 'EVIDENCE'],
+  ['Sofia Tech Ledger', 'Clear regional information for Sofia and Bulgaria.', '/sofia-tech-ledger', 'INTELLIGENCE'],
+  ['A11-K Command', 'A private workspace for operations, releases, recovery and records.', '/flight-deck', 'CONTROL'],
+  ['Proof View', 'See what is confirmed and what still needs checking.', '/a11-sites.html', 'EVIDENCE'],
 ];
 
 const revenueSteps = ['OFFER', 'LANDING', 'CTA', 'CHECKOUT', 'PAYMENT', 'FULFILMENT', 'RECORD', 'REPEAT'];
@@ -44,10 +44,10 @@ export default function Home() {
       <div>
         <p className="eyebrow">PRIVATE COMMAND LAYER · SOFIA · EU</p>
         <h1 className="mt-6 max-w-5xl text-6xl font-light leading-[.9] tracking-[-.065em] sm:text-8xl lg:text-[7.2rem]">
-          See what matters.<br /><span className="muted">Move with proof.</span>
+          See what matters.<br /><span className="muted">Take the next clear step.</span>
         </h1>
         <p className="mt-8 max-w-2xl text-lg leading-8 text-white/50 sm:text-xl">
-          A11-K brings intelligence, operations, delivery and commercial systems into one evidence-gated surface built for clear decisions and controlled execution.
+          A11-K brings important signals, work and business operations into one clear workspace. See the current state, choose the next action, and keep the result recorded.
         </p>
         <div className="mt-10 flex flex-wrap gap-3">
           <Link href="/flight-deck" className="button">Open command center <span>↗</span></Link>
@@ -80,7 +80,7 @@ export default function Home() {
     <section id="loop" className="relative z-10 mx-auto max-w-7xl px-6 pb-20 lg:px-10">
       <div className="rounded-3xl border border-white/10 bg-white/[.025] p-7 sm:p-10">
         <div className="flex flex-col justify-between gap-5 lg:flex-row lg:items-end">
-          <div><p className="eyebrow">THE OPERATING LOOP</p><h2 className="mt-3 text-3xl font-light tracking-[-.04em] sm:text-5xl">Fast enough to move. Governed enough to trust.</h2></div>
+          <div><p className="eyebrow">THE OPERATING LOOP</p><h2 className="mt-3 text-3xl font-light tracking-[-.04em] sm:text-5xl">Move quickly. Keep control.</h2></div>
           <span className="text-[9px] uppercase tracking-[.2em] text-white/25">05 stages</span>
         </div>
         <div className="mt-9 grid gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/10 md:grid-cols-5">
@@ -97,7 +97,7 @@ export default function Home() {
       <div className="rounded-3xl border border-white/10 bg-white/[.025] p-7 sm:p-10">
         <p className="eyebrow">EXECUTION PRINCIPLE</p>
         <div className="mt-4 flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
-          <div><h2 className="max-w-3xl text-3xl font-light tracking-[-.04em] sm:text-5xl">Automation without surrendering control.</h2><p className="mt-4 max-w-2xl text-sm leading-6 text-white/45">Routine work can move through controlled workflows; consequential changes remain policy-gated, verifiable and reversible.</p></div>
+          <div><h2 className="max-w-3xl text-3xl font-light tracking-[-.04em] sm:text-5xl">Useful automation. Clear control.</h2><p className="mt-4 max-w-2xl text-sm leading-6 text-white/45">Routine work can keep moving. Important changes pause for approval, can be checked, and can be reversed when supported.</p></div>
           <Link href="/flight-deck" className="button whitespace-nowrap">Go to command <span>↗</span></Link>
         </div>
         <div className="mt-9 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/10 sm:grid-cols-4 lg:grid-cols-8">
@@ -108,7 +108,7 @@ export default function Home() {
 
     <section id="products" className="relative z-10 mx-auto max-w-7xl px-6 pb-24 lg:px-10">
       <div className="mb-8 flex items-end justify-between gap-5">
-        <div><p className="eyebrow">A11-K / SURFACES</p><h2 className="mt-3 text-3xl font-light tracking-[-.04em] sm:text-5xl">Signal, command, proof.</h2></div>
+        <div><p className="eyebrow">A11-K / SURFACES</p><h2 className="mt-3 text-3xl font-light tracking-[-.04em] sm:text-5xl">See. Act. Verify.</h2></div>
         <span className="hidden text-[9px] uppercase tracking-[.2em] text-white/25 sm:block">03 / 03</span>
       </div>
       <div className="grid gap-3 md:grid-cols-3">
