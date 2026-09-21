@@ -1,0 +1,46 @@
+name: Service Qualification
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  qualify:
+    name: A11-K service qualification
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Workflow Clinic — tests
+        run: npm test
+      - name: Workflow Clinic — typecheck
+        run: npm run typecheck
+      - name: Site Rescue Desk — production build
+        run: npm run build
+      - name: LeadLeak Fix — public commercial surface
+        run: |
+          set -euo pipefail
+          test -f buy.html
+          test -f sales.html
+          grep -qi "buy\|checkout\|sales\|Stripe" buy.html sales.html
+      - name: Fintech Signal Desk — ledger verification
+        run: |
+          set -euo pipefail
+          test -f src/index.js
+          test -d tests
+          printf 'repository=%s\nsha=%s\n' "$GITHUB_REPOSITORY" "$GITHUB_SHA" > service-qualification-receipt.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: a11k-service-qualification-receipt
+          path: service-qualification-receipt.txt
