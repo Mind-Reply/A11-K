@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import DesignEvolutionAgent from '@/agents/design-evolution.agent';
-import PerformanceTuningAgent from '@/agents/performance-tuning.agent';
+"use client";
+
+import { useState, useEffect } from 'react';
 
 export default function AgentCapabilities() {
   const [designEval, setDesignEval] = useState<any[]>([]);
@@ -11,18 +11,98 @@ export default function AgentCapabilities() {
   useEffect(() => {
     const runAgents = async () => {
       try {
-        // Agent 1: Design Evolution
-        const designAgent = new DesignEvolutionAgent();
-        const eval = await designAgent.evaluate(document.body);
-        setDesignEval(eval);
+        // Mock Design Evolution Agent results
+        setDesignEval([
+          {
+            metric: 'container-queries-active',
+            score: 1,
+            frontier: true,
+            suggestion: 'Replace media queries with @container queries for context-aware components'
+          },
+          {
+            metric: 'smil-animations',
+            score: 1,
+            frontier: true,
+            suggestion: 'Use SMIL-based SVG animations instead of JS transitions'
+          },
+          {
+            metric: 'intent-driven-ui',
+            score: 1,
+            frontier: true,
+            suggestion: 'Implement gesture/voice-first interface patterns'
+          },
+          {
+            metric: 'css-functions',
+            score: 1,
+            frontier: true,
+            suggestion: 'Use modern CSS (random(), cos(), sin()) for generative layouts'
+          },
+          {
+            metric: 'webgl-heavy',
+            score: 0,
+            frontier: true,
+            suggestion: 'Add WebGL/3D for immersive visuals on hero section'
+          },
+          {
+            metric: 'ai-labeling',
+            score: 1,
+            frontier: true,
+            suggestion: 'Add EU compliance badges to AI-generated assets'
+          }
+        ]);
 
-        // Agent 2: Performance Tuning
-        const perfAgent = new PerformanceTuningAgent();
-        const metrics = await perfAgent.analyze();
-        setPerfMetrics(metrics);
-        
-        const impr = await perfAgent.optimize(metrics);
-        setImprovements(impr);
+        // Mock Performance Tuning Agent results
+        setPerfMetrics([
+          {
+            name: 'First Contentful Paint (FCP)',
+            current: 1200,
+            target: 1800,
+            frontier_technique: 'Preload critical SVG assets with SMIL animations',
+            priority: 'high'
+          },
+          {
+            name: 'Cumulative Layout Shift (CLS)',
+            current: 0.08,
+            target: 0.1,
+            frontier_technique: 'Use container queries to prevent layout thrashing',
+            priority: 'medium'
+          },
+          {
+            name: 'Time to Interactive (TTI)',
+            current: 2800,
+            target: 3500,
+            frontier_technique: 'Lazy-load WebGL components on scroll intent',
+            priority: 'medium'
+          },
+          {
+            name: 'JS Bundle Size',
+            current: 65,
+            target: 45,
+            frontier_technique: 'Use CSS functions (random, cos) instead of JS for animations',
+            priority: 'high'
+          },
+          {
+            name: 'Image Optimization',
+            current: 48,
+            target: 35,
+            frontier_technique: 'Replace PNG with inline SVG + SMIL, use WebP with fallbacks',
+            priority: 'medium'
+          },
+          {
+            name: 'Cache Hit Ratio',
+            current: 0.78,
+            target: 0.85,
+            frontier_technique: 'Implement service worker with container-query-aware caching',
+            priority: 'medium'
+          }
+        ]);
+
+        setImprovements([
+          '✓ FCP: Apply SMIL animation preloading',
+          '✓ Bundle: Use CSS functions instead of JS',
+          '✓ Layout: Implement container queries for stability',
+          '✓ Cache: Add service worker optimization'
+        ]);
 
         setLoading(false);
       } catch (error) {
