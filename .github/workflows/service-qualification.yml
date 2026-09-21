@@ -20,7 +20,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - run: npm ci
+      - run: npm install --no-audit --no-fund
       - name: Workflow Clinic — tests
         run: npm test
       - name: Workflow Clinic — typecheck
