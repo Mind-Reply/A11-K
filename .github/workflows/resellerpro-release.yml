@@ -3,6 +3,8 @@ name: A11-K → ResellerPro Release
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -10,7 +12,7 @@ permissions:
   packages: write
 
 concurrency:
-  group: resellerpro-release-main
+  group: resellerpro-release-${{ github.ref }}
   cancel-in-progress: true
 
 env:
@@ -54,6 +56,7 @@ jobs:
           exit 1
 
   publish:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: validate-build
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -76,6 +79,7 @@ jobs:
             ${{ env.IMAGE }}:main
 
   deploy-resellerpro:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: publish
     runs-on: ubuntu-latest
     timeout-minutes: 20
@@ -85,30 +89,27 @@ jobs:
       RESELLERPRO_SSH_PRIVATE_KEY: ${{ secrets.RESELLERPRO_SSH_PRIVATE_KEY }}
       RESELLERPRO_DEPLOY_PATH: ${{ secrets.RESELLERPRO_DEPLOY_PATH }}
     steps:
-      - name: Fail closed when deployment target is not configured
+      - name: Check deployment target
         run: |
           if [ -z "$RESELLERPRO_SSH_HOST" ] || [ -z "$RESELLERPRO_SSH_USER" ] || [ -z "$RESELLERPRO_SSH_PRIVATE_KEY" ] || [ -z "$RESELLERPRO_DEPLOY_PATH" ]; then
-            echo "ResellerPro deployment target is not configured."
-            echo "Release image was published and validated; production deployment was not attempted."
+            echo "ResellerPro target not configured; release is validated/published but not deployed."
             exit 0
           fi
       - name: Install SSH tooling
         if: env.RESELLERPRO_SSH_HOST != ''
         run: sudo apt-get update && sudo apt-get install -y openssh-client
-      - name: Deploy immutable image to ResellerPro host
+      - name: Deploy immutable image
         if: env.RESELLERPRO_SSH_HOST != ''
         env:
           IMAGE_REF: ${{ env.IMAGE }}:${{ github.sha }}
         run: |
           set -euo pipefail
           mkdir -p ~/.ssh
-          printf '%s
-' "$RESELLERPRO_SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+          printf '%s\n' "$RESELLERPRO_SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan -H "$RESELLERPRO_SSH_HOST" >> ~/.ssh/known_hosts
           ssh "$RESELLERPRO_SSH_USER@$RESELLERPRO_SSH_HOST" "mkdir -p '$RESELLERPRO_DEPLOY_PATH'"
-          ssh "$RESELLERPRO_SSH_USER@$RESELLERPRO_SSH_HOST" "cd '$RESELLERPRO_DEPLOY_PATH' && printf '%s
-' '$IMAGE_REF' > .a11k-image"
+          ssh "$RESELLERPRO_SSH_USER@$RESELLERPRO_SSH_HOST" "cd '$RESELLERPRO_DEPLOY_PATH' && printf '%s\n' '$IMAGE_REF' > .a11k-image"
           ssh "$RESELLERPRO_SSH_USER@$RESELLERPRO_SSH_HOST" "docker pull '$IMAGE_REF'"
           ssh "$RESELLERPRO_SSH_USER@$RESELLERPRO_SSH_HOST" "docker rm -f a11k 2>/dev/null || true"
           ssh "$RESELLERPRO_SSH_USER@$RESELLERPRO_SSH_HOST" "docker run -d --restart unless-stopped --name a11k -p 8080:8080 '$IMAGE_REF'"
