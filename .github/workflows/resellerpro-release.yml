@@ -39,9 +39,10 @@ jobs:
       - name: Build
         run: npm run build
       - name: Docker build
-        run: docker build --tag "$IMAGE:${{ github.sha }}" --tag "$IMAGE:main" .
+        run: docker build --tag "$IMAGE:${{ github.sha }}" .
       - name: Docker health contract
         run: |
+          set -euo pipefail
           docker run -d --name a11k-release -p 18080:8080 "$IMAGE:${{ github.sha }}"
           trap 'docker rm -f a11k-release >/dev/null 2>&1 || true' EXIT
           for i in $(seq 1 30); do
@@ -88,20 +89,28 @@ jobs:
       RESELLERPRO_SSH_USER: ${{ secrets.RESELLERPRO_SSH_USER }}
       RESELLERPRO_SSH_PRIVATE_KEY: ${{ secrets.RESELLERPRO_SSH_PRIVATE_KEY }}
       RESELLERPRO_DEPLOY_PATH: ${{ secrets.RESELLERPRO_DEPLOY_PATH }}
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
     steps:
       - name: Check deployment target
+        id: target
+        shell: bash
         run: |
-          if [ -z "$RESELLERPRO_SSH_HOST" ] || [ -z "$RESELLERPRO_SSH_USER" ] || [ -z "$RESELLERPRO_SSH_PRIVATE_KEY" ] || [ -z "$RESELLERPRO_DEPLOY_PATH" ]; then
+          set -euo pipefail
+          if [[ -n "$RESELLERPRO_SSH_HOST" && -n "$RESELLERPRO_SSH_USER" && -n "$RESELLERPRO_SSH_PRIVATE_KEY" && -n "$RESELLERPRO_DEPLOY_PATH" ]]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+            echo "ResellerPro target configured."
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
             echo "ResellerPro target not configured; release is validated/published but not deployed."
-            exit 0
           fi
       - name: Install SSH tooling
-        if: env.RESELLERPRO_SSH_HOST != ''
+        if: steps.target.outputs.ready == 'true'
         run: sudo apt-get update && sudo apt-get install -y openssh-client
       - name: Deploy immutable image
-        if: env.RESELLERPRO_SSH_HOST != ''
+        if: steps.target.outputs.ready == 'true'
         env:
           IMAGE_REF: ${{ env.IMAGE }}:${{ github.sha }}
+        shell: bash
         run: |
           set -euo pipefail
           mkdir -p ~/.ssh
@@ -123,3 +132,15 @@ jobs:
           done
           echo "Deployment did not produce a verified health response."
           exit 1
+      - name: Slack update
+        if: always() && env.SLACK_WEBHOOK_URL != ''
+        env:
+          STATUS: ${{ job.status }}
+        shell: bash
+        run: |
+          payload=$(python - <<'PY'
+          import json, os
+          print(json.dumps({"text": f"A11-K ResellerPro release {os.environ['STATUS']} for {os.environ['GITHUB_SHA'][:12]}"}))
+          PY
+          )
+          curl --fail --silent --show-error -X POST -H 'Content-Type: application/json' --data "$payload" "$SLACK_WEBHOOK_URL"
