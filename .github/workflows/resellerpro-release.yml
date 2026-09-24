@@ -9,7 +9,6 @@ on:
 
 permissions:
   contents: read
-  packages: write
 
 concurrency:
   group: resellerpro-release-${{ github.ref }}
@@ -61,6 +60,9 @@ jobs:
     needs: validate-build
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    permissions:
+      contents: read
+      packages: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -132,6 +134,17 @@ jobs:
           done
           echo "Deployment did not produce a verified health response."
           exit 1
+      - name: Write release evidence
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "## A11-K release evidence"
+            echo "- Commit: $GITHUB_SHA"
+            echo "- Workflow: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+            echo "- Target configured: ${{ steps.target.outputs.ready || 'unknown' }}"
+            echo "- Job status: ${{ job.status }}"
+          } >> "$GITHUB_STEP_SUMMARY"
       - name: Slack update
         if: always() && env.SLACK_WEBHOOK_URL != ''
         env:
@@ -140,7 +153,13 @@ jobs:
         run: |
           payload=$(python - <<'PY'
           import json, os
-          print(json.dumps({"text": f"A11-K ResellerPro release {os.environ['STATUS']} for {os.environ['GITHUB_SHA'][:12]}"}))
+          print(json.dumps({
+            "text": (
+              f"A11-K ResellerPro release {os.environ['STATUS']} | "
+              f"commit {os.environ['GITHUB_SHA'][:12]} | "
+              f"run {os.environ['GITHUB_SERVER_URL']}/{os.environ['GITHUB_REPOSITORY']}/actions/runs/{os.environ['GITHUB_RUN_ID']}"
+            )
+          }))
           PY
           )
           curl --fail --silent --show-error -X POST -H 'Content-Type: application/json' --data "$payload" "$SLACK_WEBHOOK_URL"
