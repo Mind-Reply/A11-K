@@ -19,22 +19,48 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Verify production surface
         env:
           PRODUCTION_URL: https://chat.a11-k.space/
         run: |
           set -euo pipefail
-          status="$(curl -L -sS -o /tmp/response.html -w '%{http_code}' --max-time 20 "$PRODUCTION_URL")"
+          started=$(date +%s%3N)
+          status="$(curl -L -sS -D /tmp/headers.txt -o /tmp/response.html -w '%{http_code}' --max-time 20 "$PRODUCTION_URL")"
+          finished=$(date +%s%3N)
+          latency="$((finished-started))ms"
           test "$status" = "200"
           test -s /tmp/response.html
           grep -qi "A11-K" /tmp/response.html
           echo "## Runtime verification" >> "$GITHUB_STEP_SUMMARY"
           echo "- URL: $PRODUCTION_URL" >> "$GITHUB_STEP_SUMMARY"
           echo "- HTTP status: $status" >> "$GITHUB_STEP_SUMMARY"
-          echo "- Content marker: A11-K" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Latency: $latency" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Correlation: $GITHUB_RUN_ID/$GITHUB_RUN_ATTEMPT" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Verify security headers
+        run: |
+          set -euo pipefail
+          curl -L -sS -D /tmp/headers.txt -o /dev/null --max-time 20 https://chat.a11-k.space/
+          grep -Eiq '^strict-transport-security:' /tmp/headers.txt
+          grep -Eiq '^x-content-type-options:' /tmp/headers.txt
+          echo "## Security headers" >> "$GITHUB_STEP_SUMMARY"
+          echo "- HSTS present" >> "$GITHUB_STEP_SUMMARY"
+          echo "- X-Content-Type-Options present" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Verify automation contracts
+        run: |
+          set -euo pipefail
+          test -d .github/workflows
+          test -f .github/workflows/resellerpro-release.yml
+          test -f .github/workflows/autonomous-contract-check.yml
+          echo "## Automation contracts" >> "$GITHUB_STEP_SUMMARY"
+          echo "- ResellerPro release workflow present" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Autonomous contract check present" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Verify repository safety invariants
-        shell: bash
         run: |
           set -euo pipefail
           test ! -f .env
@@ -44,3 +70,14 @@ jobs:
           echo "- No committed .env file" >> "$GITHUB_STEP_SUMMARY"
           echo "- No committed .next directory" >> "$GITHUB_STEP_SUMMARY"
           echo "- .gitignore present" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Slack status
+        if: always()
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          RESULT: ${{ job.status }}
+        run: |
+          set -euo pipefail
+          if [[ -z "${SLACK_WEBHOOK_URL:-}" ]]; then exit 0; fi
+          payload=$(printf '{"text":"A11-K guardrail: %s | run %s | %s"}' "$RESULT" "$GITHUB_RUN_ID" "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID")
+          curl -sS --fail-with-body -X POST -H 'Content-Type: application/json' --data "$payload" "$SLACK_WEBHOOK_URL"

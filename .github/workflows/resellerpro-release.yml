@@ -1,0 +1,164 @@
+name: A11-K → ResellerPro Release
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: resellerpro-release-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  IMAGE: ghcr.io/mind-reply/a11-k
+
+jobs:
+  validate-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install
+        run: npm install --no-audit --no-fund
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Tests
+        run: npm test
+      - name: Build
+        run: npm run build
+      - name: Docker build
+        run: docker build --tag "$IMAGE:${{ github.sha }}" .
+      - name: Docker health contract
+        run: |
+          set -euo pipefail
+          docker run -d --name a11k-release -p 18080:8080 "$IMAGE:${{ github.sha }}"
+          trap 'docker rm -f a11k-release >/dev/null 2>&1 || true' EXIT
+          for i in $(seq 1 30); do
+            if curl --fail --silent --show-error http://127.0.0.1:18080/healthz; then
+              echo
+              echo "A11-K container health verified."
+              exit 0
+            fi
+            sleep 2
+          done
+          docker logs a11k-release
+          exit 1
+
+  publish:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: validate-build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and push immutable release
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ env.IMAGE }}:${{ github.sha }}
+            ${{ env.IMAGE }}:main
+
+  deploy-resellerpro:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: publish
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      RESELLERPRO_SSH_HOST: ${{ secrets.RESELLERPRO_SSH_HOST }}
+      RESELLERPRO_SSH_USER: ${{ secrets.RESELLERPRO_SSH_USER }}
+      RESELLERPRO_SSH_PRIVATE_KEY: ${{ secrets.RESELLERPRO_SSH_PRIVATE_KEY }}
+      RESELLERPRO_DEPLOY_PATH: ${{ secrets.RESELLERPRO_DEPLOY_PATH }}
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+    steps:
+      - name: Check deployment target
+        id: target
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -n "$RESELLERPRO_SSH_HOST" && -n "$RESELLERPRO_SSH_USER" && -n "$RESELLERPRO_SSH_PRIVATE_KEY" && -n "$RESELLERPRO_DEPLOY_PATH" ]]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+            echo "ResellerPro target configured."
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "ResellerPro target not configured; release is validated/published but not deployed."
+          fi
+      - name: Install SSH tooling
+        if: steps.target.outputs.ready == 'true'
+        run: sudo apt-get update && sudo apt-get install -y openssh-client
+      - name: Deploy immutable image
+        if: steps.target.outputs.ready == 'true'
+        env:
+          IMAGE_REF: ${{ env.IMAGE }}:${{ github.sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p ~/.ssh
+          printf '%s\n' "$RESELLERPRO_SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H "$RESELLERPRO_SSH_HOST" >> ~/.ssh/known_hosts
+          ssh "$RESELLERPRO_SSH_USER@$RESELLERPRO_SSH_HOST" "mkdir -p '$RESELLERPRO_DEPLOY_PATH'"
+          ssh "$RESELLERPRO_SSH_USER@$RESELLERPRO_SSH_HOST" "cd '$RESELLERPRO_DEPLOY_PATH' && printf '%s\n' '$IMAGE_REF' > .a11k-image"
+          ssh "$RESELLERPRO_SSH_USER@$RESELLERPRO_SSH_HOST" "docker pull '$IMAGE_REF'"
+          ssh "$RESELLERPRO_SSH_USER@$RESELLERPRO_SSH_HOST" "docker rm -f a11k 2>/dev/null || true"
+          ssh "$RESELLERPRO_SSH_USER@$RESELLERPRO_SSH_HOST" "docker run -d --restart unless-stopped --name a11k -p 8080:8080 '$IMAGE_REF'"
+          for i in $(seq 1 20); do
+            if curl --fail --silent --show-error "http://$RESELLERPRO_SSH_HOST:8080/healthz"; then
+              echo
+              echo "VERIFIED: ResellerPro host returned HTTP 200 from A11-K /healthz."
+              exit 0
+            fi
+            sleep 3
+          done
+          echo "Deployment did not produce a verified health response."
+          exit 1
+      - name: Write release evidence
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "## A11-K release evidence"
+            echo "- Commit: $GITHUB_SHA"
+            echo "- Workflow: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+            echo "- Target configured: ${{ steps.target.outputs.ready || 'unknown' }}"
+            echo "- Job status: ${{ job.status }}"
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Slack update
+        if: always() && env.SLACK_WEBHOOK_URL != ''
+        env:
+          STATUS: ${{ job.status }}
+        shell: bash
+        run: |
+          payload=$(python - <<'PY'
+          import json, os
+          print(json.dumps({
+            "text": (
+              f"A11-K ResellerPro release {os.environ['STATUS']} | "
+              f"commit {os.environ['GITHUB_SHA'][:12]} | "
+              f"run {os.environ['GITHUB_SERVER_URL']}/{os.environ['GITHUB_REPOSITORY']}/actions/runs/{os.environ['GITHUB_RUN_ID']}"
+            )
+          }))
+          PY
+          )
+          curl --fail --silent --show-error -X POST -H 'Content-Type: application/json' --data "$payload" "$SLACK_WEBHOOK_URL"
