@@ -8,7 +8,7 @@ A11-K provides an evidence-first surface for regional technology intelligence, o
 
 ## Canonical estate relationship
 
-- MindReply production source: `Mind-Reply/mindreply`
+- MindReply production source: `Mind-Reply/mindreply-app`
 - Control plane: `Mind-Reply/control-plane`
 - A11-K: this repository
 - Aurel experience product: `Mind-Reply/Aurel`
@@ -24,4 +24,4 @@ Do not place credentials, `.env` files, private keys or recovery material in the
 
 Active product repository. Deployment parity with the canonical MindReply delivery estate remains independently verifiable and must not be inferred from repository state alone.
 
-Cross-estate evidence and classification: `Mind-Reply/mindreply/ESTATE_RECONSTRUCTION_AUDIT_2026-09-13.md`.
+Cross-estate evidence and classification: `Mind-Reply/mindreply-app/ESTATE_RECONSTRUCTION_AUDIT_2026-09-13.md`.
