@@ -72,11 +72,12 @@ jobs:
           echo "- .gitignore present" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Slack status
-        if: ${{ always() && env.SLACK_WEBHOOK_URL != '' }}
+        if: always()
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           RESULT: ${{ job.status }}
         run: |
           set -euo pipefail
+          if [[ -z "${SLACK_WEBHOOK_URL:-}" ]]; then exit 0; fi
           payload=$(printf '{"text":"A11-K guardrail: %s | run %s | %s"}' "$RESULT" "$GITHUB_RUN_ID" "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID")
           curl -sS --fail-with-body -X POST -H 'Content-Type: application/json' --data "$payload" "$SLACK_WEBHOOK_URL"
