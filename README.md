@@ -25,3 +25,10 @@ Do not place credentials, `.env` files, private keys or recovery material in the
 Active product repository. Deployment parity with the canonical MindReply delivery estate remains independently verifiable and must not be inferred from repository state alone.
 
 Cross-estate evidence and classification: `Mind-Reply/mindreply-app/ESTATE_RECONSTRUCTION_AUDIT_2026-09-13.md`.
+
+
+## Brand authority
+
+**A11-K** is the canonical public intelligence / command brand for this product. It is separate from **MindReply**. Personal A11-K repositories are private source/provenance unless explicitly promoted.
+
+Naming authority: `Mind-Reply/.github/BRAND_ARCHITECTURE.md`.
