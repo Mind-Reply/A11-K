@@ -22,7 +22,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: false
       - run: npm install --ignore-scripts
       - run: npm run typecheck
       - run: npm run build
