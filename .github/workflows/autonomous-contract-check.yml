@@ -27,11 +27,11 @@ jobs:
         run: |
           set -euo pipefail
           test -s docs/A11K_AUTONOMOUS_RUNTIME_CONTRACT.md
-          if git ls-files | grep -E '(^|/)(\.env|\.next)(/|$)' ; then
+          if git ls-files -z | grep -zEq '(^|/)\.env(\.local)?$|(^|/)\.next(/|$)'; then
             echo 'Unsafe generated or secret artifact tracked in repository' >&2
             exit 1
           fi
           test -f .gitignore
-          grep -qE '^\.env' .gitignore
-          grep -qE '^\.next' .gitignore
+          grep -qE '^\.env(\.local)?$' .gitignore
+          grep -qE '^\.next(/|$)' .gitignore
           echo 'Autonomous runtime contract and repository safety checks passed.'
