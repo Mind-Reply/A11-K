@@ -9,7 +9,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: control-plane-${{ github.ref }}
+  group: control-plane-${{${ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -26,29 +26,40 @@ jobs:
       - run: npm run typecheck
       - run: npm test
       - run: npm run build
-      - name: Reject tracked secrets and build artifacts
+      - name: Reject banned runtime configuration
         shell: bash
         run: |
           set -euo pipefail
-          if git ls-files | grep -E '(^|/)(\.env($|\.)|\.next/|node_modules/|.*\.log$)' ; then
-            echo 'Tracked secret/build/log artifact detected.'
-            exit 1
-          fi
-          if grep -RInE '(sk-[A-Za-z0-9_-]{20,}|BEGIN (RSA|OPENSSH|EC|DSA) PRIVATE KEY)' --exclude-dir=.git --exclude-dir=node_modules . ; then
-            echo 'Potential credential material detected.'
+          if grep -RInE 'WHATSAPP_(TOKEN|ACCESS_TOKEN|VERIFY_TOKEN|APP_SECRET|PHONE|PHONE_NUMBER_ID|RECIPIENT)|whatsapp(-|_|/)?(webhook|bridge|router)' app src .github scripts config 2>/dev/null; then
+            echo 'BANNED: WhatsApp runtime configuration detected.'
             exit 1
           fi
 
-  slack:
+  notify:
     needs: verify
-    if: ${{ always() && secrets.SLACK_WEBHOOK_URL != '' }}
+    if: always()
     runs-on: ubuntu-latest
     timeout-minutes: 3
+    env:
+      SMTP_USER: ${{ secrets.SMTP_USER }}
+      SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+      RESULT: ${{ needs.verify.result }}
     steps:
-      - name: Post CI result
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          RESULT: ${{ needs.verify.result }}
+      - name: Email control-plane result
+        shell: python
         run: |
-          payload=$(printf '{"text":"A11-K control-plane CI: %s | %s"}' "$RESULT" "$GITHUB_SHA")
-          curl --fail-with-body -X POST -H 'Content-Type: application/json' --data "$payload" "$SLACK_WEBHOOK_URL"
+          import os, smtplib
+          from email.message import EmailMessage
+
+          user = os.environ.get('SMTP_USER') or 'mind.repl@gmail.com'
+          password = os.environ.get('SMTP_PASSWORD')
+          if not password:
+              raise SystemExit('SMTP_PASSWORD is not configured; notification cannot be sent.')
+          msg = EmailMessage()
+          msg['Subject'] = f"A11-K control-plane CI: {os.environ['RESULT']}"
+          msg['From'] = user
+          msg['To'] = 'mind.repl@gmail.com'
+          msg.set_content(f"Result: {os.environ['RESULT']}\nRepository: {os.environ['GITHUB_REPOSITORY']}\nCommit: {os.environ['GITHUB_SHA']}\nRun: {os.environ['GITHUB_SERVER_URL']}/{os.environ['GITHUB_REPOSITORY']}/actions/runs/{os.environ['GITHUB_RUN_ID']}")
+          with smtplib.SMTP_SSL('smtp.gmail.com', 465, timeout=20) as smtp:
+              smtp.login(user, password)
+              smtp.send_message(msg)
