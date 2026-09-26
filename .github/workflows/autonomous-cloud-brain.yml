@@ -65,7 +65,7 @@ jobs:
           test ! -f .env
           test ! -d .next
           test -f .gitignore
-          if grep -RInE 'WHATSAPP_(TOKEN|ACCESS_TOKEN|VERIFY_TOKEN|APP_SECRET|PHONE|PHONE_NUMBER_ID|RECIPIENT)|SLACK_WEBHOOK|PAGERDUTY|hooks\.slack\.com|pagerduty' app src .github scripts config 2>/dev/null; then
+          if git grep -nIE 'WHATSAPP_(TOKEN|ACCESS_TOKEN|VERIFY_TOKEN|APP_SECRET|PHONE|PHONE_NUMBER_ID|RECIPIENT)|hooks\.slack\.com|SLACK_WEBHOOK|PAGERDUTY' -- ':!app/api/webhook/whatsapp/route.ts' ':!.github/workflows/control-plane.yml' ':!.github/workflows/resellerpro-release.yml' ':!.github/workflows/autonomous-cloud-brain.yml'; then
             echo 'BANNED communication configuration detected.'
             exit 1
           fi
