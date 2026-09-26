@@ -3,8 +3,6 @@ name: Autonomous cloud brain guardrails
 on:
   push:
     branches: [main]
-  schedule:
-    - cron: '23 * * * *'
   workflow_dispatch:
 
 permissions:
@@ -60,6 +58,19 @@ jobs:
           echo "- ResellerPro release workflow present" >> "$GITHUB_STEP_SUMMARY"
           echo "- Autonomous contract check present" >> "$GITHUB_STEP_SUMMARY"
 
+      - name: Verify communication and secret invariants
+        shell: bash
+        run: |
+          set -euo pipefail
+          test ! -f .env
+          test ! -d .next
+          test -f .gitignore
+          if grep -RInE 'WHATSAPP_(TOKEN|ACCESS_TOKEN|VERIFY_TOKEN|APP_SECRET|PHONE|PHONE_NUMBER_ID|RECIPIENT)|SLACK_WEBHOOK|PAGERDUTY|hooks\.slack\.com|pagerduty' app src .github scripts config 2>/dev/null; then
+            echo 'BANNED communication configuration detected.'
+            exit 1
+          fi
+          grep -RIn 'mind\.repl@gmail\.com' .github/workflows >/dev/null
+
       - name: Verify repository safety invariants
         run: |
           set -euo pipefail
@@ -70,14 +81,3 @@ jobs:
           echo "- No committed .env file" >> "$GITHUB_STEP_SUMMARY"
           echo "- No committed .next directory" >> "$GITHUB_STEP_SUMMARY"
           echo "- .gitignore present" >> "$GITHUB_STEP_SUMMARY"
-
-      - name: Slack status
-        if: always()
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          RESULT: ${{ job.status }}
-        run: |
-          set -euo pipefail
-          if [[ -z "${SLACK_WEBHOOK_URL:-}" ]]; then exit 0; fi
-          payload=$(printf '{"text":"A11-K guardrail: %s | run %s | %s"}' "$RESULT" "$GITHUB_RUN_ID" "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID")
-          curl -sS --fail-with-body -X POST -H 'Content-Type: application/json' --data "$payload" "$SLACK_WEBHOOK_URL"
