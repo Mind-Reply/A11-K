@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+<key>PayloadContent</key><array>
+<dict>
+<key>PayloadType</key><string>com.apple.applicationaccess</string><key>PayloadVersion</key><integer>1</integer>
+<key>PayloadIdentifier</key><string>space.a11-k.iphone.applicationaccess</string><key>PayloadUUID</key><string>6F2A8E1B-3D0D-4E6C-9A5F-2C4B8E7D1F03</string>
+<key>PayloadDisplayName</key><string>A11-K Application Access</string><key>PayloadOrganization</key><string>A11-K</string><key>PayloadEnabled</key><true/>
+<key>allowAssistantWhileLocked</key><false/><key>allowControlCenterWhileLocked</key><false/><key>allowScreenShot</key><true/><key>allowUntrustedTLSPrompt</key><false/>
+</dict>
+<dict>
+<key>PayloadType</key><string>com.apple.webcontent-filter</string><key>PayloadVersion</key><integer>1</integer>
+<key>PayloadIdentifier</key><string>space.a11-k.iphone.webfilter</string><key>PayloadUUID</key><string>9D4E1C77-5A32-4B91-8F26-7C3D0E5A2B64</string>
+<key>PayloadDisplayName</key><string>A11-K Web Filter</string><key>PayloadOrganization</key><string>A11-K</string><key>FilterType</key><string>BuiltIn</string><key>FilterBrowsers</key><true/><key>FilterSockets</key><true/>
+</dict></array>
+<key>PayloadDisplayName</key><string>A11-K — Pro Security &amp; Web Filter — No Passcode Policy</string>
+<key>PayloadDescription</key><string>Owner-controlled iPhone configuration. Does not set or enforce a device passcode. No Wi-Fi credentials.</string>
+<key>PayloadIdentifier</key><string>space.a11-k.iphone.security-v3</string><key>PayloadOrganization</key><string>A11-K</string><key>PayloadUUID</key><string>2B6D5C44-6D64-4A6C-9C8A-9F2F0E4C7A11</string>
+<key>PayloadRemovalDisallowed</key><false/><key>PayloadType</key><string>Configuration</string><key>PayloadVersion</key><integer>3</integer>
+</dict></plist>
