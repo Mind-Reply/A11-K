@@ -89,9 +89,7 @@ jobs:
       RESELLERPRO_SSH_HOST: ${{ secrets.RESELLERPRO_SSH_HOST }}
       RESELLERPRO_SSH_USER: ${{ secrets.RESELLERPRO_SSH_USER }}
       RESELLERPRO_SSH_PRIVATE_KEY: ${{ secrets.RESELLERPRO_SSH_PRIVATE_KEY }}
-      RESELLERPRO_DEPLOY_PATH: ${{ secrets.RESELLERPRO_DEPLOY_PATH }}
-      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-    steps:
+      RESELLERPRO_DEPLOY_PATH: ${{ secrets.RESELLERPRO_DEPLOY_PATH }}    steps:
       - name: Check deployment target
         id: target
         shell: bash
@@ -144,21 +142,24 @@ jobs:
             echo "- Target configured: ${{ steps.target.outputs.ready || 'unknown' }}"
             echo "- Job status: ${{ job.status }}"
           } >> "$GITHUB_STEP_SUMMARY"
-      - name: Slack update
-        if: always() && env.SLACK_WEBHOOK_URL != ''
+      - name: Email release result
+        if: always()
         env:
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
           STATUS: ${{ job.status }}
-        shell: bash
+        shell: python
         run: |
-          payload=$(python - <<'PY'
-          import json, os
-          print(json.dumps({
-            "text": (
-              f"A11-K ResellerPro release {os.environ['STATUS']} | "
-              f"commit {os.environ['GITHUB_SHA'][:12]} | "
-              f"run {os.environ['GITHUB_SERVER_URL']}/{os.environ['GITHUB_REPOSITORY']}/actions/runs/{os.environ['GITHUB_RUN_ID']}"
-            )
-          }))
-          PY
-          )
-          curl --fail --silent --show-error -X POST -H 'Content-Type: application/json' --data "$payload" "$SLACK_WEBHOOK_URL"
+          import os, smtplib
+          from email.message import EmailMessage
+          user = os.environ.get('SMTP_USER') or 'mind.repl@gmail.com'
+          password = os.environ.get('SMTP_PASSWORD')
+          if not password: raise SystemExit('SMTP_PASSWORD is not configured; notification cannot be sent.')
+          msg = EmailMessage()
+          msg['Subject'] = f"A11-K ResellerPro release: {os.environ['STATUS']}"
+          msg['From'] = user
+          msg['To'] = 'mind.repl@gmail.com'
+          msg.set_content(f"Status: {os.environ['STATUS']}\nCommit: {os.environ['GITHUB_SHA']}\nRun: {os.environ['GITHUB_SERVER_URL']}/{os.environ['GITHUB_REPOSITORY']}/actions/runs/{os.environ['GITHUB_RUN_ID']}")
+          with smtplib.SMTP_SSL('smtp.gmail.com', 465, timeout=20) as smtp:
+              smtp.login(user, password)
+              smtp.send_message(msg)
