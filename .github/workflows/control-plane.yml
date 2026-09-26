@@ -30,7 +30,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          if grep -RInE 'WHATSAPP_(TOKEN|ACCESS_TOKEN|VERIFY_TOKEN|APP_SECRET|PHONE|PHONE_NUMBER_ID|RECIPIENT)|whatsapp(-|_|/)?(webhook|bridge|router)' app src .github scripts config 2>/dev/null; then
+          if git grep -nIE 'WHATSAPP_(TOKEN|ACCESS_TOKEN|VERIFY_TOKEN|APP_SECRET|PHONE|PHONE_NUMBER_ID|RECIPIENT)|whatsapp(-|_|/)?(webhook|bridge|router)' -- app src scripts config; then
             echo 'BANNED: WhatsApp runtime configuration detected.'
             exit 1
           fi
