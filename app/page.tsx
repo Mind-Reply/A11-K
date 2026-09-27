@@ -77,6 +77,15 @@ export default function Home() {
       </div>
     </section>
 
+
+
+    <nav aria-label="Quick navigation" className="relative z-20 mx-auto mb-10 flex max-w-xl items-center justify-between rounded-2xl border border-white/10 bg-[#0b0c0b]/90 p-2 shadow-2xl backdrop-blur-xl md:hidden">
+      <Link href="#signals" className="flex-1 rounded-xl px-3 py-3 text-center text-[9px] uppercase tracking-[.16em] text-white/55 no-underline transition hover:bg-white/[.06] hover:text-white">Pulse</Link>
+      <Link href="#loop" className="flex-1 rounded-xl px-3 py-3 text-center text-[9px] uppercase tracking-[.16em] text-white/55 no-underline transition hover:bg-white/[.06] hover:text-white">Flow</Link>
+      <Link href="#revenue" className="flex-1 rounded-xl px-3 py-3 text-center text-[9px] uppercase tracking-[.16em] text-white/55 no-underline transition hover:bg-white/[.06] hover:text-white">Execute</Link>
+      <Link href="#products" className="flex-1 rounded-xl bg-white/[.08] px-3 py-3 text-center text-[9px] uppercase tracking-[.16em] text-white no-underline">Library</Link>
+    </nav>
+
     <section id="loop" className="relative z-10 mx-auto max-w-7xl px-6 pb-20 lg:px-10">
       <div className="rounded-3xl border border-white/10 bg-white/[.025] p-7 sm:p-10">
         <div className="flex flex-col justify-between gap-5 lg:flex-row lg:items-end">
