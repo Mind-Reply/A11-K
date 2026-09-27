@@ -1,27 +1,18 @@
-# A11-K — Canonical Public Product
+# A11-K — Historical Public Surface
 
-A11-K is the owner-controlled intelligence and command product.
+This repository is **not the canonical A11-K implementation**.
 
-## Canonical source
+## Canonical
 
-This repository is the **single canonical A11-K product and website source**.
+- **Repository:** [angellllkr-eng/A11-K](https://github.com/angellllkr-eng/A11-K)
+- **Production site:** https://a11-k.space
 
-- Repository: `Mind-Reply/A11-K`
-- Production site: `https://a11-k.space`
-- Branch: `main`
-- Deployment authority: ResellerPro / Cloudflare
-- Source authority: GitHub
+New A11-K work belongs only in the canonical repository.
 
-All new A11-K website, product, UX, content, SEO, integration and release work goes here.
+This repository is retained temporarily as a public migration/reference surface so useful material can be inspected and consolidated without blind deletion. It must not be treated as a second production source.
 
-## Estate consolidation
+## Rule
 
-Private and historical A11-K repositories are migration/recovery sources only. Useful code and documentation may be extracted into this repository after inspection; they are not competing production sources.
+**One product → one repository → one production site.**
 
-See [CANONICAL-ESTATE.md](./CANONICAL-ESTATE.md).
-
-## Verification rule
-
-Source presence is not production proof. Live claims require current deployment, domain, HTTP, runtime and rollback evidence.
-
-No credentials, private keys, customer data or recovery secrets belong in this repository.
+Live status must be verified from the canonical source and current deployment evidence.
