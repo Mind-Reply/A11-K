@@ -1,34 +1,27 @@
-# A11-K — Sofia Tech Ledger
+# A11-K — Canonical Public Product
 
-A11-K is the distinct Mind-Reply regional intelligence and owner-operations product. It is **not** the canonical MindReply public web root.
+A11-K is the owner-controlled intelligence and command product.
 
-## Product function
+## Canonical source
 
-A11-K provides an evidence-first surface for regional technology intelligence, operational records, owner workflows and deployment/evidence coordination. It may consume shared MindReply control-plane services, but it retains its own product identity and release boundary.
+This repository is the **single canonical A11-K product and website source**.
 
-## Canonical estate relationship
+- Repository: `Mind-Reply/A11-K`
+- Production site: `https://a11-k.space`
+- Branch: `main`
+- Deployment authority: ResellerPro / Cloudflare
+- Source authority: GitHub
 
-- MindReply production source: `Mind-Reply/mindreply-app`
-- Control plane: `Mind-Reply/control-plane`
-- A11-K: this repository
-- Aurel experience product: `Mind-Reply/Aurel`
-- Migration/reference source: `Mind-Reply/mind-reply-core`
+All new A11-K website, product, UX, content, SEO, integration and release work goes here.
 
-## Engineering contract
+## Estate consolidation
 
-Source presence is not production proof. A11-K changes must be validated through manifests, entrypoints, tests, CI, deployment provenance and live HTTP checks before being described as live.
+Private and historical A11-K repositories are migration/recovery sources only. Useful code and documentation may be extracted into this repository after inspection; they are not competing production sources.
 
-Do not place credentials, `.env` files, private keys or recovery material in the repository. Destructive deployment, routing, DNS and external-service changes require owner approval.
+See [CANONICAL-ESTATE.md](./CANONICAL-ESTATE.md).
 
-## Current status
+## Verification rule
 
-Active product repository. Deployment parity with the canonical MindReply delivery estate remains independently verifiable and must not be inferred from repository state alone.
+Source presence is not production proof. Live claims require current deployment, domain, HTTP, runtime and rollback evidence.
 
-Cross-estate evidence and classification: `Mind-Reply/mindreply-app/ESTATE_RECONSTRUCTION_AUDIT_2026-09-13.md`.
-
-
-## Brand authority
-
-**A11-K** is the canonical public intelligence / command brand for this product. It is separate from **MindReply**. Personal A11-K repositories are private source/provenance unless explicitly promoted.
-
-Naming authority: `Mind-Reply/.github/BRAND_ARCHITECTURE.md`.
+No credentials, private keys, customer data or recovery secrets belong in this repository.
