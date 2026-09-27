@@ -1,32 +1,23 @@
-# A11-K Canonical Estate
+# A11-K Estate Consolidation
 
-## Single source of truth
+## Canonical
 
-**Canonical repository:** `Mind-Reply/A11-K`  
-**Canonical production site:** `https://a11-k.space`  
-**Canonical branch:** `main`
+**Repository:** `angellllkr-eng/A11-K`  
+**Production site:** `https://a11-k.space`
 
-All new A11-K product, website, UX, content, SEO, and release work belongs here.
+The personal A11-K repository is now the single implementation source because it contains the richer verified application, route structure, deployment configuration and operational material.
 
-## Consolidation rule
+## Migration/reference repositories
 
-The following repositories are migration/recovery sources only and must not receive new A11-K product work:
+- `Mind-Reply/A11-K` — this repository; public historical/reference surface
+- `angellllkr-eng/a11k-surface` — private historical satellite
 
-- `angellllkr-eng/A11-K` — private migration/provenance source
-- `angellllkr-eng/a11k-surface` — historical/private satellite
-- `angellllkr-eng/nowline` — separate Nowline roadmap product; not an A11-K source
-- `angellllkr-eng/a11-nowline` — separate Nova Hall implementation; not an A11-K source
+Separate products such as `nowline` and `a11-nowline` are not A11-K and remain separate.
 
-Existing useful A11-K material is to be inspected, extracted and consolidated into this repository before any source is retired. No blind deletion or overwrite.
-
-## Deployment
-
-The public A11-K site is `a11-k.space`. GitHub is source control. ResellerPro/Cloudflare is the intended active deployment path. Vercel is not an active deployment dependency.
-
-A repository change is not proof of a live deployment. Live status requires current build, deployment, HTTP, domain and rollback evidence.
+Useful A11-K material should be extracted into the canonical repository. No new product work should be started here.
 
 ## Operating rule
 
 **One product → one canonical repository → one production site.**
 
-No parallel A11-K implementations, duplicate public homes, or competing canonical sources.
+Repository consolidation does not by itself prove deployment. Verify build, runtime, DNS/HTTP and rollback before calling the site live.
