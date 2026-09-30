@@ -5,7 +5,7 @@
 - GitHub repository evidence: VERIFIED inspected.
 - Leadership/governance architecture: PARTIALLY VERIFIED from repository documentation.
 - Current external runtime/infrastructure: not established by repository documents alone.
-- Personal employment or board history: UNVERIFIED unless supported by an authoritative external record.
+- Personal employment or board history: pending_evidence unless supported by an authoritative external record.
 
 ## Repository evidence
 
@@ -20,7 +20,7 @@ These records establish documented operating roles, governance rules, evidence b
 
 ## DHL leadership claim
 
-The claimed former DHL EU director/board tenure is recorded here only as an UNVERIFIED claim pending authoritative supporting evidence. It must not be presented as an independently verified credential solely because it appears in project documentation.
+The claimed former DHL EU director/board tenure is recorded here only as an pending_evidence claim pending authoritative supporting evidence. It must not be presented as an independently verified credential solely because it appears in project documentation.
 
 ## Evidence rule
 
