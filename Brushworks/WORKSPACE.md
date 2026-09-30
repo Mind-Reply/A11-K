@@ -40,4 +40,4 @@ npm run verify
 
 ## Evidence rule
 
-Report only: `VERIFIED`, `READY`, `BLOCKED`, `FAILED`, or `UNVERIFIED`. Local package readiness is not the same as production deployment or sales.
+Report only: `VERIFIED`, `READY`, `BLOCKED`, `FAILED`, or `pending_evidence`. Local package readiness is not the same as production deployment or sales.
