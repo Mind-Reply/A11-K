@@ -16,7 +16,7 @@ This component stops at monitoring. It does **not** purchase anything.
 - Private/loopback/link-local IPv4 and IPv6 literals are rejected.
 - No cookies, authorization headers, payment credentials, or owner secrets are sent.
 - A price observation is not a purchase or approval.
-- If extraction is ambiguous, the run records `UNVERIFIED` rather than guessing.
+- If extraction is ambiguous, the run records `pending_evidence` rather than guessing.
 
 ## Target format
 
@@ -49,7 +49,7 @@ The worker writes `price-monitor-results.json` with one evidence record per targ
 
 - `OK`
 - `ALERT`
-- `UNVERIFIED`
+- `pending_evidence`
 - `FAILED`
 
 The GitHub Actions workflow uploads this file as an artifact. A future control-plane adapter can persist the same records into the A11K Evidence Plane and route an alert through the owner approval queue.
