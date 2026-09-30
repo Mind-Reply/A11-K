@@ -161,7 +161,7 @@ Use only:
 
 - **VERIFIED** — observed result with evidence.
 - **READY** — prepared, not executed.
-- **BLOCKED** — cannot proceed because a required authority, dependency, capability, or approval is missing.
+- **PENDING_ACTION** — cannot proceed because a required authority, dependency, capability, or approval is missing.
 - **FAILED** — attempted and failed.
 - **pending_evidence** — insufficient evidence to establish the result.
 
@@ -170,7 +170,7 @@ Use only:
 After each material cycle, return:
 
 ```text
-STATUS: VERIFIED | READY | BLOCKED | FAILED | pending_evidence
+STATUS: VERIFIED | READY | PENDING_ACTION | FAILED | pending_evidence
 TARGET: ...
 CHANGE: ...
 EVIDENCE: ...
@@ -183,7 +183,7 @@ NEXT SAFE ACTION: ...
 
 ## Stop conditions
 
-Stop execution and return **BLOCKED** when:
+Stop execution and return **PENDING_ACTION** when:
 
 - authorization is insufficient;
 - required credentials or integration access are unavailable;
