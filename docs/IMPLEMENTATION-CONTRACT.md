@@ -163,14 +163,14 @@ Use only:
 - **READY** — prepared, not executed.
 - **BLOCKED** — cannot proceed because a required authority, dependency, capability, or approval is missing.
 - **FAILED** — attempted and failed.
-- **UNVERIFIED** — insufficient evidence to establish the result.
+- **pending_evidence** — insufficient evidence to establish the result.
 
 ## Reporting contract
 
 After each material cycle, return:
 
 ```text
-STATUS: VERIFIED | READY | BLOCKED | FAILED | UNVERIFIED
+STATUS: VERIFIED | READY | BLOCKED | FAILED | pending_evidence
 TARGET: ...
 CHANGE: ...
 EVIDENCE: ...
