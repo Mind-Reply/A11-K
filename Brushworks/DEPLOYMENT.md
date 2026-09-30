@@ -22,8 +22,8 @@ The `/reseller` route is the intended commercial entry point. It exposes the res
 | Local route | VERIFIED | Local server maps `/reseller` to `reseller.html` |
 | Health endpoint | VERIFIED | `/api/health` reports local-only readiness |
 | Deployment target | VERIFIED | `/api/deployment-target` returns the canonical hostname and route |
-| DNS record | BLOCKED | Requires authenticated DNS provider access and provider-issued target |
-| Hosting project | BLOCKED | Requires authenticated hosting account/project |
+| DNS record | PENDING_ACTION | Requires authenticated DNS provider access and provider-issued target |
+| Hosting project | PENDING_ACTION | Requires authenticated hosting account/project |
 | HTTPS certificate | pending_evidence | Can only be checked after DNS and hosting are connected |
 | Public URL response | pending_evidence | Must be checked after deployment |
 | Semrush crawl | READY | Run after the URL returns a public `200` response |
