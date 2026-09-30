@@ -12,20 +12,20 @@ Default branch: main
 | SHELL | UNKNOWN | No shell execution capability has been exposed for the target runtime. |
 | GIT | AVAILABLE VIA GITHUB | Repository write/read is available through connected GitHub tooling. |
 | GITHUB | AVAILABLE | Repository metadata, search, file reads and writes verified. |
-| DEPLOYMENT | UNVERIFIED | No deployment change has been performed in this cycle. |
+| DEPLOYMENT | pending_evidence | No deployment change has been performed in this cycle. |
 | BROWSER | UNKNOWN | No general browser automation capability exposed in this cycle. |
-| DATABASE | UNVERIFIED | No database mutation performed. |
+| DATABASE | pending_evidence | No database mutation performed. |
 | MCP | UNKNOWN | Runtime MCP inventory not exposed as a single enumerable surface. |
 | DESIGN | AVAILABLE | NOVA_PRIME/DESIGN.md created in repository. |
 | IMAGE | AVAILABLE IN CHAT RUNTIME | Image generation capability exists, but no visual artifact was required for this first repo bootstrap. |
-| VIDEO | UNVERIFIED | No video generation/execution performed. |
-| EMAIL | UNVERIFIED | No outbound email action performed. |
-| SOCIAL | UNVERIFIED | No social account action performed. |
-| COMMERCE | UNVERIFIED | No transaction or order action performed. |
+| VIDEO | pending_evidence | No video generation/execution performed. |
+| EMAIL | pending_evidence | No outbound email action performed. |
+| SOCIAL | pending_evidence | No social account action performed. |
+| COMMERCE | pending_evidence | No transaction or order action performed. |
 | AUTOMATION | AVAILABLE VIA GITHUB ACTIONS REPOSITORY | Existing A11-K workflow surface found; execution not claimed without run verification. |
 | RESEARCH | AVAILABLE | Current repository state and agent-tool landscape can be researched. |
-| PAYMENT | UNVERIFIED | No payment action performed. |
-| ANALYTICS | UNVERIFIED | No analytics source connected/verified in this cycle. |
+| PAYMENT | pending_evidence | No payment action performed. |
+| ANALYTICS | pending_evidence | No analytics source connected/verified in this cycle. |
 
 ## Verified repository facts
 
@@ -43,7 +43,7 @@ Commit: c9c7b803cf0210157e71debc7ba7fe90cae1edd1
 ## Current status
 
 VERIFIED: repository write + design baseline.
-UNVERIFIED: deployment, browser E2E, social, ads, commerce, payment, database, external automation execution.
+pending_evidence: deployment, browser E2E, social, ads, commerce, payment, database, external automation execution.
 
 ## Next executable piece
 
