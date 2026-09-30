@@ -24,8 +24,8 @@ The `/reseller` route is the intended commercial entry point. It exposes the res
 | Deployment target | VERIFIED | `/api/deployment-target` returns the canonical hostname and route |
 | DNS record | BLOCKED | Requires authenticated DNS provider access and provider-issued target |
 | Hosting project | BLOCKED | Requires authenticated hosting account/project |
-| HTTPS certificate | UNVERIFIED | Can only be checked after DNS and hosting are connected |
-| Public URL response | UNVERIFIED | Must be checked after deployment |
+| HTTPS certificate | pending_evidence | Can only be checked after DNS and hosting are connected |
+| Public URL response | pending_evidence | Must be checked after deployment |
 | Semrush crawl | READY | Run after the URL returns a public `200` response |
 
 ## Required production sequence
