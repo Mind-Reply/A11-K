@@ -1,18 +1,13 @@
-# A11-K — Historical Public Surface
+# A11-K — Public Migration Surface
 
-This repository is **not the canonical A11-K implementation**.
+**Status:** PUBLIC MIGRATION / REFERENCE SURFACE
 
-## Canonical
+**Canonical engineering repository:** `angellllkr-eng/A11-K`
 
-- **Repository:** [angellllkr-eng/A11-K](https://github.com/angellllkr-eng/A11-K)
-- **Production site:** https://a11-k.space
+New A11-K implementation work belongs only in the canonical engineering repository.
 
-New A11-K work belongs only in the canonical repository.
+This public repository exists only as a mirror/reference surface. It must not become a second active implementation.
 
-This repository is retained temporarily as a public migration/reference surface so useful material can be inspected and consolidated without blind deletion. It must not be treated as a second production source.
+**Personal account = engineering source. Organization = public-facing mirror/business surface.**
 
-## Rule
-
-**One product → one repository → one production site.**
-
-Live status must be verified from the canonical source and current deployment evidence.
+Live status must be established from current deployment evidence, not repository presence.
