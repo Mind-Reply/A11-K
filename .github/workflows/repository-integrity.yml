@@ -1,0 +1,35 @@
+name: Repository Integrity Gate
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  integrity:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Git whitespace check
+        run: git diff --check
+
+      - name: Reject tracked local environment files
+        shell: bash
+        run: |
+          set -euo pipefail
+          forbidden="$(git ls-files | grep -E '(^|/)(\.env|\.env\..*|.*\.pem|.*\.key|credentials\.json)$' || true)"
+          if [ -n "$forbidden" ]; then
+            echo "::error::Potential secret-bearing files are tracked:"
+            printf '%s\n' "$forbidden"
+            exit 1
+          fi
+
+      - name: Repository gate result
+        run: echo "PASS — repository integrity checks completed."
